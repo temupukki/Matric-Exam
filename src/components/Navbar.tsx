@@ -148,7 +148,7 @@ function MobileNavLink({ item, index, isActive, onClick }: NavLinkProps) {
           isActive
             ? "underline text-yellow-400 "
             : item.highlight
-            ? "bg-yellow-500 text-blue-400"
+            ? "bg-black text-white rounded-3xl " 
             : "text-white hover:bg-blue-400"
         }`}
       >
