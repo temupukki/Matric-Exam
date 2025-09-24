@@ -21,7 +21,7 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="p-4 bg-gradient-to-r from-red-700 via-red-800 to-red-900 text-white shadow-2xl sticky top-0 z-50"
+        className="p-6 bg-gradient-to-r from-red-700 via-red-800 to-red-900 text-white shadow-2xl sticky top-0 z-50"
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Logo */}
