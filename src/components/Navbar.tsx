@@ -12,7 +12,7 @@ export default function Navbar() {
     { path: "/stream", label: "Stream" },
     { path: "/feature", label: "Features" },
     { path: "/contact", label: "Contact us" },
-    { path: "/sign-in", label: "Get Started", highlight: true },
+    { path: "/sign-in", label: "Get Started" ,highlight: true},
   ];
 
   return (
@@ -21,7 +21,7 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="p-6 bg-gradient-to-r from-red-700 via-red-800 to-red-900 text-white shadow-2xl sticky top-0 z-50"
+        className="p-6 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-700 text-white shadow-2xl sticky top-0 z-50"
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* Logo */}
@@ -30,7 +30,7 @@ export default function Navbar() {
             whileTap={{ scale: 0.95 }}
             className="text-2xl font-bold text-yellow-400"
           >
-            Logo
+            <img src="exam-logo.png" alt=""  className="h-16 w-16 rounded-full"/>
           </motion.div>
 
           {/* Desktop Menu */}
@@ -64,7 +64,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-red-800 shadow-lg"
+            className="md:hidden bg-gradient-to-r from-blue-400 via-blue-600 to-blue-700 shadow-lg"
           >
             <div className="px-4 py-2 flex flex-col gap-2">
               {navItems.map((item, index) => (
@@ -106,7 +106,7 @@ function NavLink({ item, index, isActive, onClick }: NavLinkProps) {
           isActive
             ? "text-yellow-400 font-bold scale-110"
             : item.highlight
-            ? "bg-yellow-500 text-red-900 hover:bg-yellow-400 hover:scale-105"
+            ? "bg-black text-white hover:bg-gray-700 hover:scale-105"
             : "text-white hover:text-yellow-300 hover:scale-105"
         }`}
       >
@@ -146,10 +146,10 @@ function MobileNavLink({ item, index, isActive, onClick }: NavLinkProps) {
         onClick={onClick}
         className={`block px-4 py-3 rounded-lg font-semibold transition-all duration-200 ${
           isActive
-            ? "bg-yellow-400 text-red-900"
+            ? "underline text-yellow-400 "
             : item.highlight
-            ? "bg-yellow-500 text-red-900"
-            : "text-white hover:bg-red-700"
+            ? "bg-yellow-500 text-blue-400"
+            : "text-white hover:bg-blue-400"
         }`}
       >
         {item.label}
