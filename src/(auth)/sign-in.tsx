@@ -14,7 +14,7 @@ import {
   GraduationCap,
   ArrowRight
 } from "lucide-react";
-import {auth} from "../../lib/auth"
+
 import {authClient} from "../../lib/auth-client"
 
 export default function SignIn() {
