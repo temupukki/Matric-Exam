@@ -324,7 +324,7 @@ export default function Footer() {
           >
             <motion.a
               whileHover={{ color: "#facc15", scale: 1.05 }}
-              href="#"
+              href="/privacy"
               className="hover:text-yellow-400 transition-colors"
             >
               Privacy Policy
