@@ -1,32 +1,62 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./Home";
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
 
-import Navbar from "./components/Navbar";
+import Home from "./Home";
 import Contact from "./Contact";
 import Stream from "./Stream";
 import Feature from "./Feature";
 import SignIn from "./(auth)/sign-in";
-import Footer from "./components/Footer";
 
 function App() {
   return (
-    <>
-      <Router>
-        <Navbar />
+    <Router>
+      <Routes>
+        {/* Normal pages use MainLayout */}
+        <Route
+          path="/"
+          element={
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <MainLayout>
+              <Contact />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/feature"
+          element={
+            <MainLayout>
+              <Feature />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/stream"
+          element={
+            <MainLayout>
+              <Stream />
+            </MainLayout>
+          }
+        />
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-      
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/feature" element={<Feature />} />
-          <Route path="/stream" element={<Stream />} />
-           <Route path="/sign-in" element={<SignIn />} />
-         
-       
-        </Routes>
-        <Footer/>
-      </Router>
-    </>
+        {/* Auth pages use AuthLayout (no Navbar, no Footer) */}
+        <Route
+          path="/sign-in"
+          element={
+            <AuthLayout>
+              <SignIn />
+            </AuthLayout>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 
