@@ -1,20 +1,20 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { 
-  BookOpen, 
-  GraduationCap, 
-  Award, 
-  Users, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Facebook, 
-  Twitter, 
-  Instagram, 
+import {
+  BookOpen,
+  GraduationCap,
+  Award,
+  Users,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
   Linkedin,
   ArrowRight,
   Star,
-  Heart
+  Heart,
 } from "lucide-react";
 import { useState } from "react";
 const MotionLink = motion(Link);
@@ -27,7 +27,7 @@ export default function Footer() {
     { name: "Stream", path: "/stream" },
     { name: "Features", path: "/feature" },
     { name: "Contact", path: "/contact" },
-    { name: "Get Started", path: "/sign-in" }
+    { name: "Get Started", path: "/sign-in" },
   ];
 
   const resources = [
@@ -35,7 +35,7 @@ export default function Footer() {
     { name: "Practice Tests", path: "/tests" },
     { name: "Video Lessons", path: "/videos" },
     { name: "Study Planner", path: "/planner" },
-    { name: "Progress Reports", path: "/reports" }
+    { name: "Progress Reports", path: "/reports" },
   ];
 
   const subjects = [
@@ -43,20 +43,23 @@ export default function Footer() {
     { name: "Science", path: "/science" },
     { name: "English", path: "/english" },
     { name: "Social Studies", path: "/social-studies" },
-    { name: "Languages", path: "/languages" }
+    { name: "Languages", path: "/languages" },
   ];
 
   const socialLinks = [
     { icon: <Facebook className="w-5 h-5" />, href: "#", name: "Facebook" },
     { icon: <Twitter className="w-5 h-5" />, href: "#", name: "Twitter" },
     { icon: <Instagram className="w-5 h-5" />, href: "#", name: "Instagram" },
-    { icon: <Linkedin className="w-5 h-5" />, href: "#", name: "LinkedIn" }
+    { icon: <Linkedin className="w-5 h-5" />, href: "#", name: "LinkedIn" },
   ];
 
   const contactInfo = [
     { icon: <Mail className="w-5 h-5" />, text: "support@exammaster.com" },
     { icon: <Phone className="w-5 h-5" />, text: "+1 (555) 123-4567" },
-    { icon: <MapPin className="w-5 h-5" />, text: "123 Education St, Learning City" }
+    {
+      icon: <MapPin className="w-5 h-5" />,
+      text: "123 Education St, Learning City",
+    },
   ];
 
   const handleNewsletter = (e: React.FormEvent) => {
@@ -74,7 +77,7 @@ export default function Footer() {
           animate={{
             x: [0, 100, 0],
             y: [0, -50, 0],
-            transition: { duration: 25, repeat: Infinity, ease: "linear" }
+            transition: { duration: 25, repeat: Infinity, ease: "linear" },
           }}
           className="absolute -top-32 -left-32 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"
         />
@@ -82,7 +85,7 @@ export default function Footer() {
           animate={{
             x: [0, -100, 0],
             y: [0, 50, 0],
-            transition: { duration: 30, repeat: Infinity, ease: "linear" }
+            transition: { duration: 30, repeat: Infinity, ease: "linear" },
           }}
           className="absolute -bottom-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"
         />
@@ -90,7 +93,7 @@ export default function Footer() {
           animate={{
             scale: [1, 1.3, 1],
             rotate: [0, 180, 360],
-            transition: { duration: 20, repeat: Infinity, ease: "linear" }
+            transition: { duration: 20, repeat: Infinity, ease: "linear" },
           }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-400/5 rounded-full blur-3xl"
         />
@@ -117,9 +120,9 @@ export default function Footer() {
                 transition={{ duration: 0.6 }}
                 className="relative"
               >
-                <img 
-                  src="exam-logo.png" 
-                  alt="Exam Master" 
+                <img
+                  src="exam-logo.png"
+                  alt="Exam Master"
                   className="h-12 w-12 rounded-full border-2 border-yellow-400 shadow-lg"
                 />
                 <motion.div
@@ -137,12 +140,13 @@ export default function Footer() {
                 ExamMaster
               </motion.span>
             </motion.div>
-            
+
             <p className="text-blue-200 mb-6 leading-relaxed">
-              Empowering students to excel in their matric exams through innovative learning tools, 
-              expert guidance, and personalized study experiences.
+              Empowering students to excel in their matric exams through
+              innovative learning tools, expert guidance, and personalized study
+              experiences.
             </p>
-            
+
             <div className="flex gap-4">
               {socialLinks.map((social, index) => (
                 <motion.a
@@ -151,10 +155,10 @@ export default function Footer() {
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ 
-                    scale: 1.2, 
+                  whileHover={{
+                    scale: 1.2,
                     y: -5,
-                    color: "#facc15"
+                    color: "#facc15",
                   }}
                   className="p-2 bg-blue-700/50 rounded-lg hover:bg-yellow-400 hover:text-blue-900 transition-all duration-300"
                 >
@@ -166,7 +170,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <motion.h3 
+            <motion.h3
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
@@ -177,12 +181,13 @@ export default function Footer() {
             </motion.h3>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
-                <motion.li key={link.name}
+                <motion.li
+                  key={link.name}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
                 >
-                  <Link 
+                  <Link
                     to={link.path}
                     className="text-blue-200 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2 group"
                   >
@@ -201,7 +206,7 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <motion.h3 
+            <motion.h3
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
@@ -212,12 +217,13 @@ export default function Footer() {
             </motion.h3>
             <ul className="space-y-3">
               {resources.map((resource, index) => (
-                <motion.li key={resource.name}
+                <motion.li
+                  key={resource.name}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
                 >
-                  <Link 
+                  <Link
                     to={resource.path}
                     className="text-blue-200 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2 group"
                   >
@@ -236,7 +242,7 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <motion.h3 
+            <motion.h3
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.7 }}
@@ -314,30 +320,30 @@ export default function Footer() {
             transition={{ delay: 0.8 }}
             className="text-blue-300 text-center md:text-left"
           >
-            © 2024 ExamMaster. Made with <Heart className="inline w-4 h-4 text-red-400" /> for students
+            © 2024 ExamMaster. Made with{" "}
+            <Heart className="inline w-4 h-4 text-red-400" /> for students
           </motion.p>
-          
+
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
             className="flex flex-wrap gap-6 text-sm text-blue-300"
           >
-            <MotionLink 
+            <MotionLink
               whileHover={{ color: "#facc15", scale: 1.05 }}
               to="/privacy"
               className="hover:text-yellow-400 transition-colors"
             >
               Privacy Policy
             </MotionLink>
-            <motion.a
+            <MotionLink
               whileHover={{ color: "#facc15", scale: 1.05 }}
-              href="/terms"
+              to="/terms"
               className="hover:text-yellow-400 transition-colors"
             >
               Terms of Service
-            </motion.a>
-        
+            </MotionLink>
           </motion.div>
         </motion.div>
 
@@ -349,14 +355,15 @@ export default function Footer() {
           viewport={{ once: true }}
           className="mt-8 text-center"
         >
-          <motion.div
+          <MotionLink
+            to="/sign-in" // change to the route you want
             whileHover={{ scale: 1.02 }}
             className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-6 py-3 rounded-full font-semibold shadow-lg"
           >
             <Star className="w-5 h-5" />
             <span>Start Your Success Journey Today!</span>
             <ArrowRight className="w-5 h-5" />
-          </motion.div>
+          </MotionLink>
         </motion.div>
       </div>
     </footer>
