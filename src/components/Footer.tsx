@@ -17,6 +17,7 @@ import {
   Heart
 } from "lucide-react";
 import { useState } from "react";
+const MotionLink = motion(Link);
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -322,13 +323,13 @@ export default function Footer() {
             transition={{ delay: 0.9 }}
             className="flex flex-wrap gap-6 text-sm text-blue-300"
           >
-            <motion.a
+            <MotionLink 
               whileHover={{ color: "#facc15", scale: 1.05 }}
-              href="/privacy"
+              to="/privacy"
               className="hover:text-yellow-400 transition-colors"
             >
               Privacy Policy
-            </motion.a>
+            </MotionLink>
             <motion.a
               whileHover={{ color: "#facc15", scale: 1.05 }}
               href="/terms"
@@ -336,13 +337,7 @@ export default function Footer() {
             >
               Terms of Service
             </motion.a>
-            <motion.a
-              whileHover={{ color: "#facc15", scale: 1.05 }}
-              href="#"
-              className="hover:text-yellow-400 transition-colors"
-            >
-              Cookie Policy
-            </motion.a>
+        
           </motion.div>
         </motion.div>
 
