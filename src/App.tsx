@@ -6,6 +6,7 @@ import Contact from "./Contact";
 import Stream from "./Stream";
 import Feature from "./Feature";
 import SignIn from "./(auth)/sign-in";
+import Footer from "./Footer";
 
 function App() {
   return (
@@ -20,8 +21,10 @@ function App() {
           <Route path="/feature" element={<Feature />} />
           <Route path="/stream" element={<Stream />} />
            <Route path="/sign-in" element={<SignIn />} />
+         
        
         </Routes>
+        <Footer/>
       </Router>
     </>
   );
