@@ -105,7 +105,7 @@ export default function SignIn() {
       });
 
       if (error) {
-        setError(error.message || "Google sign in failed");
+        toast.error("Google sign in failed");
       }
 
       // The social sign-in will redirect to the provider's page
