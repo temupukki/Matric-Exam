@@ -224,7 +224,7 @@ Check this page regularly for updates. Significant changes will be prominently n
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-6">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
