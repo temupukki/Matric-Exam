@@ -6,7 +6,7 @@ import Contact from "./Contact";
 import Stream from "./Stream";
 import Feature from "./Feature";
 import SignIn from "./(auth)/sign-in";
-import Footer from "./Footer";
+import Footer from "./components/Footer";
 
 function App() {
   return (
