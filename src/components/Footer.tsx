@@ -19,6 +19,7 @@ import {
 import { useState } from "react";
 const MotionLink = motion(Link);
 
+
 export default function Footer() {
   const [email, setEmail] = useState("");
 
@@ -320,7 +321,7 @@ export default function Footer() {
             transition={{ delay: 0.8 }}
             className="text-blue-300 text-center md:text-left"
           >
-            © 2024 ExamMaster. Made with{" "}
+            © {new Date().getFullYear()} ExamMaster. Made with{" "}
             <Heart className="inline w-4 h-4 text-red-400" /> for students
           </motion.p>
 
