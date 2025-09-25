@@ -1,6 +1,17 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { BookOpen, Clock, Award, Users, ArrowRight, Star, CheckCircle, GraduationCap, Target, BarChart3 } from "lucide-react";
+import {
+  BookOpen,
+  Clock,
+  Award,
+  Users,
+  ArrowRight,
+  Star,
+  CheckCircle,
+  GraduationCap,
+  Target,
+  BarChart3,
+} from "lucide-react";
 const MotionLink = motion(Link);
 export default function HomePage() {
   const navigate = useNavigate();
@@ -9,47 +20,67 @@ export default function HomePage() {
     {
       icon: <BookOpen className="w-8 h-8" />,
       title: "Comprehensive Syllabus",
-      description: "Cover all subjects with detailed study materials and notes"
+      description: "Cover all subjects with detailed study materials and notes",
     },
     {
       icon: <Clock className="w-8 h-8" />,
       title: "Timed Practice Tests",
-      description: "Simulate real exam conditions with timed practice sessions"
+      description: "Simulate real exam conditions with timed practice sessions",
     },
     {
       icon: <Award className="w-8 h-8" />,
       title: "Performance Analytics",
-      description: "Track your progress with detailed analytics and insights"
+      description: "Track your progress with detailed analytics and insights",
     },
     {
       icon: <Users className="w-8 h-8" />,
       title: "Expert Guidance",
-      description: "Learn from experienced teachers and subject matter experts"
+      description: "Learn from experienced teachers and subject matter experts",
     },
     {
       icon: <Target className="w-8 h-8" />,
       title: "Smart Revision",
-      description: "AI-powered revision schedules tailored to your needs"
+      description: "AI-powered revision schedules tailored to your needs",
     },
     {
       icon: <BarChart3 className="w-8 h-8" />,
       title: "Progress Tracking",
-      description: "Visualize your improvement with detailed progress reports"
-    }
+      description: "Visualize your improvement with detailed progress reports",
+    },
   ];
 
   const subjects = [
     { name: "Mathematics", color: "from-cyan-500 to-blue-500", progress: 75 },
     { name: "Science", color: "from-blue-500 to-indigo-500", progress: 60 },
     { name: "English", color: "from-indigo-500 to-purple-500", progress: 85 },
-    { name: "Social Studies", color: "from-purple-500 to-blue-600", progress: 70 }
+    {
+      name: "Social Studies",
+      color: "from-purple-500 to-blue-600",
+      progress: 70,
+    },
   ];
 
   const stats = [
-    { number: "10K+", label: "Students Enrolled", icon: <Users className="w-6 h-6" /> },
-    { number: "95%", label: "Success Rate", icon: <Award className="w-6 h-6" /> },
-    { number: "500+", label: "Practice Tests", icon: <BookOpen className="w-6 h-6" /> },
-    { number: "50+", label: "Expert Tutors", icon: <GraduationCap className="w-6 h-6" /> }
+    {
+      number: "10K+",
+      label: "Students Enrolled",
+      icon: <Users className="w-6 h-6" />,
+    },
+    {
+      number: "95%",
+      label: "Success Rate",
+      icon: <Award className="w-6 h-6" />,
+    },
+    {
+      number: "500+",
+      label: "Practice Tests",
+      icon: <BookOpen className="w-6 h-6" />,
+    },
+    {
+      number: "50+",
+      label: "Expert Tutors",
+      icon: <GraduationCap className="w-6 h-6" />,
+    },
   ];
 
   return (
@@ -62,7 +93,7 @@ export default function HomePage() {
             animate={{
               x: [0, 100, 0],
               y: [0, -50, 0],
-              transition: { duration: 20, repeat: Infinity, ease: "linear" }
+              transition: { duration: 20, repeat: Infinity, ease: "linear" },
             }}
             className="absolute -top-20 -left-20 w-64 h-64 bg-cyan-400/20 rounded-full blur-3xl"
           />
@@ -70,7 +101,7 @@ export default function HomePage() {
             animate={{
               x: [0, -100, 0],
               y: [0, 50, 0],
-              transition: { duration: 25, repeat: Infinity, ease: "linear" }
+              transition: { duration: 25, repeat: Infinity, ease: "linear" },
             }}
             className="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-400/20 rounded-full blur-3xl"
           />
@@ -78,7 +109,7 @@ export default function HomePage() {
             animate={{
               scale: [1, 1.2, 1],
               rotate: [0, 180, 360],
-              transition: { duration: 15, repeat: Infinity, ease: "linear" }
+              transition: { duration: 15, repeat: Infinity, ease: "linear" },
             }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl"
           />
@@ -116,46 +147,47 @@ export default function HomePage() {
               Matric Exams
             </motion.span>
           </motion.h1>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.8 }}
             className="text-lg md:text-xl lg:text-2xl mb-8 text-blue-100 max-w-4xl mx-auto leading-relaxed"
           >
-            Ace your exams with personalized learning, AI-powered practice tests, 
-            and expert guidance tailored for matric success
+            Ace your exams with personalized learning, AI-powered practice
+            tests, and expert guidance tailored for matric success
           </motion.p>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-           <MotionLink
-      to="/sign-in"
-      whileHover={{ 
-        scale: 1.05,
-        background: "linear-gradient(to right, #facc15, #f59e0b)"
-      }}
-      whileTap={{ scale: 0.95 }}
-      className="bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
-    >
-      Start Learning Now <ArrowRight className="w-5 h-5" />
-    </MotionLink>
-            
-            <motion.button
-              whileHover={{ 
+            <MotionLink
+              to="/sign-in"
+              whileHover={{
                 scale: 1.05,
-                backgroundColor: "rgba(255,255,255,0.2)"
+                background: "linear-gradient(to right, #facc15, #f59e0b)",
+              }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+            >
+              Start Learning Now <ArrowRight className="w-5 h-5" />
+            </MotionLink>
+
+            <MotionLink
+              to="/feature"
+              whileHover={{
+                scale: 1.05,
+                backgroundColor: "rgba(255,255,255,0.2)",
               }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/feature")}
               className="border-2 border-white/50 bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition-all duration-300"
             >
               Explore Features
-            </motion.button>
+            </MotionLink>
           </motion.div>
 
           {/* Stats Preview */}
@@ -179,7 +211,9 @@ export default function HomePage() {
                     {stat.icon}
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-yellow-400">{stat.number}</div>
+                <div className="text-2xl font-bold text-yellow-400">
+                  {stat.number}
+                </div>
                 <div className="text-sm text-blue-200">{stat.label}</div>
               </motion.div>
             ))}
@@ -213,7 +247,8 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive tools and resources designed specifically for matric exam success
+              Comprehensive tools and resources designed specifically for matric
+              exam success
             </p>
           </motion.div>
 
@@ -225,10 +260,11 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
                 viewport={{ once: true }}
-                whileHover={{ 
-                  y: -10, 
+                whileHover={{
+                  y: -10,
                   scale: 1.02,
-                  background: "linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)"
+                  background:
+                    "linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)",
                 }}
                 className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-blue-100"
               >
@@ -242,7 +278,9 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold text-gray-900 mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                <p className="text-gray-600 leading-relaxed">
+                  {feature.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -266,7 +304,8 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="text-xl text-blue-100">
-              Monitor your performance across all subjects with detailed analytics
+              Monitor your performance across all subjects with detailed
+              analytics
             </p>
           </motion.div>
 
@@ -291,7 +330,11 @@ export default function HomePage() {
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: `${subject.progress}%` }}
-                    transition={{ delay: index * 0.3 + 0.5, duration: 1, ease: "easeOut" }}
+                    transition={{
+                      delay: index * 0.3 + 0.5,
+                      duration: 1,
+                      ease: "easeOut",
+                    }}
                     viewport={{ once: true }}
                     className="h-3 rounded-full bg-white shadow-lg"
                   />
@@ -309,14 +352,14 @@ export default function HomePage() {
           <motion.div
             animate={{
               rotate: 360,
-              transition: { duration: 30, repeat: Infinity, ease: "linear" }
+              transition: { duration: 30, repeat: Infinity, ease: "linear" },
             }}
             className="absolute -top-32 -left-32 w-64 h-64 bg-yellow-400/10 rounded-full"
           />
           <motion.div
             animate={{
               rotate: -360,
-              transition: { duration: 40, repeat: Infinity, ease: "linear" }
+              transition: { duration: 40, repeat: Infinity, ease: "linear" },
             }}
             className="absolute -bottom-32 -right-32 w-80 h-80 bg-cyan-400/10 rounded-full"
           />
@@ -340,20 +383,21 @@ export default function HomePage() {
               Ace Your Exams?
             </span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             className="text-xl mb-8 text-blue-100"
           >
-            Join thousands of students who have improved their grades with our platform
+            Join thousands of students who have improved their grades with our
+            platform
           </motion.p>
-          
+
           <motion.button
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              background: "linear-gradient(to right, #facc15, #f59e0b)"
+              background: "linear-gradient(to right, #facc15, #f59e0b)",
             }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/sign-in")}
@@ -361,7 +405,7 @@ export default function HomePage() {
           >
             Get Started Today <ArrowRight className="inline ml-2 w-5 h-5" />
           </motion.button>
-          
+
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -371,7 +415,7 @@ export default function HomePage() {
             {[
               "Free trial available",
               "No credit card required",
-              "Cancel anytime"
+              "Cancel anytime",
             ].map((item, index) => (
               <motion.div
                 key={item}
