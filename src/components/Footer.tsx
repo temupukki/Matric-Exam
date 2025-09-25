@@ -161,7 +161,7 @@ export default function Footer() {
                     y: -5,
                     color: "#facc15",
                   }}
-                  className="p-2 bg-blue-700/50 rounded-lg hover:bg-yellow-400 hover:text-blue-900 transition-all duration-300"
+                  className="p-2 bg-blue-700/50 rounded-lg  hover:text-blue-900 transition-all duration-300"
                 >
                   {social.icon}
                 </motion.a>
