@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { authClient } from "../../lib/auth-client";
+import { toast } from "sonner";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -51,13 +52,13 @@ export default function SignIn() {
         });
 
         if (error) {
-          setError(error.message || "Sign in failed");
+          toast.error("Sign in failed");
           return;
         }
 
         if (data) {
-          console.log("Sign in successful:", data);
-          navigate("/");
+          toast.success("Sign in successful:");
+          navigate("/dashboard");
         }
       } else {
         // Sign up with email and password
