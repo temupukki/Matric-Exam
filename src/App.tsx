@@ -8,6 +8,7 @@ import Stream from "./Stream";
 import Feature from "./Feature";
 import SignIn from "./(auth)/sign-in";
 import Privacy from "./privacy";
+import Terms from "./Terms";
 
 function App() {
   return (
@@ -61,6 +62,14 @@ function App() {
           element={
             <MainLayout>
               <Privacy />
+            </MainLayout>
+          }
+        />
+          <Route
+          path="/terms"
+          element={
+            <MainLayout>
+              <Terms />
             </MainLayout>
           }
         />

@@ -331,7 +331,7 @@ export default function Footer() {
             </motion.a>
             <motion.a
               whileHover={{ color: "#facc15", scale: 1.05 }}
-              href="#"
+              href="/terms"
               className="hover:text-yellow-400 transition-colors"
             >
               Terms of Service
