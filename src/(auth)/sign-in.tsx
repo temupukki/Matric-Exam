@@ -14,11 +14,15 @@ import {
   GraduationCap,
   ArrowRight
 } from "lucide-react";
+import {auth} from "../../lib/auth"
+import {authClient} from "../../lib/auth-client"
 
 export default function SignIn() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -33,12 +37,84 @@ export default function SignIn() {
     { icon: <GraduationCap className="w-6 h-6" />, text: "Progress tracking" }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
- 
-    console.log("Form submitted:", formData);
-   
-    navigate("/");
+    setLoading(true);
+    setError("");
+
+    try {
+      if (isLogin) {
+        // Sign in with email and password
+        const { data, error } = await authClient.signIn.email({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (error) {
+          setError(error.message || "Sign in failed");
+          return;
+        }
+
+        if (data) {
+          console.log("Sign in successful:", data);
+          navigate("/");
+        }
+      } else {
+        // Sign up with email and password
+        if (formData.password !== formData.confirmPassword) {
+          setError("Passwords do not match");
+          setLoading(false);
+          return;
+        }
+
+        const { data, error } = await authClient.signUp.email({
+          email: formData.email,
+          password: formData.password,
+          name: formData.fullName,
+        });
+
+        if (error) {
+          setError(error.message || "Sign up failed");
+          return;
+        }
+
+        if (data) {
+          console.log("Sign up successful:", data);
+          // Optionally sign in automatically after sign up
+          navigate("/");
+        }
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+      console.error("Auth error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Social authentication handlers
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const { data, error } = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/", // Redirect after successful login
+      });
+
+      if (error) {
+        setError(error.message || "Google sign in failed");
+      }
+
+      // The social sign-in will redirect to the provider's page
+      // BetterAuth handles the callback automatically
+    } catch (err) {
+      setError("Google sign in failed");
+      console.error("Google auth error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,11 +122,13 @@ export default function SignIn() {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    if (error) setError("");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 flex items-center justify-center p-4">
-     
+      {/* Background animations */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           animate={{
@@ -71,13 +149,14 @@ export default function SignIn() {
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10">
-       
+        {/* Left Side - Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center lg:text-left"
         >
+          {/* Your existing content remains the same */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -170,7 +249,19 @@ export default function SignIn() {
           transition={{ duration: 0.8 }}
           className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8"
         >
-         
+          {/* Error Message */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl flex items-center gap-2"
+            >
+              <CheckCircle className="w-4 h-4" />
+              {error}
+            </motion.div>
+          )}
+
+          {/* Toggle between Login/Signup */}
           <motion.div
             layout
             className="flex bg-blue-100 rounded-2xl p-1 mb-8 relative"
@@ -204,6 +295,7 @@ export default function SignIn() {
           </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Form fields remain the same */}
             {!isLogin && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
@@ -310,15 +402,26 @@ export default function SignIn() {
             )}
 
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: loading ? 1 : 1.02 }}
+              whileTap={{ scale: loading ? 1 : 0.98 }}
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLogin ? "Sign In" : "Create Account"}
-              <ArrowRight className="w-5 h-5" />
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  {isLogin ? "Signing In..." : "Creating Account..."}
+                </>
+              ) : (
+                <>
+                  {isLogin ? "Sign In" : "Create Account"}
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
             </motion.button>
 
+            {/* Toggle between login/signup */}
             {isLogin ? (
               <p className="text-center text-gray-600">
                 Don't have an account?{" "}
@@ -356,7 +459,9 @@ export default function SignIn() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="button"
-                className="p-3 border border-gray-300 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+                className="p-3 border border-gray-300 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors disabled:opacity-50"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -370,7 +475,8 @@ export default function SignIn() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="button"
-                className="p-3 border border-gray-300 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                disabled={true} // Facebook not configured in your auth
+                className="p-3 border border-gray-300 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
