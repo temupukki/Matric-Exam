@@ -35,9 +35,9 @@ export default function SignIn() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle authentication logic here
+ 
     console.log("Form submitted:", formData);
-    // Redirect to dashboard after successful login/signup
+   
     navigate("/");
   };
 
@@ -50,7 +50,7 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 flex items-center justify-center p-4">
-      {/* Animated Background */}
+     
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           animate={{
@@ -71,7 +71,7 @@ export default function SignIn() {
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10">
-        {/* Left Side - Illustration and Features */}
+       
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -170,7 +170,7 @@ export default function SignIn() {
           transition={{ duration: 0.8 }}
           className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8"
         >
-          {/* Toggle Switch */}
+         
           <motion.div
             layout
             className="flex bg-blue-100 rounded-2xl p-1 mb-8 relative"
