@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BookOpen, Clock, Award, Users, ArrowRight, Star, CheckCircle, GraduationCap, Target, BarChart3 } from "lucide-react";
-
+const MotionLink = motion(Link);
 export default function HomePage() {
   const navigate = useNavigate();
 
@@ -133,17 +133,17 @@ export default function HomePage() {
             transition={{ delay: 0.9, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <motion.button
-              whileHover={{ 
-                scale: 1.05,
-                background: "linear-gradient(to right, #facc15, #f59e0b)"
-              }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate("/sign-in")}
-              className="bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
-            >
-              Start Learning Now <ArrowRight className="w-5 h-5" />
-            </motion.button>
+           <MotionLink
+      to="/sign-in"
+      whileHover={{ 
+        scale: 1.05,
+        background: "linear-gradient(to right, #facc15, #f59e0b)"
+      }}
+      whileTap={{ scale: 0.95 }}
+      className="bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+    >
+      Start Learning Now <ArrowRight className="w-5 h-5" />
+    </MotionLink>
             
             <motion.button
               whileHover={{ 
