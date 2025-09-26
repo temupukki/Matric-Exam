@@ -27,10 +27,9 @@ const SigninSchema = z.object({
 
 type SigninFormData = z.infer<typeof SigninSchema>;
 
-export default function BankSignin() {
+export default function Signin() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   const {
     register,
@@ -44,22 +43,6 @@ export default function BankSignin() {
     },
   });
 
-  useEffect(() => {
-    async function checkSession() {
-      try {
-        const { data: session } = await authClient.getSession();
-        if (session) {
-          navigate("/dashboard");
-        }
-      } catch (error) {
-        console.error("Session check error:", error);
-      } finally {
-        setIsCheckingSession(false);
-      }
-    }
-    checkSession();
-  }, [navigate]);
-
   async function onSubmit(values: SigninFormData) {
     const { lastName, password } = values;
 
@@ -72,7 +55,8 @@ export default function BankSignin() {
 
       if (error) {
         toast.error("Sign in failed", {
-          description: error.message || "Please check your credentials and try again",
+          description:
+            error.message || "Please check your credentials and try again",
         });
         return;
       }
@@ -105,13 +89,13 @@ export default function BankSignin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 p-4 sm:p-6">
       <title>Sign In | CBS</title>
-      
+
       <Card className="w-full max-w-md p-6 sm:p-8 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-blue-200/50">
         <CardHeader className="text-center space-y-4 pb-4">
           <div className="flex justify-center">
-            <img 
-              src="/dashen logo.png" 
-              alt="Dashen Bank Logo" 
+            <img
+              src="/dashen logo.png"
+              alt="Dashen Bank Logo"
               className="h-16 w-auto"
             />
           </div>
@@ -212,8 +196,8 @@ export default function BankSignin() {
           <div className="text-center">
             <p className="text-sm text-blue-600">
               Need help?{" "}
-              <Link 
-                to="/support" 
+              <Link
+                to="/support"
                 className="font-semibold text-blue-700 hover:text-blue-900 underline underline-offset-2"
               >
                 Contact Support
