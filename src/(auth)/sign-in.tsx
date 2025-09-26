@@ -1,14 +1,14 @@
 import { Button } from "../components/ui/button"
 import {
   Card,
-  
+ 
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "../components/ui/card"
-import { Input } from "@/components/ui/input"
+import { Input } from "../components/ui/input"
 import { Label } from  "../components/ui/label"
 
 export default function CardDemo() {
@@ -19,9 +19,9 @@ export default function CardDemo() {
         <CardDescription>
           Enter your email below to login to your account
         </CardDescription>
-        <CardAction>
+        
           <Button variant="link">Sign Up</Button>
-        </CardAction>
+   
       </CardHeader>
       <CardContent>
         <form>
