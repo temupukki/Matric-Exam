@@ -63,7 +63,7 @@ export default function SignIn() {
       } else {
         // Sign up with email and password
         if (formData.password !== formData.confirmPassword) {
-          setError("Passwords do not match");
+          toast.error("Passwords do not match");
           setLoading(false);
           return;
         }
@@ -101,7 +101,7 @@ export default function SignIn() {
     try {
       const { data, error } = await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/", // Redirect after successful login
+        callbackURL: "/dashboard", // Redirect after successful login
       });
 
       if (error) {
@@ -111,7 +111,7 @@ export default function SignIn() {
       // The social sign-in will redirect to the provider's page
       // BetterAuth handles the callback automatically
     } catch (err) {
-      setError("Google sign in failed");
+      toast.error("Google sign in failed");
       console.error("Google auth error:", err);
     } finally {
       setLoading(false);
