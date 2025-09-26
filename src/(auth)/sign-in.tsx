@@ -75,18 +75,18 @@ export default function SignIn() {
         });
 
         if (error) {
-          setError(error.message || "Sign up failed");
+          toast.error("Sign up failed");
           return;
         }
 
         if (data) {
           console.log("Sign up successful:", data);
           // Optionally sign in automatically after sign up
-          navigate("/");
+          navigate("/dashboard");
         }
       }
     } catch (err) {
-      setError("An unexpected error occurred");
+      toast.error("An unexpected error occurred");
       console.error("Auth error:", err);
     } finally {
       setLoading(false);
