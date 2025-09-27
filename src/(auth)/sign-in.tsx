@@ -75,7 +75,7 @@ export default function SignIn() {
         });
 
         if (error) {
-          toast.error("Sign up failed");
+          toast.error("Sign up fail");
           return;
         }
 
