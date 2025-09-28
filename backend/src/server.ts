@@ -1,18 +1,20 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import dotenv from "dotenv";
+
+// Load .env from root folder (one level up from backend)
+dotenv.config({ path: "../.env" });
 
 const app = express();
 app.use(express.json());
-app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Backend is working!" });
-});
-app.get("/hello",(req:Request,res:Response)=>{
-    res.json("hello fellas my name is the dude whoknow evrthing man")
-})
 
-const PORT = 3000;
+const PORT = process.env.PORT || 4000;
+console.log("ENV TEST:", process.env.BETTER_AUTH_URL); // just to test
+
+app.get("/", (req, res) => {
+  res.send("Backend is reading env from root!");
+});
+
 app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
+  console.log(`✅ Backend running at http://localhost:${PORT}`);
 });
-
-// Keep process alive (optional, usually not needed)
 process.stdin.resume();
