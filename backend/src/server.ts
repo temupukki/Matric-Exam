@@ -1,20 +1,17 @@
 import express from "express";
-import dotenv from "dotenv";
-
-// Load .env from root folder (one level up from backend)
-dotenv.config({ path: "../.env" });
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "../../lib/auth";
 
 const app = express();
+const port = 3000;
+
+app.all("/api/auth/*", toNodeHandler(auth)); // For ExpressJS v4
+// app.all("/api/auth/*splat", toNodeHandler(auth)); For ExpressJS v5 
+
+// Mount express json middleware after Better Auth handler
+// or only apply it to routes that don't interact with Better Auth
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
-console.log("ENV TEST:", process.env.BETTER_AUTH_URL); // just to test
-
-app.get("/", (req, res) => {
-  res.send("Backend is reading env from root!");
+app.listen(port, () => {
+	console.log(`Example app listening on port ${port}`);
 });
-
-app.listen(PORT, () => {
-  console.log(`✅ Backend running at http://localhost:${PORT}`);
-});
-process.stdin.resume();
