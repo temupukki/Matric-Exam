@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // Adjust the path if your Prisma client is somewhere else
-import { PrismaClient } from "../generated/prisma";
+import { PrismaClient } from "../../generated/prisma";
 import * as dotenv from "dotenv";
 
 // Load environment variables from .env file
