@@ -21,7 +21,7 @@ app.use(cors(
 app.get("/",(req:Request,res:Response)=>{
 res.json({message:"here is the updated one man"})
 })
-app.get("/api/abebe",(req:Request,res:Response)=>{
+app.get("/api/test",(req:Request,res:Response)=>{
     res.json({
         message:"backend api is runing in this host server man",
 

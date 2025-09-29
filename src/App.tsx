@@ -7,8 +7,9 @@ import Contact from "./Contact";
 import Stream from "./Stream";
 import Feature from "./Feature";
 import SignIn from "./(auth)/sign-in";
-import Privacy from "./privacy";
+import Privacy from "./Privacy";
 import Terms from "./Terms";
+import SimpleTest from "./components/Simpletest";
 
 function App() {
   return (
@@ -70,6 +71,14 @@ function App() {
           element={
             <MainLayout>
               <Terms />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/test"
+          element={
+            <MainLayout>
+              <SimpleTest />
             </MainLayout>
           }
         />
