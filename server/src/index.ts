@@ -5,7 +5,7 @@ import { auth } from "./lib/auth";
 const app = express();
 const port = 3000;
 
-app.all("/api/auth/*", toNodeHandler(auth));
+
 
 
 app.use(express.json());
