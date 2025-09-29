@@ -26,19 +26,7 @@ app.use(
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "here is the updated one man" });
 });
-// Test route to check if server is working
-app.get("/api/test", (req, res) => {
-  res.json({
-    message: "Server is working with Better Auth!",
-    timestamp: new Date().toISOString(),
-    authEndpoints: {
-      signup: "POST /api/auth/signup/email",
-      signin: "POST /api/auth/signin/email",
-      session: "GET /api/auth/session",
-      google: "GET /api/auth/oauth/google",
-    },
-  });
-});
+
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
 });
