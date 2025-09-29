@@ -10,7 +10,7 @@ const port = 3000;
 
 app.use(express.json());
 app.get("/",(req:Request,res:Response)=>{
-res.json({message:"abebe beso bela man how can you relate man how can i fix that man"})
+res.json({message:"here is the updated one man"})
 })
 
 app.listen(port, () => {
