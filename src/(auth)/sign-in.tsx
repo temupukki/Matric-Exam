@@ -14,7 +14,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-import { authClient } from "../lib/auth-client";
+import { authClient } from "../../server/src/lib/auth-client";
 import { toast } from "sonner";
 
 export default function SignIn() {
