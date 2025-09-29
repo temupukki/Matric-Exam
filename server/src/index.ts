@@ -6,7 +6,7 @@ import cors from "cors";
 const app = express();
 const port = 3000;
 
-app.all("/api/auth/*splat", toNodeHandler(auth)); // Express 5.x
+app.all("/api/auth/*", toNodeHandler(auth)); // Express 5.x
 
 app.use(express.json());
 app.use(
