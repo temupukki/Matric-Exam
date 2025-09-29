@@ -105,7 +105,7 @@ export default function SignIn() {
       console.log("Google auth result:", result);
 
       if (result.error) {
-        toast.error(`Google sign in failed: ${result.error.message}`);
+        toast.error(` ${result.error.message}`);
         return;
       }
 
