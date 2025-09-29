@@ -5,6 +5,13 @@ import cors from "cors";
 
 const app = express();
 const port = 3000;
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "PATCH"],
+    credentials: true,
+  })
+);
 
 app.all("/api/auth/*", toNodeHandler(auth)); // Express 5.x
 
@@ -12,7 +19,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
-   
+    methods: ["GET", "POST", "PUT", "PATCH"],
     credentials: true,
   })
 );
@@ -32,7 +39,6 @@ app.get("/api/test", (req, res) => {
     },
   });
 });
-
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
 });
