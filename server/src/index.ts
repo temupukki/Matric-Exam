@@ -23,7 +23,9 @@ res.json({message:"here is the updated one man"})
 })
 app.get("/api/abebe",(req:Request,res:Response)=>{
     res.json({
-        message:"kfet belew berun ye getawn man"
+        message:"backend api is runing in this host server man",
+
+        updatedAt:Date()
     })
 })
 app.listen(port, () => {
