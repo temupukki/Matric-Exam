@@ -1,66 +1,77 @@
 import { useState } from "react";
 
-export default function SimpleTest() {
-  const [status, setStatus] = useState("Click test button");
-  const [loading, setLoading] = useState(false);
+import { authClient } from "../../lib/auth-client";
+import { redirect } from "react-router-dom";
+import { toast } from "sonner";
 
-  const testConnection = async () => {
-    setLoading(true);
-    setStatus("Testing...");
-    
-    try {
-      const response = await fetch("http://localhost:3000/api/test");
-      const data = await response.json();
+export default function SimpleTest() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await authClient.signUp.email(
+      {
+        email,
+        password,
+        name,
+
+        callbackURL: "/dashboard",
+      },
+      {
       
-      setStatus("✅ CONNECTED! Backend is working");
-      console.log("Backend response:", data);
-      
-    } catch (error) {
-      setStatus("❌ FAILED! Backend not connected");
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
+        onSuccess: (ctx) => {
+           toast.success(`signed up sucess fully${ctx}`) 
+         redirect("/dashboard")
+        },
+        onError: (ctx) => {
+              toast.error(`you fucked up man`) 
+     
+        
+          alert(ctx.error.message);
+        },
+      }
+    );
   };
 
   return (
-    <div style={{ 
-      padding: "20px", 
-      border: "2px solid blue", 
-      borderRadius: "10px",
-      margin: "20px",
-      maxWidth: "400px"
-    }}>
-      <h2>Connection Test</h2>
-      
-      <button 
-        onClick={testConnection}
-        disabled={loading}
-        style={{
-          padding: "10px 20px",
-          backgroundColor: loading ? "gray" : "green",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: loading ? "not-allowed" : "pointer"
-        }}
-      >
-        {loading ? "Testing..." : "Test Connection"}
+    <form onSubmit={handleSubmit} className="m-auto">
+      <div className="mb-10">
+        <label>Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={{ width: "100%", padding: 5 }}
+        />
+      </div>
+    <div className="mb-10">
+        <label>name:</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          style={{ width: "100%", padding: 5 }}
+        />
+      </div>
+      <div className="mb-10">
+        <label>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          style={{ width: "100%", padding: 5 }}
+        />
+      </div>
+
+      <button type="submit" className="p-4 bg-red-600">
+        Login
       </button>
-      
-      <div style={{ 
-        marginTop: "15px",
-        padding: "10px",
-        backgroundColor: status.includes("✅") ? "lightgreen" : "lightcoral",
-        borderRadius: "5px"
-      }}>
-        <strong>Status:</strong> {status}
-      </div>
-      
-      <div style={{ marginTop: "15px", fontSize: "14px" }}>
-        <div>Backend: http://localhost:3000</div>
-        <div>Frontend: http://localhost:5173</div>
-      </div>
-    </div>
+    </form>
   );
 }
