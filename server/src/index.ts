@@ -21,7 +21,7 @@ app.use(cors(
 app.get("/",(req:Request,res:Response)=>{
 res.json({message:"here is the updated one man"})
 })
-app.get("/ber",(req:Request,res:Response)=>{
+app.get("/api/abebe",(req:Request,res:Response)=>{
     res.json({
         message:"kfet belew berun ye getawn man"
     })

@@ -9,7 +9,7 @@ import {
   BookOpen,
   Award,
   Star,
-  CheckCircle,
+
   User,
   GraduationCap,
   ArrowRight,
@@ -23,7 +23,6 @@ export default function SignIn() {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -41,77 +40,85 @@ export default function SignIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+
+    // Basic validation
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all required fields");
+      setLoading(false);
+      return;
+    }
+
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
     try {
       if (isLogin) {
         // Sign in with email and password
-        const { data, error } = await authClient.signIn.email({
+        const result = await authClient.signIn.email({
           email: formData.email,
           password: formData.password,
         });
 
-        if (error) {
-          toast.error("Sign in failed");
+        console.log("Login result:", result);
+
+        if (result.error) {
+          toast.error(`Sign in failed: ${result.error.message}`);
           return;
         }
 
-        if (data) {
-          toast.success("Sign in successful:");
+        if (result.data) {
+          toast.success("Welcome back! Sign in successful.");
           navigate("/dashboard");
         }
       } else {
         // Sign up with email and password
-        if (formData.password !== formData.confirmPassword) {
-          toast.error("Passwords do not match");
-          setLoading(false);
-          return;
-        }
-
-        const { data, error } = await authClient.signUp.email({
+        const result = await authClient.signUp.email({
           email: formData.email,
           password: formData.password,
           name: formData.fullName,
         });
 
-        if (error) {
-          toast.error("Sign up fail");
+        console.log("Signup result:", result);
+
+        if (result.error) {
+          toast.error(`Sign up failed: ${result.error.message}`);
           return;
         }
 
-        if (data) {
-          console.log("Sign up successful:", data);
-          // Optionally sign in automatically after sign up
-          navigate("/dashboard");
+        if (result.data) {
+          toast.success("Account created successfully! Welcome to ExamMaster.");
+          
+          // Auto sign in after successful signup
+          const signInResult = await authClient.signIn.email({
+            email: formData.email,
+            password: formData.password,
+          });
+          
+          if (signInResult.data) {
+            navigate("/dashboard");
+          } else {
+            navigate("/signin");
+          }
         }
       }
-    } catch (err) {
-      toast.error("An unexpected error occurred");
+    } catch (err: any) {
       console.error("Auth error:", err);
+      toast.error("Network error. Please check if backend is running.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Social authentication handlers
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    setError("");
-
     try {
-      const { data, error } = await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/dashboard", // Redirect after successful login
-      });
-
-      if (error) {
-        toast.error("Google sign in failed");
-      }
-
-      // The social sign-in will redirect to the provider's page
-      // BetterAuth handles the callback automatically
+      // Simple direct redirect approach
+      window.location.href = "http://localhost:3000/api/auth/oauth/google";
     } catch (err) {
-      toast.error("Google sign in failed");
+      toast.error("Failed to start Google sign-in");
       console.error("Google auth error:", err);
     } finally {
       setLoading(false);
@@ -123,8 +130,6 @@ export default function SignIn() {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // Clear error when user starts typing
-    if (error) setError("");
   };
 
   return (
@@ -157,18 +162,15 @@ export default function SignIn() {
           transition={{ duration: 0.8 }}
           className="text-center lg:text-left"
         >
-          {/* Your existing content remains the same */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring" }}
             className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full mb-8"
           >
-            <img
-              src="exam-logo.png"
-              alt="Exam Master"
-              className="h-8 w-8 rounded-full border-2 border-yellow-400"
-            />
+            <div className="h-8 w-8 bg-yellow-400 rounded-full border-2 border-yellow-400 flex items-center justify-center">
+              <span className="text-sm font-bold">EM</span>
+            </div>
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               ExamMaster
             </span>
@@ -249,18 +251,6 @@ export default function SignIn() {
           transition={{ duration: 0.8 }}
           className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8"
         >
-          {/* Error Message */}
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl flex items-center gap-2"
-            >
-              <CheckCircle className="w-4 h-4" />
-              {error}
-            </motion.div>
-          )}
-
           {/* Toggle between Login/Signup */}
           <motion.div
             layout
@@ -295,7 +285,6 @@ export default function SignIn() {
           </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Form fields remain the same */}
             {!isLogin && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
@@ -323,7 +312,7 @@ export default function SignIn() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                Email Address *
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -341,7 +330,7 @@ export default function SignIn() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                Password *
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -353,6 +342,7 @@ export default function SignIn() {
                   className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                   placeholder="Enter your password"
                   required
+                  minLength={6}
                 />
                 <button
                   type="button"
@@ -376,7 +366,7 @@ export default function SignIn() {
                 transition={{ duration: 0.3 }}
               >
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm Password
+                  Confirm Password *
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -388,29 +378,10 @@ export default function SignIn() {
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     placeholder="Confirm your password"
                     required={!isLogin}
+                    minLength={6}
                   />
                 </div>
               </motion.div>
-            )}
-
-            {isLogin && (
-              <div className="flex items-center justify-between">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-600">
-                    Remember me
-                  </span>
-                </label>
-                <Link
-                  to="/forgot-password"
-                  className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
             )}
 
             <motion.button
