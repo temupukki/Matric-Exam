@@ -19,6 +19,7 @@ import {
   Globe,
   Lock
 } from "lucide-react";
+import { authClient } from "../lib/auth-client";
 
 interface UserSession {
   user?: {
@@ -29,14 +30,6 @@ interface UserSession {
 }
 
 // Mock auth client - replace with your actual auth client
-const authClient = {
-  signOut: async (options: { fetchOptions: { onSuccess: () => void } }) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    options.fetchOptions.onSuccess();
-  }
-};
-
 export default function Profile() {
   const navigate = useNavigate();
   const [session, setSession] = useState<UserSession | null>(null);

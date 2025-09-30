@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Bookmark
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface UserSession {
   user?: {
@@ -29,6 +30,7 @@ interface UserSession {
 export default function Dashboard() {
   const [session, setSession] = useState<UserSession | null>(null);
   const [loading, setLoading] = useState(true);
+ const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchMe() {
@@ -91,29 +93,13 @@ export default function Dashboard() {
       </div>
     );
   }
+  useEffect(() => {
+    if (!session) {
+      navigate("/"); // immediately redirect to home page
+    }
+  }, [session, navigate]);
 
-  if (!session) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-lg"
-        >
-          <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">No Session Found</h2>
-          <p className="text-gray-600 mb-4">Please log in to access your dashboard</p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-semibold"
-          >
-            Go to Login
-          </motion.button>
-        </motion.div>
-      </div>
-    );
-  }
+   if (!session) return null; 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
