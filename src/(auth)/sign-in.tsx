@@ -100,7 +100,7 @@ export default function SignIn() {
     try {
       const result = await authClient.signIn.social({
         provider: "google",
-          callbackURL: "/dashboard",
+        callbackURL: "/dashboard",
      
       });
 
@@ -111,7 +111,7 @@ export default function SignIn() {
         return;
       }
       toast.success("Google sign in successful!");
-      navigate("/dashboard");
+     
     } catch (error: any) {
       toast.error("Google sign in failed");
       console.error("Google auth error:", error);
