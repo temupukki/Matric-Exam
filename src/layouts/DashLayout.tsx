@@ -1,8 +1,8 @@
-// src/layouts/MainLayout.tsx
+
 import React from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { Toaster } from "sonner";
+import DashNavbar from "../components/DashNavbar";
+import DashFooter from "../components/DashFooter";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -11,10 +11,10 @@ interface MainLayoutProps {
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
+      <DashNavbar />
       <main className="flex-1">{children}</main>
       <Toaster/>
-      <Footer />
+      <DashFooter/>
     </div>
   );
 }
