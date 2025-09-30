@@ -10,6 +10,7 @@ import SignIn from "./(auth)/sign-in";
 import Privacy from "./Privacy";
 import Terms from "./Terms";
 import SimpleTest from "./components/Simpletest";
+import Dashboard from "./dashboard";
 
 function App() {
   return (
@@ -79,6 +80,14 @@ function App() {
           element={
             <MainLayout>
               <SimpleTest />
+            </MainLayout>
+          }
+        />
+          <Route
+          path="/dashboard"
+          element={
+            <MainLayout>
+              <Dashboard/>
             </MainLayout>
           }
         />
