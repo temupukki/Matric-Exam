@@ -1,116 +1,35 @@
-import { useState, useEffect } from "react";
-import { authClient } from "../lib/auth-client";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  emailVerified: boolean;
-  createdAt: string;
-}
-
-export default function UserProfile() {
-  const [user, setUser] = useState<User | null>(null);
+export default function Dashboard() {
+  const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch user session
-  const fetchUser = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch("http://localhost:3000/api/me", {
-        credentials: "include", // Important for cookies
-      });
-      
-      const data = await response.json();
-      
-      if (data.success && data.user) {
-        setUser(data.user);
-      } else {
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
- 
-
-  // Sign out function
-  const handleSignOut = async () => {
-    try {
-      await authClient.signOut();
-      setUser(null);
-      toast.success("Signed out successfully");
-    } catch (error) {
-      toast.error("Failed to sign out");
-    }
-  };
-
-  // Fetch user on component mount
   useEffect(() => {
-    fetchUser();
+    async function fetchSession() {
+      try {
+        const res = await fetch("http://localhost:3000/api/session"); // your backend route
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        console.error("Error fetching session:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchSession();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="p-4 border rounded-lg">
-        <div className="animate-pulse">Loading user info...</div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="p-4 border border-yellow-300 bg-yellow-50 rounded-lg">
-        <p>Not signed in</p>
-      </div>
-    );
-  }
+  if (loading) return <p>Loading...</p>;
+  if (!data) return <p>No session data found</p>;
 
   return (
-    <div className="p-6 border border-green-300 bg-green-50 rounded-lg max-w-md">
-      <h2 className="text-xl font-bold mb-4">User Profile</h2>
-      
-      <div className="space-y-3">
-        <div>
-          <label className="font-semibold">Name:</label>
-          <p className="text-gray-700">{user.name}</p>
-        </div>
-        
-        <div>
-          <label className="font-semibold">Email:</label>
-          <p className="text-gray-700">{user.email}</p>
-        </div>
-        
-        <div>
-          <label className="font-semibold">User ID:</label>
-          <p className="text-gray-700 text-sm">{user.id}</p>
-        </div>
-        
-        <div>
-          <label className="font-semibold">Email Verified:</label>
-          <p className="text-gray-700">{user.emailVerified ? "Yes" : "No"}</p>
-        </div>
-        
-        <div>
-          <label className="font-semibold">Created:</label>
-          <p className="text-gray-700 text-sm">
-            {new Date(user.createdAt).toLocaleDateString()}
-          </p>
-        </div>
-      </div>
-
-      <button
-        onClick={handleSignOut}
-        className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-      >
-        Sign Out
-      </button>
+    <div className="p-4 border rounded">
+      <h2 className="font-bold">User Session</h2>
+      <p><strong>Name:</strong> {data.user?.name}</p>
+      <p><strong>Email:</strong> {data.user?.email}</p>
+      <p><strong>Token:</strong> {data.session?.token}</p>
+      <p><strong>Expires At:</strong> {data.session?.expiresAt}</p>
     </div>
   );
 }
