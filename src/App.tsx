@@ -12,6 +12,7 @@ import Terms from "./Terms";
 import SimpleTest from "./components/Simpletest";
 import Dashboard from "./dashboard";
 import DashLayout from "./layouts/DashLayout";
+import Profile from "./Profile";
 
 function App() {
   return (
@@ -96,7 +97,7 @@ function App() {
           path="/dashboard/profile"
           element={
             <DashLayout>
-              <Dashboard/>
+              <Profile/>
             </DashLayout>
           }
         />

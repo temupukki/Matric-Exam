@@ -284,19 +284,7 @@ export default function Navbar() {
                           </div>
                         </Link>
 
-                        <Link
-                          to="/settings"
-                          onClick={() => setIsUserDropdownOpen(false)}
-                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors group"
-                        >
-                          <div className="p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors">
-                            <Settings className="w-4 h-4 text-purple-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium">Settings</p>
-                            <p className="text-xs text-gray-500">Account preferences</p>
-                          </div>
-                        </Link>
+                 
                       </div>
                     </motion.div>
                   )}
