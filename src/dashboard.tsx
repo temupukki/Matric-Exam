@@ -7,7 +7,7 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchSession() {
       try {
-        const res = await fetch("http://localhost:3000/api/session"); // your backend route
+        const res = await fetch("http://localhost:3000/api/me"); // your backend route
         const json = await res.json();
         setData(json);
       } catch (err) {
