@@ -100,17 +100,18 @@ export default function SignIn() {
     try {
       const result = await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: "http://localhost:5173/dashboard",
+        
      
       });
 
-      console.log("Google auth result:", result);
+       toast.success("Google sign in sucessfully handeled !");
 
       if (result.error) {
         toast.error(` ${result.error.message}`);
         return;
       }
-      toast.success("Google sign in successful!");
+      toast.loading("lets procced to the next steps !");
      
     } catch (error: any) {
       toast.error("Google sign in failed");
