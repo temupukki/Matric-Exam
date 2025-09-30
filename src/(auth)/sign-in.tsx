@@ -73,7 +73,7 @@ export default function SignIn() {
           toast.error(`Sign up failed: ${result.error.message}`);
         } else {
           toast.success("Account created successfully!");
-          
+
           // Auto login after signup
           const loginResult = await authClient.signIn.email({
             email: formData.email,
@@ -96,7 +96,7 @@ export default function SignIn() {
   // Google SignIn - SIMPLE VERSION
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    
+
     try {
       const result = await authClient.signIn.social({
         provider: "google",
@@ -108,16 +108,8 @@ export default function SignIn() {
         toast.error(` ${result.error.message}`);
         return;
       }
-
-      // If we get a URL, redirect to Google OAuth
-      if (result.data?.url) {
-        window.location.href = result.data.url;
-      } else {
-        // If no URL, maybe it worked automatically
-        toast.success("Google sign in successful!");
-        navigate("/dashboard");
-      }
-
+      toast.success("Google sign in successful!");
+      navigate("/dashboard");
     } catch (error: any) {
       toast.error("Google sign in failed");
       console.error("Google auth error:", error);
