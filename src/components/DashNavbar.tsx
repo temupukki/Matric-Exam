@@ -10,7 +10,8 @@ import {
   User, 
   LogOut, 
   LayoutDashboard,
-  Settings
+  Settings,
+  ChevronDown
 } from "lucide-react";
 
 // Mock user session - replace this with your actual auth logic
@@ -26,6 +27,13 @@ const useSession = () => {
         const userData = localStorage.getItem('user');
         if (userData) {
           setSession(JSON.parse(userData));
+        } else {
+          // Mock user data for demonstration
+          setSession({
+            name: "John Student",
+            email: "john.student@exammaster.com",
+            createdAt: new Date().toISOString()
+          });
         }
       } catch (error) {
         console.error('Error fetching session:', error);
@@ -49,6 +57,7 @@ const useSession = () => {
 export default function Navbar() {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { session, loading, logout } = useSession();
 
@@ -77,11 +86,9 @@ export default function Navbar() {
 
   // Navigation items for signed in users
   const userNavItems = [
-    { path: "/", label: "Home", icon: <Star className="w-4 h-4" /> },
-    { path: "/stream", label: "Stream", icon: <BookOpen className="w-4 h-4" /> },
-    { path: "/feature", label: "Features", icon: <GraduationCap className="w-4 h-4" /> },
-    { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-    { path: "/profile", label: "Profile", icon: <User className="w-4 h-4" /> },
+   { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
+
+    
   ];
 
   const navItems = session ? userNavItems : guestNavItems;
@@ -89,6 +96,16 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
     setIsMobileMenuOpen(false);
+    setIsUserDropdownOpen(false);
+  };
+
+  const getUserInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
@@ -164,54 +181,144 @@ export default function Navbar() {
               />
             ))}
             
-            {/* User profile dropdown for signed in users */}
-            {session && (
+            {/* User profile section for signed in users */}
+            {session ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative group"
+                className="relative"
               >
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 border border-white/20"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                    {session.name?.charAt(0).toUpperCase() || 'U'}
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg">
+                      {getUserInitials(session.name)}
+                    </div>
+                    <div className="text-left">
+                      <p className="font-semibold text-sm leading-tight">
+                        {session.name.split(' ')[0]} {/* First name only */}
+                      </p>
+                      <p className="text-xs text-white/70 leading-tight">
+                        {session.email.split('@')[0]} {/* Username only */}
+                      </p>
+                    </div>
                   </div>
-                  <span className="font-semibold">{session.name || 'User'}</span>
+                  <motion.div
+                    animate={{ rotate: isUserDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </motion.div>
                 </motion.button>
                 
                 {/* Dropdown menu */}
-                <div className="absolute top-full right-0 mt-2 w-48 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right">
-                  <div className="p-2">
-                    <div className="px-3 py-2 border-b border-gray-200/50">
-                      <p className="text-sm font-semibold text-gray-900">{session.name}</p>
-                      <p className="text-xs text-gray-600">{session.email}</p>
-                    </div>
-                    <Link
-                      to="/profile"
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors"
+                <AnimatePresence>
+                  {isUserDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full right-0 mt-2 w-64 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 overflow-hidden"
                     >
-                      <User className="w-4 h-4" />
-                      Profile
-                    </Link>
-                    <Link
-                      to="/settings"
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors"
-                    >
-                      <Settings className="w-4 h-4" />
-                      Settings
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Logout
-                    </button>
-                  </div>
-                </div>
+                      {/* User info header */}
+                      <div className="p-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white text-lg font-bold">
+                            {getUserInitials(session.name)}
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-semibold">{session.name}</p>
+                            <p className="text-sm text-white/80">{session.email}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Menu items */}
+                      <div className="p-2">
+                        <Link
+                          to="/profile"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors group"
+                        >
+                          <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
+                            <User className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium">My Profile</p>
+                            <p className="text-xs text-gray-500">View and edit your profile</p>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/dashboard"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors group"
+                        >
+                          <div className="p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors">
+                            <LayoutDashboard className="w-4 h-4 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Dashboard</p>
+                            <p className="text-xs text-gray-500">Your learning dashboard</p>
+                          </div>
+                        </Link>
+
+                        <Link
+                          to="/settings"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors group"
+                        >
+                          <div className="p-2 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors">
+                            <Settings className="w-4 h-4 text-purple-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Settings</p>
+                            <p className="text-xs text-gray-500">Account preferences</p>
+                          </div>
+                        </Link>
+
+                        <div className="border-t border-gray-200 my-2"></div>
+
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center gap-3 w-full px-3 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors group"
+                        >
+                          <div className="p-2 bg-red-100 rounded-lg group-hover:bg-red-200 transition-colors">
+                            <LogOut className="w-4 h-4 text-red-600" />
+                          </div>
+                          <div>
+                            <p className="font-medium">Logout</p>
+                            <p className="text-xs text-red-500">Sign out of your account</p>
+                          </div>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ) : (
+              // Get Started button for guests
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+              >
+                <Link
+                  to="/sign-in"
+                  className="bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-6 py-3 rounded-full font-semibold hover:from-yellow-300 hover:to-amber-400 hover:scale-105 hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+                >
+                  Get Started
+                  <motion.span
+                    animate={{ x: [0, 3, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    →
+                  </motion.span>
+                </Link>
               </motion.div>
             )}
           </div>
@@ -289,25 +396,56 @@ export default function Navbar() {
                   />
                 ))}
                 
-                {/* User info and logout for mobile */}
-                {session && (
+                {/* User info and menu for mobile */}
+                {session ? (
                   <>
-                    <div className="border-t border-white/20 pt-2 mt-2">
-                      <div className="px-4 py-3 text-white/80">
-                        <p className="font-semibold">{session.name}</p>
-                        <p className="text-sm text-white/60">{session.email}</p>
+                    <div className="border-t border-white/20 pt-4 mt-2">
+                      {/* User info */}
+                      <div className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl mb-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                          {getUserInitials(session.name)}
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold text-white">{session.name}</p>
+                          <p className="text-sm text-white/70">{session.email}</p>
+                        </div>
                       </div>
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+
+                      {/* User menu items */}
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        My Profile
+                      </Link>
+                      <Link
+                        to="/settings"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-colors"
+                      >
+                        <Settings className="w-4 h-4" />
+                        Settings
+                      </Link>
+                      <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-red-500/20 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-red-500/20 transition-colors"
                       >
                         <LogOut className="w-4 h-4" />
                         Logout
-                      </motion.button>
+                      </button>
                     </div>
                   </>
+                ) : (
+                  // Get Started for mobile guests
+                  <Link
+                    to="/sign-in"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-4 py-3 rounded-xl font-semibold text-center hover:shadow-xl transition-all duration-300 mt-2"
+                  >
+                    Get Started
+                  </Link>
                 )}
               </div>
             </motion.div>
@@ -339,8 +477,6 @@ function NavLink({ item, index, isActive, onClick }: NavLinkProps) {
         className={`relative z-10 px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 group ${
           isActive
             ? "text-yellow-400 font-bold shadow-lg"
-            : item.highlight
-            ? "bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 hover:from-yellow-300 hover:to-amber-400 hover:scale-105 hover:shadow-xl"
             : "text-white hover:text-yellow-300 hover:bg-white/10"
         }`}
       >
@@ -354,8 +490,8 @@ function NavLink({ item, index, isActive, onClick }: NavLinkProps) {
         )}
         {item.label}
         
-        {/* Hover effect for non-highlighted items */}
-        {!isActive && !item.highlight && (
+        {/* Hover effect */}
+        {!isActive && (
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-amber-400/20 rounded-full scale-0"
             whileHover={{ scale: 1 }}
@@ -405,8 +541,6 @@ function MobileNavLink({ item, index, isActive, onClick }: NavLinkProps) {
         className={`relative overflow-hidden group p-4 rounded-xl font-semibold transition-all duration-300 flex items-center gap-3 ${
           isActive
             ? "bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 shadow-lg"
-            : item.highlight
-            ? "bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 hover:shadow-xl"
             : "text-white hover:bg-white/10 hover:shadow-lg"
         }`}
       >
