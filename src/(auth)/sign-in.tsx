@@ -93,13 +93,15 @@ export default function SignIn() {
     }
   };
 
-  // Google SignIn - SIMPLE VERSION
+  
   const handleGoogleSignIn = async () => {
     setLoading(true);
 
     try {
       const result = await authClient.signIn.social({
         provider: "google",
+          callbackURL: "/dashboard",
+     
       });
 
       console.log("Google auth result:", result);
