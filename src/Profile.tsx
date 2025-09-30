@@ -18,6 +18,8 @@ import {
   Globe,
   Lock
 } from "lucide-react";
+import { authClient } from "../lib/auth-client";
+import { useNavigate } from "react-router-dom";
 
 interface UserSession {
   user?: {
@@ -27,10 +29,11 @@ interface UserSession {
   };
 }
 
-export default function Profile() {
+export default async function Profile() {
   const [session, setSession] = useState<UserSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("profile");
+    const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchMe() {
@@ -115,7 +118,19 @@ export default function Profile() {
       </div>
     );
   }
-
+  const handleLogout = async () => {
+    try {
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            navigate("/"); 
+          },
+        },
+      });
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
       {/* Animated Background */}
@@ -193,6 +208,8 @@ export default function Profile() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleLogout}
+               
                 className="flex items-center gap-2 px-6 py-3 bg-red-100 text-red-700 rounded-xl font-semibold hover:bg-red-200 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
