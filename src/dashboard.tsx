@@ -1,35 +1,40 @@
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
-  const [data, setData] = useState<any>(null);
+  const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchSession() {
+    async function fetchMe() {
       try {
-        const res = await fetch("http://localhost:3000/api/me"); // your backend route
-        const json = await res.json();
-        setData(json);
+        const res = await fetch("http://localhost:3000/api/me", {
+          credentials: "include", // send cookies with request
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch /api/me");
+
+        const data = await res.json();
+        setSession(data);
       } catch (err) {
-        console.error("Error fetching session:", err);
+        console.error("Error fetching /api/me:", err);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchSession();
+    fetchMe();
   }, []);
 
   if (loading) return <p>Loading...</p>;
-  if (!data) return <p>No session data found</p>;
+  if (!session) return <p>No session found</p>;
 
   return (
-    <div className="p-4 border rounded">
-      <h2 className="font-bold">User Session</h2>
-      <p><strong>Name:</strong> {data.user?.name}</p>
-      <p><strong>Email:</strong> {data.user?.email}</p>
-      <p><strong>Token:</strong> {data.session?.token}</p>
-      <p><strong>Expires At:</strong> {data.session?.expiresAt}</p>
+    <div>
+      <h2>User Info</h2>
+      <p><strong>Name:</strong> {session.user?.name}</p>
+      <p><strong>Email:</strong> {session.user?.email}</p>
+      <p><strong>Token:</strong> {session.session?.token}</p>
+      <p><strong>Expires:</strong> {session.session?.expiresAt}</p>
     </div>
   );
 }
