@@ -8,7 +8,7 @@ interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export default function DashLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <DashNavbar />
