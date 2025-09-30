@@ -8,7 +8,6 @@ import {
   Star, 
   GraduationCap, 
   User, 
-  LogOut, 
   LayoutDashboard,
   Settings,
   ChevronDown
@@ -41,22 +40,7 @@ const useSession = () => {
     fetchMe();
   }, []);
 
-  const logout = async () => {
-    try {
-      // Call your logout API if you have one
-      await fetch("http://localhost:3000/api/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      setSession(null);
-      window.location.href = '/';
-    }
-  };
-
-  return { session, loading, logout };
+  return { session, loading };
 };
 
 export default function Navbar() {
@@ -64,7 +48,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { session, loading, logout } = useSession();
+  const { session, loading } = useSession();
 
   // Handle scroll effect
   useEffect(() => {
@@ -98,12 +82,6 @@ export default function Navbar() {
   ];
 
   const navItems = session ? userNavItems : guestNavItems;
-
-  const handleLogout = () => {
-    logout();
-    setIsMobileMenuOpen(false);
-    setIsUserDropdownOpen(false);
-  };
 
   const getUserInitials = (name: string) => {
     if (!name) return 'U';
@@ -321,21 +299,6 @@ export default function Navbar() {
                             <p className="text-xs text-gray-500">Account preferences</p>
                           </div>
                         </Link>
-
-                        <div className="border-t border-gray-200 my-2"></div>
-
-                        <button
-                          onClick={handleLogout}
-                          className="flex items-center gap-3 w-full px-3 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors group"
-                        >
-                          <div className="p-2 bg-red-100 rounded-lg group-hover:bg-red-200 transition-colors">
-                            <LogOut className="w-4 h-4 text-red-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium">Logout</p>
-                            <p className="text-xs text-red-500">Sign out of your account</p>
-                          </div>
-                        </button>
                       </div>
                     </motion.div>
                   )}
@@ -468,13 +431,6 @@ export default function Navbar() {
                         <Settings className="w-4 h-4" />
                         Settings
                       </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-red-500/20 transition-colors"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                      </button>
                     </div>
                   </>
                 ) : (
