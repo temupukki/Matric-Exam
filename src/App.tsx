@@ -92,6 +92,14 @@ function App() {
             </DashLayout>
           }
         />
+           <Route
+          path="/dashboard/profile"
+          element={
+            <DashLayout>
+              <Dashboard/>
+            </DashLayout>
+          }
+        />
       </Routes>
     </Router>
   );

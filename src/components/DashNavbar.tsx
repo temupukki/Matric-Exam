@@ -257,7 +257,7 @@ export default function Navbar() {
                       {/* Menu items */}
                       <div className="p-2">
                         <Link
-                          to="/profile"
+                          to="/dashboard/profile"
                           onClick={() => setIsUserDropdownOpen(false)}
                           className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-blue-50 transition-colors group"
                         >
