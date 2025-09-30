@@ -111,7 +111,7 @@ export default function SignIn() {
         toast.error(` ${result.error.message}`);
         return;
       }
-      toast.loading("lets procced to the next steps !");
+      toast.loading("Processing!");
      
     } catch (error: any) {
       toast.error("Google sign in failed");
