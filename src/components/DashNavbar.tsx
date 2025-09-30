@@ -75,9 +75,7 @@ export default function Navbar() {
 
   // Navigation items for signed in users
   const userNavItems = [
-    { path: "/", label: "Home", icon: <Star className="w-4 h-4" /> },
-    { path: "/stream", label: "Stream", icon: <BookOpen className="w-4 h-4" /> },
-    { path: "/feature", label: "Features", icon: <GraduationCap className="w-4 h-4" /> },
+ 
     { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
   ];
 
