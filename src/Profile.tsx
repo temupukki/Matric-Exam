@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { 
-  User, 
-  Mail, 
-  Calendar, 
-  Edit3, 
-  Settings, 
+import {
+  User,
+  Mail,
+  Calendar,
+  Edit3,
+  Settings,
   LogOut,
   BookOpen,
   Award,
@@ -16,7 +16,7 @@ import {
   Shield,
   Bell,
   Globe,
-  Lock
+  Lock,
 } from "lucide-react";
 import { authClient } from "../lib/auth-client";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,7 @@ export default async function Profile() {
   const [session, setSession] = useState<UserSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("profile");
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchMe() {
@@ -58,23 +58,66 @@ export default async function Profile() {
 
   // Mock user stats
   const userStats = [
-    { label: "Courses Completed", value: "8", icon: <BookOpen className="w-5 h-5" />, color: "from-blue-500 to-cyan-500" },
-    { label: "Tests Taken", value: "45", icon: <Award className="w-5 h-5" />, color: "from-green-500 to-emerald-500" },
-    { label: "Average Score", value: "87%", icon: <BarChart3 className="w-5 h-5" />, color: "from-purple-500 to-pink-500" },
-    { label: "Study Hours", value: "156", icon: <Clock className="w-5 h-5" />, color: "from-orange-500 to-amber-500" }
+    {
+      label: "Courses Completed",
+      value: "8",
+      icon: <BookOpen className="w-5 h-5" />,
+      color: "from-blue-500 to-cyan-500",
+    },
+    {
+      label: "Tests Taken",
+      value: "45",
+      icon: <Award className="w-5 h-5" />,
+      color: "from-green-500 to-emerald-500",
+    },
+    {
+      label: "Average Score",
+      value: "87%",
+      icon: <BarChart3 className="w-5 h-5" />,
+      color: "from-purple-500 to-pink-500",
+    },
+    {
+      label: "Study Hours",
+      value: "156",
+      icon: <Clock className="w-5 h-5" />,
+      color: "from-orange-500 to-amber-500",
+    },
   ];
 
   const recentAchievements = [
-    { name: "Math Master", description: "Completed all math courses", icon: <Star className="w-4 h-4" />, date: "2 days ago" },
-    { name: "Science Pro", description: "Scored 95% in science test", icon: <Award className="w-4 h-4" />, date: "1 week ago" },
-    { name: "Consistent Learner", description: "7-day study streak", icon: <CheckCircle className="w-4 h-4" />, date: "2 weeks ago" }
+    {
+      name: "Math Master",
+      description: "Completed all math courses",
+      icon: <Star className="w-4 h-4" />,
+      date: "2 days ago",
+    },
+    {
+      name: "Science Pro",
+      description: "Scored 95% in science test",
+      icon: <Award className="w-4 h-4" />,
+      date: "1 week ago",
+    },
+    {
+      name: "Consistent Learner",
+      description: "7-day study streak",
+      icon: <CheckCircle className="w-4 h-4" />,
+      date: "2 weeks ago",
+    },
   ];
 
   const tabs = [
     { id: "profile", label: "Profile", icon: <User className="w-4 h-4" /> },
-    { id: "preferences", label: "Preferences", icon: <Settings className="w-4 h-4" /> },
+    {
+      id: "preferences",
+      label: "Preferences",
+      icon: <Settings className="w-4 h-4" />,
+    },
     { id: "security", label: "Security", icon: <Shield className="w-4 h-4" /> },
-    { id: "notifications", label: "Notifications", icon: <Bell className="w-4 h-4" /> }
+    {
+      id: "notifications",
+      label: "Notifications",
+      icon: <Bell className="w-4 h-4" />,
+    },
   ];
 
   if (loading) {
@@ -105,8 +148,12 @@ export default async function Profile() {
           className="text-center bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-lg"
         >
           <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">No Session Found</h2>
-          <p className="text-gray-600 mb-4">Please log in to view your profile</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            No Session Found
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Please log in to view your profile
+          </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -118,19 +165,7 @@ export default async function Profile() {
       </div>
     );
   }
-  const handleLogout = async () => {
-    try {
-      await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            navigate("/"); 
-          },
-        },
-      });
-    } catch (err) {
-      console.error("Logout failed:", err);
-    }
-  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
       {/* Animated Background */}
@@ -139,7 +174,7 @@ export default async function Profile() {
           animate={{
             x: [0, 100, 0],
             y: [0, -50, 0],
-            transition: { duration: 25, repeat: Infinity, ease: "linear" }
+            transition: { duration: 25, repeat: Infinity, ease: "linear" },
           }}
           className="absolute -top-20 -left-20 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl"
         />
@@ -147,7 +182,7 @@ export default async function Profile() {
           animate={{
             x: [0, -100, 0],
             y: [0, 50, 0],
-            transition: { duration: 30, repeat: Infinity, ease: "linear" }
+            transition: { duration: 30, repeat: Infinity, ease: "linear" },
           }}
           className="absolute -bottom-20 -right-20 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl"
         />
@@ -176,7 +211,7 @@ export default async function Profile() {
                   className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 border-4 border-white rounded-full"
                 />
               </motion.div>
-              
+
               <div>
                 <h1 className="text-4xl font-bold text-gray-900 mb-2">
                   {session.user?.name || "Student"}
@@ -188,7 +223,12 @@ export default async function Profile() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="w-5 h-5" />
-                    <span>Joined {new Date(session.user?.createdAt || Date.now()).toLocaleDateString()}</span>
+                    <span>
+                      Joined{" "}
+                      {new Date(
+                        session.user?.createdAt || Date.now()
+                      ).toLocaleDateString()}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -203,13 +243,11 @@ export default async function Profile() {
                 <Edit3 className="w-4 h-4" />
                 Edit Profile
               </motion.button>
-              
+
               {/* Logout Button (without logic) */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={handleLogout}
-               
                 className="flex items-center gap-2 px-6 py-3 bg-red-100 text-red-700 rounded-xl font-semibold hover:bg-red-200 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
@@ -243,12 +281,18 @@ export default async function Profile() {
                     className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100"
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg bg-gradient-to-r ${stat.color} text-white`}>
+                      <div
+                        className={`p-2 rounded-lg bg-gradient-to-r ${stat.color} text-white`}
+                      >
                         {stat.icon}
                       </div>
-                      <span className="font-medium text-gray-700">{stat.label}</span>
+                      <span className="font-medium text-gray-700">
+                        {stat.label}
+                      </span>
                     </div>
-                    <span className="text-lg font-bold text-gray-900">{stat.value}</span>
+                    <span className="text-lg font-bold text-gray-900">
+                      {stat.value}
+                    </span>
                   </motion.div>
                 ))}
               </div>
@@ -278,9 +322,15 @@ export default async function Profile() {
                       {achievement.icon}
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-900">{achievement.name}</p>
-                      <p className="text-sm text-gray-600">{achievement.description}</p>
-                      <p className="text-xs text-gray-500 mt-1">{achievement.date}</p>
+                      <p className="font-semibold text-gray-900">
+                        {achievement.name}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {achievement.description}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {achievement.date}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
@@ -303,8 +353,8 @@ export default async function Profile() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
+                      : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
                   }`}
                 >
                   {tab.icon}
@@ -321,11 +371,15 @@ export default async function Profile() {
                   animate={{ opacity: 1 }}
                   className="space-y-6"
                 >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Personal Information</h3>
-                  
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Personal Information
+                  </h3>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Full Name
+                      </label>
                       <input
                         type="text"
                         defaultValue={session.user?.name}
@@ -333,7 +387,9 @@ export default async function Profile() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address
+                      </label>
                       <input
                         type="email"
                         defaultValue={session.user?.email}
@@ -343,7 +399,9 @@ export default async function Profile() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Bio
+                    </label>
                     <textarea
                       rows={4}
                       placeholder="Tell us about yourself..."
@@ -367,13 +425,17 @@ export default async function Profile() {
                   animate={{ opacity: 1 }}
                   className="space-y-6"
                 >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Study Preferences</h3>
-                  
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Study Preferences
+                  </h3>
+
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
                       <div>
                         <p className="font-semibold text-gray-900">Dark Mode</p>
-                        <p className="text-sm text-gray-600">Switch to dark theme</p>
+                        <p className="text-sm text-gray-600">
+                          Switch to dark theme
+                        </p>
                       </div>
                       <div className="w-12 h-6 bg-gray-300 rounded-full relative">
                         <div className="w-6 h-6 bg-white rounded-full absolute left-0 top-0 shadow-md transform transition-transform" />
@@ -382,8 +444,12 @@ export default async function Profile() {
 
                     <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
                       <div>
-                        <p className="font-semibold text-gray-900">Study Reminders</p>
-                        <p className="text-sm text-gray-600">Daily study notifications</p>
+                        <p className="font-semibold text-gray-900">
+                          Study Reminders
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Daily study notifications
+                        </p>
                       </div>
                       <div className="w-12 h-6 bg-blue-500 rounded-full relative">
                         <div className="w-6 h-6 bg-white rounded-full absolute right-0 top-0 shadow-md transform transition-transform" />
@@ -407,15 +473,21 @@ export default async function Profile() {
                   animate={{ opacity: 1 }}
                   className="space-y-6"
                 >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Security Settings</h3>
-                  
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Security Settings
+                  </h3>
+
                   <div className="space-y-4">
                     <div className="p-4 rounded-xl bg-blue-50 border border-blue-200">
                       <div className="flex items-center justify-between mb-2">
-                        <p className="font-semibold text-gray-900">Change Password</p>
+                        <p className="font-semibold text-gray-900">
+                          Change Password
+                        </p>
                         <Lock className="w-5 h-5 text-blue-600" />
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">Update your password regularly for better security</p>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Update your password regularly for better security
+                      </p>
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -427,10 +499,14 @@ export default async function Profile() {
 
                     <div className="p-4 rounded-xl bg-green-50 border border-green-200">
                       <div className="flex items-center justify-between mb-2">
-                        <p className="font-semibold text-gray-900">Two-Factor Authentication</p>
+                        <p className="font-semibold text-gray-900">
+                          Two-Factor Authentication
+                        </p>
                         <Shield className="w-5 h-5 text-green-600" />
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">Add an extra layer of security to your account</p>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Add an extra layer of security to your account
+                      </p>
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -449,22 +525,55 @@ export default async function Profile() {
                   animate={{ opacity: 1 }}
                   className="space-y-6"
                 >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Notification Settings</h3>
-                  
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Notification Settings
+                  </h3>
+
                   <div className="space-y-4">
                     {[
-                      { label: "Email Notifications", description: "Receive updates via email", enabled: true },
-                      { label: "Push Notifications", description: "Get push notifications on your device", enabled: true },
-                      { label: "Study Reminders", description: "Daily study schedule reminders", enabled: false },
-                      { label: "Test Results", description: "Get notified when test results are ready", enabled: true },
+                      {
+                        label: "Email Notifications",
+                        description: "Receive updates via email",
+                        enabled: true,
+                      },
+                      {
+                        label: "Push Notifications",
+                        description: "Get push notifications on your device",
+                        enabled: true,
+                      },
+                      {
+                        label: "Study Reminders",
+                        description: "Daily study schedule reminders",
+                        enabled: false,
+                      },
+                      {
+                        label: "Test Results",
+                        description: "Get notified when test results are ready",
+                        enabled: true,
+                      },
                     ].map((setting, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-4 rounded-xl bg-gray-50"
+                      >
                         <div>
-                          <p className="font-semibold text-gray-900">{setting.label}</p>
-                          <p className="text-sm text-gray-600">{setting.description}</p>
+                          <p className="font-semibold text-gray-900">
+                            {setting.label}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {setting.description}
+                          </p>
                         </div>
-                        <div className={`w-12 h-6 rounded-full relative ${setting.enabled ? 'bg-blue-500' : 'bg-gray-300'}`}>
-                          <div className={`w-6 h-6 bg-white rounded-full absolute top-0 shadow-md transform transition-transform ${setting.enabled ? 'right-0' : 'left-0'}`} />
+                        <div
+                          className={`w-12 h-6 rounded-full relative ${
+                            setting.enabled ? "bg-blue-500" : "bg-gray-300"
+                          }`}
+                        >
+                          <div
+                            className={`w-6 h-6 bg-white rounded-full absolute top-0 shadow-md transform transition-transform ${
+                              setting.enabled ? "right-0" : "left-0"
+                            }`}
+                          />
                         </div>
                       </div>
                     ))}
