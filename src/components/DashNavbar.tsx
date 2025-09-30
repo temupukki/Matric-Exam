@@ -14,41 +14,46 @@ import {
   ChevronDown
 } from "lucide-react";
 
-// Mock user session - replace this with your actual auth logic
+// User session hook with your actual API
 const useSession = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching user session
-    const fetchSession = async () => {
+    async function fetchMe() {
       try {
-        // Replace this with your actual session check
-        const userData = localStorage.getItem('user');
-        if (userData) {
-          setSession(JSON.parse(userData));
-        } else {
-          // Mock user data for demonstration
-          setSession({
-            name: "John Student",
-            email: "john.student@exammaster.com",
-            createdAt: new Date().toISOString()
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching session:', error);
+        const res = await fetch("http://localhost:3000/api/me", {
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch /api/me");
+
+        const data = await res.json();
+        setSession(data);
+      } catch (err) {
+        console.error("Error fetching /api/me:", err);
+        setSession(null);
       } finally {
         setLoading(false);
       }
-    };
+    }
 
-    fetchSession();
+    fetchMe();
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem('user');
-    setSession(null);
-    window.location.href = '/';
+  const logout = async () => {
+    try {
+      // Call your logout API if you have one
+      await fetch("http://localhost:3000/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setSession(null);
+      window.location.href = '/';
+    }
   };
 
   return { session, loading, logout };
@@ -86,9 +91,10 @@ export default function Navbar() {
 
   // Navigation items for signed in users
   const userNavItems = [
-   { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-
-    
+    { path: "/", label: "Home", icon: <Star className="w-4 h-4" /> },
+    { path: "/stream", label: "Stream", icon: <BookOpen className="w-4 h-4" /> },
+    { path: "/feature", label: "Features", icon: <GraduationCap className="w-4 h-4" /> },
+    { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
   ];
 
   const navItems = session ? userNavItems : guestNavItems;
@@ -100,6 +106,7 @@ export default function Navbar() {
   };
 
   const getUserInitials = (name: string) => {
+    if (!name) return 'U';
     return name
       .split(' ')
       .map(part => part.charAt(0))
@@ -107,6 +114,39 @@ export default function Navbar() {
       .toUpperCase()
       .slice(0, 2);
   };
+
+  const getFirstName = (name: string) => {
+    if (!name) return 'User';
+    return name.split(' ')[0];
+  };
+
+  const getUsername = (email: string) => {
+    if (!email) return 'user';
+    return email.split('@')[0];
+  };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="p-4 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-700 text-white shadow-2xl sticky top-0 z-50"
+      >
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="h-12 w-12 rounded-full border-2 border-yellow-400 bg-gray-300 animate-pulse" />
+            <div className="h-6 w-32 bg-gray-300 rounded animate-pulse" />
+          </div>
+          <div className="hidden md:flex gap-2">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="h-10 w-20 bg-gray-300 rounded-full animate-pulse" />
+            ))}
+          </div>
+        </div>
+      </motion.nav>
+    );
+  }
 
   return (
     <>
@@ -196,14 +236,14 @@ export default function Navbar() {
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg">
-                      {getUserInitials(session.name)}
+                      {getUserInitials(session.user?.name || session.user?.email)}
                     </div>
                     <div className="text-left">
                       <p className="font-semibold text-sm leading-tight">
-                        {session.name.split(' ')[0]} {/* First name only */}
+                        {getFirstName(session.user?.name || session.user?.email)}
                       </p>
                       <p className="text-xs text-white/70 leading-tight">
-                        {session.email.split('@')[0]} {/* Username only */}
+                        {getUsername(session.user?.email)}
                       </p>
                     </div>
                   </div>
@@ -229,11 +269,11 @@ export default function Navbar() {
                       <div className="p-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white text-lg font-bold">
-                            {getUserInitials(session.name)}
+                            {getUserInitials(session.user?.name || session.user?.email)}
                           </div>
                           <div className="flex-1">
-                            <p className="font-semibold">{session.name}</p>
-                            <p className="text-sm text-white/80">{session.email}</p>
+                            <p className="font-semibold">{session.user?.name || 'User'}</p>
+                            <p className="text-sm text-white/80">{session.user?.email}</p>
                           </div>
                         </div>
                       </div>
@@ -403,11 +443,11 @@ export default function Navbar() {
                       {/* User info */}
                       <div className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl mb-3">
                         <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                          {getUserInitials(session.name)}
+                          {getUserInitials(session.user?.name || session.user?.email)}
                         </div>
                         <div className="flex-1">
-                          <p className="font-semibold text-white">{session.name}</p>
-                          <p className="text-sm text-white/70">{session.email}</p>
+                          <p className="font-semibold text-white">{session.user?.name || 'User'}</p>
+                          <p className="text-sm text-white/70">{session.user?.email}</p>
                         </div>
                       </div>
 
