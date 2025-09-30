@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { toNodeHandler } from "better-auth/node";
+import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import cors from "cors";
 
@@ -26,6 +26,13 @@ app.use(
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "The backend is running in the online man !" });
 });
+
+app.get("/api/me",async (req:Request,res:Response)=>{
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(req.headers),
+  })
+  return res.json(session);
+})
 
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
