@@ -402,21 +402,22 @@ export default function Navbar() {
 
                       {/* User menu items */}
                       <Link
-                        to="/profile"
+                        to="/dashboard/profile"
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-colors"
                       >
                         <User className="w-4 h-4" />
                         My Profile
                       </Link>
-                      <Link
-                        to="/settings"
+                        <Link
+                        to="/dashboard"
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-colors"
                       >
-                        <Settings className="w-4 h-4" />
-                        Settings
+                        <User className="w-4 h-4" />
+                        Dashboard
                       </Link>
+                   
                     </div>
                   </>
                 ) : (
