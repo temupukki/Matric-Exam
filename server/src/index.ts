@@ -24,7 +24,7 @@ app.use(
   })
 );
 app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "here is the updated one man" });
+  res.json({ message: "The backend is running in the online man !" });
 });
 
 app.listen(port, () => {
