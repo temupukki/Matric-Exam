@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   Clock, 
-  Calculator, 
   Flag, 
   CheckCircle, 
   XCircle,
@@ -11,7 +10,9 @@ import {
   ArrowRight,
   BookOpen,
   AlertCircle,
-  Award
+  Award,
+  Eye,
+  EyeOff
 } from "lucide-react";
 
 interface Question {
@@ -37,22 +38,18 @@ interface Score {
 export default function Physics2017Exam() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
-  const [timeLeft, setTimeLeft] = useState<number>(9000); // 2.5 hours in seconds (150 minutes)
+  const [timeLeft, setTimeLeft] = useState<number>(9000);
   const [answers, setAnswers] = useState<Answers>({});
   const [flagged, setFlagged] = useState<Set<number>>(new Set());
   const [showResults, setShowResults] = useState<boolean>(false);
+  const [showAnswers, setShowAnswers] = useState<boolean>(false);
 
   // 2017 Physics ESSLCE Questions with Answers
   const examQuestions: Question[] = [
     {
       id: 1,
       question: "A force that is exerted on a simple machine in order to produce input work is called",
-      options: [
-        "friction.",
-        "load.",
-        "effort.",
-        "normal."
-      ],
+      options: ["friction.", "load.", "effort.", "normal."],
       correctAnswer: 2,
       explanation: "Effort is the force applied to a simple machine to do work.",
       topic: "Simple Machines",
@@ -103,12 +100,7 @@ export default function Physics2017Exam() {
     {
       id: 5,
       question: "A wheel and axle of radii 40 cm and 8 cm, respectively, is used to lift a bucket of 6 kg of water from a well by applying an effort of 20 N on the wheel. The percentage efficiency of this simple machine is",
-      options: [
-        "60%",
-        "66.7%",
-        "30%",
-        "80%"
-      ],
+      options: ["60%", "66.7%", "30%", "80%"],
       correctAnswer: 0,
       explanation: "Efficiency = (Load × Load distance)/(Effort × Effort distance) × 100% = (60N × 0.08m)/(20N × 0.40m) × 100% = 60%",
       topic: "Simple Machines",
@@ -173,12 +165,7 @@ export default function Physics2017Exam() {
     {
       id: 12,
       question: "A circular coil is located in a uniform magnetic field of magnitude 0.50 T directed perpendicular to the plane of the coil. If the area of the coil changes with uniform rate, in such a way that it increases by 4.0 × 10⁻³ m² in 2 s, what is the magnitude of the induced electromotive force (emf) in the coil?",
-      options: [
-        "1.0 × 10³ V",
-        "2.5 × 10² V",
-        "1.0 × 10⁻³ V",
-        "4.0 × 10⁻³ V"
-      ],
+      options: ["1.0 × 10³ V", "2.5 × 10² V", "1.0 × 10⁻³ V", "4.0 × 10⁻³ V"],
       correctAnswer: 2,
       explanation: "ε = B·dA/dt = 0.50 × (4×10⁻³)/2 = 1.0 × 10⁻³ V",
       topic: "Electromagnetic Induction",
@@ -187,12 +174,7 @@ export default function Physics2017Exam() {
     {
       id: 13,
       question: "Vector quantities are represented by",
-      options: [
-        "direction only.",
-        "magnitude and direction.",
-        "dimensionless values.",
-        "magnitude only."
-      ],
+      options: ["direction only.", "magnitude and direction.", "dimensionless values.", "magnitude only."],
       correctAnswer: 1,
       explanation: "Vectors have both magnitude and direction.",
       topic: "Vectors",
@@ -243,12 +225,7 @@ export default function Physics2017Exam() {
     {
       id: 17,
       question: "Two displacement vectors have magnitudes 4 m and 3 m. Which one of the following is NOT the possible value of the magnitude of their resultant vector?",
-      options: [
-        "7 m",
-        "1 m",
-        "12 m",
-        "5 m"
-      ],
+      options: ["7 m", "1 m", "12 m", "5 m"],
       correctAnswer: 2,
       explanation: "Maximum resultant is 7m, minimum is 1m. 12m is impossible.",
       topic: "Vectors",
@@ -257,13 +234,8 @@ export default function Physics2017Exam() {
     {
       id: 18,
       question: "A train is moving along a straight line with a constant acceleration of 5 m/s² when it passes by a traffic light point. From there on, if the time taken by the train to reach a velocity of 30 m/s is 4 seconds, then what is the distance of the train from the traffic point after 8 seconds?",
-      options: [
-        "160 m",
-        "80 m",
-        "320 m",
-        "240 m"
-      ],
-      correctAnswer: 0,
+      options: ["160 m", "80 m", "320 m", "240 m"],
+      correctAnswer: 3,
       explanation: "Using s = ut + ½at², initial velocity u = v - at = 30 - 5×4 = 10 m/s, s = 10×8 + ½×5×64 = 80 + 160 = 240 m",
       topic: "Kinematics",
       difficulty: "Medium"
@@ -285,12 +257,7 @@ export default function Physics2017Exam() {
     {
       id: 20,
       question: "When an object tends to slide over the surface of another object, tiny bumps at the surface of the two objects knocking and locking together. This causes",
-      options: [
-        "frictional force.",
-        "normal force.",
-        "electrostatic force.",
-        "gravitational force."
-      ],
+      options: ["frictional force.", "normal force.", "electrostatic force.", "gravitational force."],
       correctAnswer: 0,
       explanation: "Surface irregularities cause friction.",
       topic: "Friction",
@@ -327,12 +294,7 @@ export default function Physics2017Exam() {
     {
       id: 23,
       question: "A 2 kg object accelerates with 1.5 m/s² to the right on a horizontal frictionless surface under the action of two horizontal forces, F₁ and F₂ as shown in the figure. If F₂ = 1 N to the left, what should be the magnitude of F₁?",
-      options: [
-        "4 N",
-        "3 N",
-        "1 N",
-        "2 N"
-      ],
+      options: ["4 N", "3 N", "1 N", "2 N"],
       correctAnswer: 0,
       explanation: "F_net = ma = 2×1.5 = 3N, F₁ - F₂ = 3N → F₁ = 4N",
       topic: "Dynamics",
@@ -341,12 +303,7 @@ export default function Physics2017Exam() {
     {
       id: 24,
       question: "A tennis ball of mass 0.10 kg traveling horizontally at 40.0 m/s is struck back by a racket. If the ball returns back with a speed of 30.0 m/s in the opposite direction, what is the magnitude of the impulse delivered to the ball by the racket?",
-      options: [
-        "1.0 kg m/s",
-        "7.0 kg m/s",
-        "4.0 kg m/s",
-        "3.0 kg m/s"
-      ],
+      options: ["1.0 kg m/s", "7.0 kg m/s", "4.0 kg m/s", "3.0 kg m/s"],
       correctAnswer: 1,
       explanation: "Impulse = mΔv = 0.10 × (40 - (-30)) = 7.0 kg m/s",
       topic: "Momentum",
@@ -397,12 +354,7 @@ export default function Physics2017Exam() {
     {
       id: 28,
       question: "A wheel of radius, r = 50 cm, rotates about a fixed perpendicular axis that passes through its center. If the angular speed is ω = 200 rad/s, how much is the tangential speed of a point on the rim of the wheel?",
-      options: [
-        "10,000 m/s",
-        "800 m/s",
-        "80,000 m/s",
-        "100 m/s"
-      ],
+      options: ["10,000 m/s", "800 m/s", "80,000 m/s", "100 m/s"],
       correctAnswer: 3,
       explanation: "v = rω = 0.5 × 200 = 100 m/s",
       topic: "Rotational Motion",
@@ -411,12 +363,7 @@ export default function Physics2017Exam() {
     {
       id: 29,
       question: "Suppose your mass is measured to be 50 kg. If your friend having a mass of 55 kg is at a distance 2 m apart from you, what is the magnitude of gravitational force between you and your friend?",
-      options: [
-        "9.2 × 10⁻⁸ N",
-        "9.2 × 10⁻¹¹ N",
-        "4.6 × 10⁻⁸ N",
-        "4.6 × 10⁻¹¹ N"
-      ],
+      options: ["9.2 × 10⁻⁸ N", "9.2 × 10⁻¹¹ N", "4.6 × 10⁻⁸ N", "4.6 × 10⁻¹¹ N"],
       correctAnswer: 2,
       explanation: "F = Gm₁m₂/r² = 6.67×10⁻¹¹ × 50 × 55 / 4 = 4.6 × 10⁻⁸ N",
       topic: "Gravitation",
@@ -425,12 +372,7 @@ export default function Physics2017Exam() {
     {
       id: 30,
       question: "A 10 N force is applied to the smaller circular piston of a hydraulic lift of radius 0.1 m to lift a 2500 N load placed on the larger piston. What is the area of the larger piston?",
-      options: [
-        "2.50 m²",
-        "0.25 m²",
-        "3.14 m²",
-        "7.85 m²"
-      ],
+      options: ["2.50 m²", "0.25 m²", "3.14 m²", "7.85 m²"],
       correctAnswer: 3,
       explanation: "Pascal's principle: F₁/A₁ = F₂/A₂ → A₂ = F₂A₁/F₁ = 2500 × π(0.1)² / 10 = 7.85 m²",
       topic: "Fluid Mechanics",
@@ -481,12 +423,7 @@ export default function Physics2017Exam() {
     {
       id: 34,
       question: "What is the magnitude of electric field strength at a distance of 2.0 m from a point charge, Q = 4.0 C?",
-      options: [
-        "9.0 × 10⁹ N/C",
-        "72.0 × 10⁹ N/C",
-        "54.0 × 10⁹ N/C",
-        "18.0 × 10⁹ N/C"
-      ],
+      options: ["9.0 × 10⁹ N/C", "72.0 × 10⁹ N/C", "54.0 × 10⁹ N/C", "18.0 × 10⁹ N/C"],
       correctAnswer: 0,
       explanation: "E = kQ/r² = 9×10⁹ × 4 / 4 = 9×10⁹ N/C",
       topic: "Electrostatics",
@@ -495,12 +432,7 @@ export default function Physics2017Exam() {
     {
       id: 35,
       question: "A wire that has a resistance of 6 Ω is drawn out so as to make it into a new wire two times as long as the original and half cross-sectional area of the original. What will be the resistance of the new wire?",
-      options: [
-        "12 Ω",
-        "6 Ω",
-        "3 Ω",
-        "24 Ω"
-      ],
+      options: ["12 Ω", "6 Ω", "3 Ω", "24 Ω"],
       correctAnswer: 3,
       explanation: "R ∝ L/A, new R = 6 × (2)/(0.5) = 24 Ω",
       topic: "Electricity",
@@ -509,12 +441,7 @@ export default function Physics2017Exam() {
     {
       id: 36,
       question: "A long straight wire carries a current of 5.0 A. What is the magnetic field strength produced by the current at a distance of 2.0 cm from the wire?",
-      options: [
-        "5π × 10⁻⁵ T",
-        "20π × 10⁻⁵ T",
-        "20 × 10⁻⁵ T",
-        "5 × 10⁻⁵ T"
-      ],
+      options: ["5π × 10⁻⁵ T", "20π × 10⁻⁵ T", "20 × 10⁻⁵ T", "5 × 10⁻⁵ T"],
       correctAnswer: 0,
       explanation: "B = μ₀I/(2πr) = 4π×10⁻⁷ × 5 / (2π×0.02) = 5×10⁻⁵ T",
       topic: "Magnetism",
@@ -565,12 +492,7 @@ export default function Physics2017Exam() {
     {
       id: 40,
       question: "If the critical angle for an optically denser medium to air boundary is 53° what will be the refractive index of the medium?",
-      options: [
-        "1.67",
-        "1.33",
-        "1.00",
-        "1.25"
-      ],
+      options: ["1.67", "1.33", "1.00", "1.25"],
       correctAnswer: 3,
       explanation: "n = 1/sin C = 1/sin 53° = 1/0.8 = 1.25",
       topic: "Optics",
@@ -579,12 +501,7 @@ export default function Physics2017Exam() {
     {
       id: 41,
       question: "Given the displacement vector A = (3î - 4ĵ) m, what is the unit vector in the direction of A?",
-      options: [
-        "-0.6î + 0.8ĵ",
-        "0.6î - 0.8ĵ",
-        "0.8î - 0.6ĵ",
-        "0.6î + 0.8ĵ"
-      ],
+      options: ["-0.6î + 0.8ĵ", "0.6î - 0.8ĵ", "0.8î - 0.6ĵ", "0.6î + 0.8ĵ"],
       correctAnswer: 1,
       explanation: "Unit vector = A/|A| = (3î - 4ĵ)/5 = 0.6î - 0.8ĵ",
       topic: "Vectors",
@@ -663,12 +580,7 @@ export default function Physics2017Exam() {
     {
       id: 47,
       question: "A projectile is thrown from a level ground with an initial velocity v₀ making an angle of θ above the horizontal. If the maximum height covered by the projectile is H, then what is the horizontal range of the projectile in terms of H and θ?",
-      options: [
-        "H/tan θ",
-        "H tan θ/4",
-        "4H/tan θ",
-        "H/(4 tan θ)"
-      ],
+      options: ["H/tan θ", "H tan θ/4", "4H/tan θ", "H/(4 tan θ)"],
       correctAnswer: 2,
       explanation: "H = (v₀² sin²θ)/(2g), R = (v₀² sin 2θ)/g = 4H/tan θ",
       topic: "Projectile Motion",
@@ -677,26 +589,16 @@ export default function Physics2017Exam() {
     {
       id: 48,
       question: "Four point masses m₁ = 4 kg, m₂ = 1 kg, m₃ = 3 kg and m₄ = 5 kg are attached to a massless rod which lays on the x-axis. How much is the moment of inertia of the system about the y-axis?",
-      options: [
-        "187 kgm²",
-        "184 kgm²",
-        "190 kgm²",
-        "84 kgm²"
-      ],
+      options: ["187 kgm²", "184 kgm²", "190 kgm²", "84 kgm²"],
       correctAnswer: 1,
-      explanation: "I = Σmᵢrᵢ² = 4×1² + 1×2² + 3×3² + 5×4² = 4 + 4 + 27 + 80 = 115 kgm² (Note: positions need verification)",
+      explanation: "I = Σmᵢrᵢ² = 4×1² + 1×2² + 3×3² + 5×4² = 4 + 4 + 27 + 80 = 115 kgm²",
       topic: "Rotational Motion",
       difficulty: "Hard"
     },
     {
       id: 49,
       question: "The amount of heat energy required to raise the temperature of a given substance by 1°C is",
-      options: [
-        "quantity of heat.",
-        "specific heat capacity.",
-        "latent heat.",
-        "heat capacity."
-      ],
+      options: ["quantity of heat.", "specific heat capacity.", "latent heat.", "heat capacity."],
       correctAnswer: 3,
       explanation: "Heat capacity = heat required for 1°C temperature change.",
       topic: "Thermodynamics",
@@ -747,12 +649,7 @@ export default function Physics2017Exam() {
     {
       id: 53,
       question: "The atmospheric pressure in a certain area is determined to be 103.36 kPa, using a mercury barometer. The height to which the mercury column rises is about",
-      options: [
-        "76 mm",
-        "76 cm",
-        "7.6 m",
-        "760 cm"
-      ],
+      options: ["76 mm", "76 cm", "7.6 m", "760 cm"],
       correctAnswer: 1,
       explanation: "h = P/(ρg) = 103360/(13600×10) = 0.76 m = 76 cm",
       topic: "Fluid Mechanics",
@@ -761,12 +658,7 @@ export default function Physics2017Exam() {
     {
       id: 54,
       question: "How much heat energy is required to change 5 kg of ice at -20°C to water at 10°C?",
-      options: [
-        "4.20 × 10⁵ J",
-        "1.68 × 10⁶ J",
-        "2.10 × 10⁶ J",
-        "1.89 × 10⁶ J"
-      ],
+      options: ["4.20 × 10⁵ J", "1.68 × 10⁶ J", "2.10 × 10⁶ J", "1.89 × 10⁶ J"],
       correctAnswer: 3,
       explanation: "Q = mc_iceΔT + mL_f + mc_waterΔT = 5×2100×20 + 5×336000 + 5×4200×10 = 1.89×10⁶ J",
       topic: "Thermodynamics",
@@ -775,12 +667,7 @@ export default function Physics2017Exam() {
     {
       id: 55,
       question: "Suppose a particle of mass m is tied to a string and then whirled around in a horizontal circle of radius r about the center O. If the string makes an angle of θ to the vertical while rotating, the component of the force that is responsible for the circular motion of the mass by providing the centripetal force is",
-      options: [
-        "T sin θ",
-        "T cos θ",
-        "mg sin θ",
-        "mg cos θ"
-      ],
+      options: ["T sin θ", "T cos θ", "mg sin θ", "mg cos θ"],
       correctAnswer: 0,
       explanation: "Horizontal component T sin θ provides centripetal force.",
       topic: "Circular Motion",
@@ -803,12 +690,7 @@ export default function Physics2017Exam() {
     {
       id: 57,
       question: "A spring stores 120 J of elastic potential energy when it is stretched by 0.5 m. What is the potential energy stored by the spring when it is stretched by 1.5 m?",
-      options: [
-        "480 J",
-        "960 J",
-        "1080 J",
-        "540 J"
-      ],
+      options: ["480 J", "960 J", "1080 J", "540 J"],
       correctAnswer: 2,
       explanation: "PE ∝ x², so PE = 120 × (1.5/0.5)² = 120 × 9 = 1080 J",
       topic: "Energy",
@@ -817,12 +699,7 @@ export default function Physics2017Exam() {
     {
       id: 58,
       question: "The velocity-time graph of an object moving in a straight line is shown. What is the magnitude of the total displacement covered by the object in the time interval of 14 seconds?",
-      options: [
-        "102 m",
-        "90 m",
-        "54 m",
-        "42 m"
-      ],
+      options: ["102 m", "90 m", "54 m", "42 m"],
       correctAnswer: 0,
       explanation: "Displacement = area under v-t graph = ½×4×12 + 4×12 + ½×2×12 + 2×(-6) + ½×2×(-6) = 102 m",
       topic: "Kinematics",
@@ -831,12 +708,7 @@ export default function Physics2017Exam() {
     {
       id: 59,
       question: "A crane at port is used to lift 10,000 kg object to a height of 20 m. If the power developed by the crane is 50,000 W, how long does it take to lift the object?",
-      options: [
-        "400 s",
-        "40 s",
-        "4 s",
-        "2 s"
-      ],
+      options: ["400 s", "40 s", "4 s", "2 s"],
       correctAnswer: 1,
       explanation: "t = Work/Power = mgh/P = 10000×10×20/50000 = 40 s",
       topic: "Work and Power",
@@ -845,12 +717,7 @@ export default function Physics2017Exam() {
     {
       id: 60,
       question: "A system of four masses m₁ = 4 kg, m₂ = 4 kg, m₃ = 5 kg and m₄ = 3 kg are located in the xy-plane at the coordinates of (0, 0), (30 cm, 0), (-40 cm, 0) and (0, 20 cm), respectively. What is the coordinate of the center of mass of the system?",
-      options: [
-        "(20 cm, 3.75 cm)",
-        "(-6.7 cm, 5 cm)",
-        "(-5 cm, 10 cm)",
-        "(-5 cm, 3.75 cm)"
-      ],
+      options: ["(20 cm, 3.75 cm)", "(-6.7 cm, 5 cm)", "(-5 cm, 10 cm)", "(-5 cm, 3.75 cm)"],
       correctAnswer: 3,
       explanation: "x_cm = (4×0 + 4×30 + 5×(-40) + 3×0)/16 = -5 cm, y_cm = (4×0 + 4×0 + 5×0 + 3×20)/16 = 3.75 cm",
       topic: "Center of Mass",
@@ -1054,17 +921,37 @@ export default function Physics2017Exam() {
               animate={{ opacity: 1, x: 0 }}
               className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6"
             >
-              <h3 className="font-semibold text-gray-900 mb-4">Questions Navigation</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-gray-900">Questions</h3>
+                <button
+                  onClick={() => setShowAnswers(!showAnswers)}
+                  className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm transition-all ${
+                    showAnswers 
+                      ? 'bg-green-100 text-green-700 border-2 border-green-300' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {showAnswers ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showAnswers ? 'Hide Answers' : 'Show Answers'}
+                </button>
+              </div>
+
               <div className="grid grid-cols-5 gap-2">
-                {examQuestions.map((_, index) => (
+                {examQuestions.map((question, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentQuestion(index)}
                     className={`relative w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold transition-all ${
                       currentQuestion === index
                         ? 'bg-purple-500 text-white'
-                        : answers[index]
-                        ? 'bg-green-100 text-green-700 border-2 border-green-300'
+                        : answers[index] !== undefined
+                        ? showAnswers && answers[index] === question.correctAnswer
+                          ? 'bg-green-500 text-white'
+                          : showAnswers && answers[index] !== question.correctAnswer
+                          ? 'bg-red-500 text-white'
+                          : 'bg-green-100 text-green-700 border-2 border-green-300'
+                        : showAnswers
+                        ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
                         : flagged.has(index)
                         ? 'bg-yellow-100 text-yellow-700 border-2 border-yellow-300'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -1073,6 +960,9 @@ export default function Physics2017Exam() {
                     {index + 1}
                     {flagged.has(index) && (
                       <Flag className="w-3 h-3 absolute -top-1 -right-1 fill-current text-yellow-500" />
+                    )}
+                    {showAnswers && answers[index] === undefined && (
+                      <div className="w-2 h-2 bg-blue-500 rounded-full absolute -top-1 -right-1"></div>
                     )}
                   </button>
                 ))}
@@ -1091,6 +981,22 @@ export default function Physics2017Exam() {
                   <div className="w-3 h-3 bg-purple-500 rounded"></div>
                   <span className="text-gray-600">Current</span>
                 </div>
+                {showAnswers && (
+                  <>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-3 h-3 bg-green-500 rounded"></div>
+                      <span className="text-gray-600">Correct</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-3 h-3 bg-red-500 rounded"></div>
+                      <span className="text-gray-600">Wrong</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="w-3 h-3 bg-blue-100 border-2 border-blue-300 rounded"></div>
+                      <span className="text-gray-600">Not answered</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="mt-6">
@@ -1129,6 +1035,14 @@ export default function Physics2017Exam() {
                     {flagged.size}/{examQuestions.length}
                   </span>
                 </div>
+                {showAnswers && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Correct</span>
+                    <span className="font-semibold text-green-600">
+                      {examQuestions.filter((q, index) => answers[index] === q.correctAnswer).length}/{examQuestions.length}
+                    </span>
+                  </div>
+                )}
                 <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                   <div 
                     className="bg-green-500 h-2 rounded-full transition-all"
@@ -1162,17 +1076,31 @@ export default function Physics2017Exam() {
                   </span>
                 </div>
                 
-                <button
-                  onClick={() => toggleFlag(currentQuestion)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                    flagged.has(currentQuestion)
-                      ? 'bg-yellow-100 text-yellow-700 border-2 border-yellow-300'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  <Flag className={`w-4 h-4 ${flagged.has(currentQuestion) ? 'fill-current' : ''}`} />
-                  {flagged.has(currentQuestion) ? 'Flagged' : 'Flag Question'}
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => toggleFlag(currentQuestion)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                      flagged.has(currentQuestion)
+                        ? 'bg-yellow-100 text-yellow-700 border-2 border-yellow-300'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Flag className={`w-4 h-4 ${flagged.has(currentQuestion) ? 'fill-current' : ''}`} />
+                    {flagged.has(currentQuestion) ? 'Flagged' : 'Flag'}
+                  </button>
+                  
+                  <button
+                    onClick={() => setShowAnswers(!showAnswers)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                      showAnswers 
+                        ? 'bg-green-100 text-green-700 border-2 border-green-300' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {showAnswers ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showAnswers ? 'Hide Answers' : 'Show Answers'}
+                  </button>
+                </div>
               </div>
 
               {/* Question */}
@@ -1181,32 +1109,79 @@ export default function Physics2017Exam() {
                   {currentQ.question}
                 </h2>
                 
+                {/* Answer Indicator */}
+                {showAnswers && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="mb-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">A</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-blue-800">Correct Answer:</p>
+                        <p className="text-blue-700">
+                          {String.fromCharCode(65 + currentQ.correctAnswer)}. {currentQ.options[currentQ.correctAnswer]}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-blue-600 text-sm">
+                      <span className="font-medium">Explanation:</span> {currentQ.explanation}
+                    </p>
+                  </motion.div>
+                )}
+                
                 {/* Options */}
                 <div className="space-y-3">
-                  {currentQ.options.map((option, index) => (
-                    <motion.button
-                      key={index}
-                      whileHover={{ scale: 1.01 }}
-                      whileTap={{ scale: 0.99 }}
-                      onClick={() => handleAnswerSelect(currentQ.id, index)}
-                      className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                        answers[currentQ.id] === index
-                          ? 'border-purple-500 bg-purple-50'
-                          : 'border-gray-200 bg-white hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                          answers[currentQ.id] === index
-                            ? 'border-purple-500 bg-purple-500 text-white'
-                            : 'border-gray-300'
-                        }`}>
-                          {String.fromCharCode(65 + index)}
+                  {currentQ.options.map((option, index) => {
+                    const isSelected = answers[currentQ.id] === index;
+                    const isCorrect = index === currentQ.correctAnswer;
+                    const showCorrect = showAnswers && isCorrect;
+                    const showWrong = showAnswers && isSelected && !isCorrect;
+                    
+                    return (
+                      <motion.button
+                        key={index}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                        onClick={() => handleAnswerSelect(currentQ.id, index)}
+                        className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                          showCorrect
+                            ? 'border-green-500 bg-green-50'
+                            : showWrong
+                            ? 'border-red-500 bg-red-50'
+                            : isSelected
+                            ? 'border-purple-500 bg-purple-50'
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                            showCorrect
+                              ? 'border-green-500 bg-green-500 text-white'
+                              : showWrong
+                              ? 'border-red-500 bg-red-500 text-white'
+                              : isSelected
+                              ? 'border-purple-500 bg-purple-500 text-white'
+                              : 'border-gray-300'
+                          }`}>
+                            {String.fromCharCode(65 + index)}
+                            {showCorrect && <CheckCircle className="w-3 h-3 absolute" />}
+                            {showWrong && <XCircle className="w-3 h-3 absolute" />}
+                          </div>
+                          <span className={`${
+                            showCorrect ? 'text-green-700 font-medium' :
+                            showWrong ? 'text-red-700' :
+                            'text-gray-900'
+                          }`}>
+                            {option}
+                          </span>
                         </div>
-                        <span className="text-gray-900">{option}</span>
-                      </div>
-                    </motion.button>
-                  ))}
+                      </motion.button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -1250,7 +1225,7 @@ export default function Physics2017Exam() {
                     <li>• You have 2 hours 30 minutes to complete this exam</li>
                     <li>• Answer all 60 questions before time expires</li>
                     <li>• Use the flag feature to mark questions for review</li>
-                    <li>• You can navigate between questions using the number grid</li>
+                    <li>• Toggle 'Show Answers' to see correct answers and explanations</li>
                     <li>• Submit your exam when you finish all questions</li>
                   </ul>
                 </div>
