@@ -9,7 +9,7 @@ import {
   GraduationCap, 
   User, 
   LayoutDashboard,
-  Settings,
+  
   ChevronDown,
   ClipboardList,
   CreditCard
