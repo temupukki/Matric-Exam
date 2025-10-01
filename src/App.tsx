@@ -96,7 +96,7 @@ function App() {
           }
         />
            <Route
-          path="/price"
+          path="/dashboard/price"
           element={
             <DashLayout>
               <Price/>
@@ -104,7 +104,7 @@ function App() {
           }
         />
            <Route
-          path="/demo"
+          path="/dashboard/demo"
           element={
             <DashLayout>
               <Demo/>
