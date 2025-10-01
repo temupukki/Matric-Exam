@@ -13,16 +13,36 @@ import {
   AlertCircle
 } from "lucide-react";
 
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  topic: string;
+  difficulty: "Easy" | "Medium" | "Hard";
+}
+
+interface Answers {
+  [key: number]: number;
+}
+
+interface Score {
+  correct: number;
+  total: number;
+  percentage: number;
+}
+
 export default function MathematicsExam() {
   const navigate = useNavigate();
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes in seconds
-  const [answers, setAnswers] = useState({});
-  const [flagged, setFlagged] = useState(new Set());
-  const [showResults, setShowResults] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [timeLeft, setTimeLeft] = useState<number>(1800); // 30 minutes in seconds
+  const [answers, setAnswers] = useState<Answers>({});
+  const [flagged, setFlagged] = useState<Set<number>>(new Set());
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   // Real Mathematics Exam Questions
-  const examQuestions = [
+  const examQuestions: Question[] = [
     {
       id: 1,
       question: "Solve the quadratic equation: x² - 5x + 6 = 0",
@@ -175,20 +195,20 @@ export default function MathematicsExam() {
     }
   }, [timeLeft, showResults]);
 
-  const formatTime = (seconds: number) => {
+  const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  const handleAnswerSelect = (questionId: number, answerIndex: number) => {
+  const handleAnswerSelect = (questionId: number, answerIndex: number): void => {
     setAnswers(prev => ({
       ...prev,
       [questionId]: answerIndex
     }));
   };
 
-  const toggleFlag = (questionId: unknown) => {
+  const toggleFlag = (questionId: number): void => {
     setFlagged(prev => {
       const newFlagged = new Set(prev);
       if (newFlagged.has(questionId)) {
@@ -200,7 +220,7 @@ export default function MathematicsExam() {
     });
   };
 
-  const calculateScore = () => {
+  const calculateScore = (): Score => {
     let correct = 0;
     examQuestions.forEach(question => {
       if (answers[question.id] === question.correctAnswer) {
@@ -214,11 +234,11 @@ export default function MathematicsExam() {
     };
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     setShowResults(true);
   };
 
-  const score = calculateScore();
+  const score: Score = calculateScore();
 
   if (showResults) {
     return (
@@ -264,7 +284,7 @@ export default function MathematicsExam() {
                       </p>
                       <p className="text-sm text-gray-600 mb-2">
                         Your answer: {answers[question.id] !== undefined 
-                          ? question.options[answers[question.id]]
+                          ? question.options[answers[question.id] as number]
                           : 'Not answered'
                         }
                       </p>
@@ -296,7 +316,7 @@ export default function MathematicsExam() {
     );
   }
 
-  const currentQ = examQuestions[currentQuestion];
+  const currentQ: Question = examQuestions[currentQuestion];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
