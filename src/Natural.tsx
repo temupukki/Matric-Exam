@@ -22,9 +22,8 @@ interface Subject {
   icon: JSX.Element;
   color: string;
   questions: number;
-  duration: number;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  topics: string[];
+  duration: string;
+ 
 }
 
 export default function Natural() {
@@ -38,9 +37,8 @@ export default function Natural() {
       icon: <Atom className="w-8 h-8" />,
       color: "from-purple-500 to-indigo-600",
       questions: 40,
-      duration: 150 ,
-      difficulty: "Intermediate",
-      topics: ["Mechanics", "Thermodynamics", "Electromagnetism", "Optics", "Modern Physics"]
+      duration: "2 Hour and 30 minute" ,
+     
     },
     {
       id: "chemistry",
@@ -49,9 +47,8 @@ export default function Natural() {
       icon: <FlaskConical className="w-8 h-8" />,
       color: "from-blue-500 to-cyan-600",
       questions: 80,
-      duration: 120,
-      difficulty: "Intermediate",
-      topics: ["Organic Chemistry", "Inorganic Chemistry", "Physical Chemistry", "Analytical Chemistry"]
+      duration: "2 Hours",
+      
     },
     {
       id: "biology",
@@ -60,9 +57,8 @@ export default function Natural() {
       icon: <Leaf className="w-8 h-8" />,
       color: "from-green-500 to-emerald-600",
       questions: 100,
-      duration: 120,
-      difficulty: "Beginner",
-      topics: ["Cell Biology", "Genetics", "Evolution", "Ecology", "Human Anatomy"]
+      duration: "2 Hours",
+      
     },
     {
       id: "mathmatics",
@@ -71,9 +67,8 @@ export default function Natural() {
       icon: <Calculator className="w-8 h-8" />,
       color: "from-orange-500 to-red-600",
       questions: 65,
-      duration: 180,
-      difficulty: "Beginner",
-      topics: ["Geology", "Meteorology", "Oceanography", "Astronomy", "Environmental Science"]
+      duration: "3 Hours",
+      
     },
     {
       id: "scholaticApptitude",
@@ -81,21 +76,18 @@ export default function Natural() {
       description: "Learn about the structure and organization of the human body and its systems.",
       icon: <Brain className="w-8 h-8" />,
       color: "from-pink-500 to-rose-600",
-      questions: 28,
-      duration: 45,
-      difficulty: "Advanced",
-      topics: ["Skeletal System", "Muscular System", "Nervous System", "Circulatory System", "Digestive System"]
-    },
+      questions: 65,
+      duration: "2 Hours",
+    }, 
     {
       id: "english",
       name: "English",
       description: "Examine the interactions between physical, chemical, and biological components of the environment.",
       icon: <BookOpen className="w-8 h-8" />,
       color: "from-teal-500 to-green-600",
-      questions: 22,
-      duration: 35,
-      difficulty: "Intermediate",
-      topics: ["Ecology", "Conservation", "Climate Change", "Sustainability", "Pollution"]
+      questions: 120,
+      duration: "2 Hours"
+     
     }
   ];
 
@@ -174,13 +166,7 @@ export default function Natural() {
                     {subject.icon}
                     <h3 className="text-2xl font-bold">{subject.name}</h3>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    subject.difficulty === 'Beginner' ? 'bg-green-400/20 text-green-100' :
-                    subject.difficulty === 'Intermediate' ? 'bg-yellow-400/20 text-yellow-100' :
-                    'bg-red-400/20 text-red-100'
-                  }`}>
-                    {subject.difficulty}
-                  </span>
+                
                 </div>
                 <p className="text-white/90 text-sm">{subject.description}</p>
               </div>
@@ -202,21 +188,7 @@ export default function Natural() {
                 {/* Topics */}
                 <div className="mb-6">
                   <h4 className="font-semibold text-gray-900 mb-3">Topics Covered:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {subject.topics.slice(0, 3).map((topic, idx) => (
-                      <span
-                        key={idx}
-                        className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-                      >
-                        {topic}
-                      </span>
-                    ))}
-                    {subject.topics.length > 3 && (
-                      <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                        +{subject.topics.length - 3} more
-                      </span>
-                    )}
-                  </div>
+                  
                 </div>
 
                 {/* Start Button */}
