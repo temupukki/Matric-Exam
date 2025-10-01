@@ -90,13 +90,33 @@ export default function Streams() {
           topics: ["Microeconomics", "Macroeconomics", "Economic Systems", "Development Economics"]
         },
         {
-          name: "Business Studies",
+          name: "Mathmatics",
+          icon: <Calculator className="w-6 h-6" />,
+          description: "Principles of business operations, management, and entrepreneurship",
+          chapters: 14,
+          videos: 110,
+          tests: 42,
+          color: "from-yellow-500 to-green-500",
+          topics: ["Business Management", "Marketing", "Finance", "Entrepreneurship"]
+        },
+          {
+          name: "English",
+          icon: <BookOpen className="w-6 h-6" />,
+          description: "Principles of business operations, management, and entrepreneurship",
+          chapters: 14,
+          videos: 110,
+          tests: 42,
+          color: "from-red-500 to-green-500",
+          topics: ["Business Management", "Marketing", "Finance", "Entrepreneurship"]
+        },
+          {
+          name: "Scholastic Apptitude",
           icon: <BarChart3 className="w-6 h-6" />,
           description: "Principles of business operations, management, and entrepreneurship",
           chapters: 14,
           videos: 110,
           tests: 42,
-          color: "from-indigo-500 to-purple-500",
+          color: "from-orange-500 to-red-600",
           topics: ["Business Management", "Marketing", "Finance", "Entrepreneurship"]
         }
       ]
@@ -147,6 +167,26 @@ export default function Streams() {
           tests: 65,
           color: "from-orange-500 to-amber-500",
           topics: ["Calculus", "Algebra", "Statistics", "Geometry"]
+        },
+        {
+          name: "English",
+          icon: <BookOpen className="w-6 h-6" />,
+          description: "Principles of business operations, management, and entrepreneurship",
+          chapters: 14,
+          videos: 110,
+          tests: 42,
+          color: "from-red-500 to-green-500",
+          topics: ["Business Management", "Marketing", "Finance", "Entrepreneurship"]
+        },
+              {
+          name: "Scholastic Apptitude",
+          icon: <BarChart3 className="w-6 h-6" />,
+          description: "Principles of business operations, management, and entrepreneurship",
+          chapters: 14,
+          videos: 110,
+          tests: 42,
+          color: "from-orange-500 to-red-600",
+          topics: ["Business Management", "Marketing", "Finance", "Entrepreneurship"]
         }
       ]
     }

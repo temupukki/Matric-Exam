@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  User, 
-  Mail, 
-  Calendar, 
-  BookOpen, 
-  Award, 
-  BarChart3, 
+import {
+  User,
+  Mail,
+  Calendar,
+  BookOpen,
+  Award,
+  BarChart3,
   Target,
   Clock,
   Edit3,
@@ -15,7 +15,7 @@ import {
   Star,
   CheckCircle,
   TrendingUp,
-  Bookmark
+  Bookmark,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -52,26 +52,65 @@ export default function Dashboard() {
     fetchMe();
   }, []);
 
-  // Mock data for demonstration
   const userStats = [
-    { label: "Courses Enrolled", value: "12", icon: <BookOpen className="w-5 h-5" />, color: "from-blue-500 to-cyan-500" },
-    { label: "Tests Completed", value: "45", icon: <CheckCircle className="w-5 h-5" />, color: "from-green-500 to-emerald-500" },
-    { label: "Average Score", value: "87%", icon: <TrendingUp className="w-5 h-5" />, color: "from-purple-500 to-pink-500" },
-    { label: "Study Hours", value: "156", icon: <Clock className="w-5 h-5" />, color: "from-orange-500 to-amber-500" }
+    {
+      label: "Courses Enrolled",
+      value: "12",
+      icon: <BookOpen className="w-5 h-5" />,
+      color: "from-blue-500 to-cyan-500",
+    },
+    {
+      label: "Tests Completed",
+      value: "45",
+      icon: <CheckCircle className="w-5 h-5" />,
+      color: "from-green-500 to-emerald-500",
+    },
+    {
+      label: "Average Score",
+      value: "87%",
+      icon: <TrendingUp className="w-5 h-5" />,
+      color: "from-purple-500 to-pink-500",
+    },
+    {
+      label: "Study Hours",
+      value: "156",
+      icon: <Clock className="w-5 h-5" />,
+      color: "from-orange-500 to-amber-500",
+    },
   ];
 
   const recentActivities = [
-    { action: "Completed Physics Test", score: "92%", time: "2 hours ago", icon: <Award className="w-4 h-4" /> },
-    { action: "Watched Chemistry Video", topic: "Organic Chemistry", time: "5 hours ago", icon: <BookOpen className="w-4 h-4" /> },
-    { action: "Joined Study Group", group: "Mathematics Club", time: "1 day ago", icon: <Users className="w-4 h-4" /> },
-    { action: "Achieved New Badge", badge: "Science Master", time: "2 days ago", icon: <Star className="w-4 h-4" /> }
+    {
+      action: "Completed Physics Test",
+      score: "92%",
+      time: "2 hours ago",
+      icon: <Award className="w-4 h-4" />,
+    },
+    {
+      action: "Watched Chemistry Video",
+      topic: "Organic Chemistry",
+      time: "5 hours ago",
+      icon: <BookOpen className="w-4 h-4" />,
+    },
+    {
+      action: "Joined Study Group",
+      group: "Mathematics Club",
+      time: "1 day ago",
+      icon: <Users className="w-4 h-4" />,
+    },
+    {
+      action: "Achieved New Badge",
+      badge: "Science Master",
+      time: "2 days ago",
+      icon: <Star className="w-4 h-4" />,
+    },
   ];
 
   const progressData = [
     { subject: "Mathematics", progress: 85, color: "bg-blue-500" },
     { subject: "Physics", progress: 72, color: "bg-green-500" },
     { subject: "Chemistry", progress: 68, color: "bg-purple-500" },
-    { subject: "Biology", progress: 79, color: "bg-orange-500" }
+    { subject: "Biology", progress: 79, color: "bg-orange-500" },
   ];
 
   if (loading) {
@@ -102,17 +141,21 @@ export default function Dashboard() {
           className="text-center bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-lg"
         >
           <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Hey Imposter </h2>
-          <p className="text-gray-600 mb-4">Please log in to access your dashboard</p>
-          <Link to= "/sign-in">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-semibold"
-          >
-            Go to Login
-          </motion.button></Link>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Hey Imposter{" "}
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Please log in to access your dashboard
+          </p>
+          <Link to="/sign-in">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full font-semibold"
+            >
+              Go to Login
+            </motion.button>
+          </Link>
         </motion.div>
       </div>
     );
@@ -126,7 +169,7 @@ export default function Dashboard() {
           animate={{
             x: [0, 100, 0],
             y: [0, -50, 0],
-            transition: { duration: 25, repeat: Infinity, ease: "linear" }
+            transition: { duration: 25, repeat: Infinity, ease: "linear" },
           }}
           className="absolute -top-20 -left-20 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl"
         />
@@ -134,7 +177,7 @@ export default function Dashboard() {
           animate={{
             x: [0, -100, 0],
             y: [0, 50, 0],
-            transition: { duration: 30, repeat: Infinity, ease: "linear" }
+            transition: { duration: 30, repeat: Infinity, ease: "linear" },
           }}
           className="absolute -bottom-20 -right-20 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl"
         />
@@ -163,35 +206,16 @@ export default function Dashboard() {
                   className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full"
                 />
               </motion.div>
-              
+
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Welcome back, {session.user?.name || "Student"}!
+                  Welcome , {session.user?.name || "Student"}!
                 </h1>
                 <p className="text-gray-600 flex items-center gap-2">
                   <Mail className="w-4 h-4" />
                   {session.user?.email}
                 </p>
               </div>
-            </div>
-
-            <div className="flex gap-3">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-xl font-semibold hover:bg-blue-200 transition-colors"
-              >
-                <Edit3 className="w-4 h-4" />
-                Edit Profile
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
-              >
-                <Settings className="w-4 h-4" />
-                Settings
-              </motion.button>
             </div>
           </div>
 
@@ -203,7 +227,12 @@ export default function Dashboard() {
             className="flex items-center gap-2 mt-4 text-gray-500"
           >
             <Calendar className="w-4 h-4" />
-            <span>Member since {new Date(session.user?.createdAt || Date.now()).toLocaleDateString()}</span>
+            <span>
+              Member since{" "}
+              {new Date(
+                session.user?.createdAt || Date.now()
+              ).toLocaleDateString()}
+            </span>
           </motion.div>
         </motion.div>
 
@@ -224,12 +253,14 @@ export default function Dashboard() {
               className={`bg-gradient-to-r ${stat.color} rounded-2xl p-6 text-white shadow-lg`}
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-white/20 rounded-xl">
-                  {stat.icon}
-                </div>
+                <div className="p-2 bg-white/20 rounded-xl">{stat.icon}</div>
                 <motion.div
                   animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: index * 0.5,
+                  }}
                   className="text-2xl font-bold"
                 >
                   {stat.value}
@@ -249,7 +280,9 @@ export default function Dashboard() {
             className="lg:col-span-2 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Study Progress</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Study Progress
+              </h2>
               <Target className="w-6 h-6 text-blue-600" />
             </div>
 
@@ -263,8 +296,12 @@ export default function Dashboard() {
                   className="space-y-2"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="font-semibold text-gray-700">{item.subject}</span>
-                    <span className="text-sm text-gray-600">{item.progress}%</span>
+                    <span className="font-semibold text-gray-700">
+                      {item.subject}
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      {item.progress}%
+                    </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <motion.div
@@ -295,7 +332,9 @@ export default function Dashboard() {
             className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Recent Activity</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Recent Activity
+              </h2>
               <BarChart3 className="w-6 h-6 text-blue-600" />
             </div>
 
@@ -313,11 +352,18 @@ export default function Dashboard() {
                     {activity.icon}
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-900">{activity.action}</p>
-                    <p className="text-sm text-gray-600">
-                      {activity.score || activity.topic || activity.group || activity.badge}
+                    <p className="font-semibold text-gray-900">
+                      {activity.action}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
+                    <p className="text-sm text-gray-600">
+                      {activity.score ||
+                        activity.topic ||
+                        activity.group ||
+                        activity.badge}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {activity.time}
+                    </p>
                   </div>
                 </motion.div>
               ))}
@@ -340,13 +386,31 @@ export default function Dashboard() {
           transition={{ delay: 0.8 }}
           className="mt-8 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6"
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Quick Actions
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: "Continue Learning", icon: <BookOpen className="w-6 h-6" />, color: "bg-blue-500" },
-              { label: "Take Practice Test", icon: <Award className="w-6 h-6" />, color: "bg-green-500" },
-              { label: "View Progress", icon: <TrendingUp className="w-6 h-6" />, color: "bg-purple-500" },
-              { label: "Study Materials", icon: <Bookmark className="w-6 h-6" />, color: "bg-orange-500" }
+              {
+                label: "Continue Learning",
+                icon: <BookOpen className="w-6 h-6" />,
+                color: "bg-blue-500",
+              },
+              {
+                label: "Take Practice Test",
+                icon: <Award className="w-6 h-6" />,
+                color: "bg-green-500",
+              },
+              {
+                label: "View Progress",
+                icon: <TrendingUp className="w-6 h-6" />,
+                color: "bg-purple-500",
+              },
+              {
+                label: "Study Materials",
+                icon: <Bookmark className="w-6 h-6" />,
+                color: "bg-orange-500",
+              },
             ].map((action, index) => (
               <motion.button
                 key={action.label}
@@ -369,7 +433,17 @@ export default function Dashboard() {
 
 // Missing Users icon component
 const Users = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+    />
   </svg>
 );

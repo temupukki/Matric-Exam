@@ -414,7 +414,7 @@ export default function Navbar() {
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-colors"
                       >
-                        <User className="w-4 h-4" />
+                        <LayoutDashboard className="w-4 h-4" />
                         Dashboard
                       </Link>
                    
