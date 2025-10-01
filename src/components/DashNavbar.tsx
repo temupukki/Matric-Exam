@@ -10,7 +10,9 @@ import {
   User, 
   LayoutDashboard,
   Settings,
-  ChevronDown
+  ChevronDown,
+  ClipboardList,
+  CreditCard
 } from "lucide-react";
 
 // User session hook with your actual API
@@ -77,6 +79,8 @@ export default function Navbar() {
   const userNavItems = [
  
     { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
+     { path: "/", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
+      { path: "/", label: "Pricing", icon: <CreditCard className="w-4 h-4" /> },
   ];
 
   const navItems = session ? userNavItems : guestNavItems;
