@@ -111,6 +111,14 @@ function App() {
             </DashLayout>
           }
         />
+          <Route
+          path="/dashboard/demo/math"
+          element={
+            <DashLayout>
+              <Math/>
+            </DashLayout>
+          }
+        />
       </Routes>
     </Router>
   );
