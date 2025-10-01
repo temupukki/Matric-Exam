@@ -9,7 +9,6 @@ import {
   XCircle,
   ArrowLeft,
   ArrowRight,
-  BookOpen,
   AlertCircle
 } from "lucide-react";
 
@@ -33,7 +32,7 @@ interface Score {
   percentage: number;
 }
 
-export default function Math() {
+export default function Mathmatics() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(1800); // 30 minutes in seconds
@@ -227,10 +226,11 @@ export default function Math() {
         correct++;
       }
     });
+    const percentage = Math.round((correct / examQuestions.length) * 100);
     return {
       correct,
       total: examQuestions.length,
-      percentage: Math.round((correct / examQuestions.length) * 100)
+      percentage
     };
   };
 
@@ -260,44 +260,49 @@ export default function Math() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {examQuestions.map((question, index) => (
-                <motion.div
-                  key={question.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`p-4 rounded-xl border-2 ${
-                    answers[question.id] === question.correctAnswer
-                      ? 'border-green-200 bg-green-50'
-                      : 'border-red-200 bg-red-50'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    {answers[question.id] === question.correctAnswer ? (
-                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
-                    ) : (
-                      <XCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-1" />
-                    )}
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-2">
-                        Q{index + 1}: {question.question}
-                      </p>
-                      <p className="text-sm text-gray-600 mb-2">
-                        Your answer: {answers[question.id] !== undefined 
-                          ? question.options[answers[question.id] as number]
-                          : 'Not answered'
-                        }
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        Correct answer: {question.options[question.correctAnswer]}
-                      </p>
-                      <p className="text-sm text-blue-600 mt-2">
-                        <strong>Explanation:</strong> {question.explanation}
-                      </p>
+              {examQuestions.map((question, index) => {
+                const userAnswer = answers[question.id];
+                const isCorrect = userAnswer === question.correctAnswer;
+                
+                return (
+                  <motion.div
+                    key={question.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`p-4 rounded-xl border-2 ${
+                      isCorrect
+                        ? 'border-green-200 bg-green-50'
+                        : 'border-red-200 bg-red-50'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {isCorrect ? (
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      ) : (
+                        <XCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-1" />
+                      )}
+                      <div>
+                        <p className="font-semibold text-gray-900 mb-2">
+                          Q{index + 1}: {question.question}
+                        </p>
+                        <p className="text-sm text-gray-600 mb-2">
+                          Your answer: {userAnswer !== undefined 
+                            ? question.options[userAnswer]
+                            : 'Not answered'
+                          }
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Correct answer: {question.options[question.correctAnswer]}
+                        </p>
+                        <p className="text-sm text-blue-600 mt-2">
+                          <strong>Explanation:</strong> {question.explanation}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
 
             <div className="text-center">
@@ -358,7 +363,7 @@ export default function Math() {
                   <button
                     key={index}
                     onClick={() => setCurrentQuestion(index)}
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold transition-all ${
+                    className={`relative w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold transition-all ${
                       currentQuestion === index
                         ? 'bg-blue-500 text-white'
                         : answers[index]

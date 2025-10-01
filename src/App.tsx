@@ -15,6 +15,7 @@ import DashLayout from "./layouts/DashLayout";
 import Profile from "./Profile";
 import Demo from "./Demo";
 import Price from "./Price";
+import Math from "./Math";
 
 function App() {
   return (
@@ -108,6 +109,14 @@ function App() {
           element={
             <DashLayout>
               <Demo/>
+            </DashLayout>
+          }
+        />
+           <Route
+          path="/dashboard/profile"
+          element={
+            <DashLayout>
+              <Profile/>
             </DashLayout>
           }
         />
