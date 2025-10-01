@@ -185,7 +185,7 @@ export default function Demo() {
 
   const startDemoExam = (examId: number) => {
     // Navigate to exam taking page or show exam instructions
-    navigate(`/exam/${examId}/demo`);
+    navigate(`/dashboard/demo/math`);
   };
 
   return (

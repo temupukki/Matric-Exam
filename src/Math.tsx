@@ -33,7 +33,7 @@ interface Score {
   percentage: number;
 }
 
-export default function MathematicsExam() {
+export default function Math() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(1800); // 30 minutes in seconds
