@@ -20,6 +20,7 @@ import Mathmatics from "./Math";
 import DemoStart from "./DemoStart";
 import Natural from "./Natural";
 import Social from "./Social";
+import Physics from "./Physics";
 
 function App() {
   return (
@@ -153,6 +154,14 @@ function App() {
           element={
             <DashLayout>
               <Social />
+            </DashLayout>
+          }
+        />
+         <Route
+          path="/dashboard/natural/physics"
+          element={
+            <DashLayout>
+              <Physics />
             </DashLayout>
           }
         />
