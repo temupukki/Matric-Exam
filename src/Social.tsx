@@ -212,31 +212,6 @@ export default function Social() {
             </motion.div>
           ))}
         </div>
-
-        {/* Footer CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 text-white">
-            <h2 className="text-3xl font-bold mb-4">
-              Ready to Explore Natural Sciences?
-            </h2>
-            <p className="text-blue-100 text-lg mb-6 max-w-2xl mx-auto">
-              Join thousands of students who are discovering the fascinating
-              world of science through our interactive learning platform.
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold shadow-lg"
-            >
-              Get Started Today
-            </motion.button>
-          </div>
-        </motion.div>
       </div>
     </div>
   );

@@ -1,17 +1,15 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { 
-  BookOpen, 
-  Calculator, 
-  FlaskConical, 
-  Atom, 
+import {
+  BookOpen,
+  Calculator,
+  FlaskConical,
+  Atom,
   Leaf,
-  Globe,
   Brain,
-  Heart,
   Star,
   Clock,
-  Users
+  Users,
 } from "lucide-react";
 import type { JSX } from "react";
 
@@ -23,7 +21,6 @@ interface Subject {
   color: string;
   questions: number;
   duration: string;
- 
 }
 
 export default function Natural() {
@@ -33,62 +30,63 @@ export default function Natural() {
     {
       id: "physics",
       name: "Physics",
-      description: "Explore the fundamental laws of the universe, from motion and energy to electricity and magnetism.",
+      description:
+        "Explore the fundamental laws of the universe, from motion and energy to electricity and magnetism.",
       icon: <Atom className="w-8 h-8" />,
       color: "from-purple-500 to-indigo-600",
       questions: 50,
-      duration: "2 Hour and 30 minute" ,
-     
+      duration: "2 Hour and 30 minute",
     },
     {
       id: "chemistry",
       name: "Chemistry",
-      description: "Study matter, its properties, composition, and the changes it undergoes during chemical reactions.",
+      description:
+        "Study matter, its properties, composition, and the changes it undergoes during chemical reactions.",
       icon: <FlaskConical className="w-8 h-8" />,
       color: "from-blue-500 to-cyan-600",
       questions: 80,
       duration: "2 Hours",
-      
     },
     {
       id: "biology",
       name: "Biology",
-      description: "Discover the science of life, from cellular processes to ecosystems and biodiversity.",
+      description:
+        "Discover the science of life, from cellular processes to ecosystems and biodiversity.",
       icon: <Leaf className="w-8 h-8" />,
       color: "from-green-500 to-emerald-600",
       questions: 100,
       duration: "2 Hours",
-      
     },
     {
       id: "mathmatics",
       name: "Mathmatics",
-      description: "Understand our planet's systems, including geology, meteorology, oceanography, and astronomy.",
+      description:
+        "Understand our planet's systems, including geology, meteorology, oceanography, and astronomy.",
       icon: <Calculator className="w-8 h-8" />,
       color: "from-orange-500 to-red-600",
       questions: 65,
       duration: "3 Hours",
-      
     },
     {
       id: "scholaticApptitude",
       name: "Scholastic Apptitude",
-      description: "Learn about the structure and organization of the human body and its systems.",
+      description:
+        "Learn about the structure and organization of the human body and its systems.",
       icon: <Brain className="w-8 h-8" />,
       color: "from-pink-500 to-rose-600",
       questions: 65,
       duration: "2 Hours",
-    }, 
+    },
     {
       id: "english",
       name: "English",
-      description: "Examine the interactions between physical, chemical, and biological components of the environment.",
+      description:
+        "Examine the interactions between physical, chemical, and biological components of the environment.",
       icon: <BookOpen className="w-8 h-8" />,
       color: "from-teal-500 to-green-600",
       questions: 120,
-      duration: "2 Hours"
-     
-    }
+      duration: "2 Hours",
+    },
   ];
 
   const handleSubjectSelect = (subjectId: string) => {
@@ -107,11 +105,14 @@ export default function Natural() {
           >
             <div className="flex items-center justify-center gap-3 mb-4">
               <FlaskConical className="w-12 h-12 text-blue-600" />
-              <h1 className="text-5xl font-bold text-gray-900">Natural Sciences</h1>
+              <h1 className="text-5xl font-bold text-gray-900">
+                Natural Sciences
+              </h1>
             </div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Explore the wonders of the natural world through our comprehensive science curriculum. 
-              From microscopic organisms to cosmic phenomena, discover how our universe works.
+              Explore the wonders of the natural world through our comprehensive
+              science curriculum. From microscopic organisms to cosmic
+              phenomena, discover how our universe works.
             </p>
           </motion.div>
         </div>
@@ -127,7 +128,9 @@ export default function Natural() {
         >
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center shadow-lg">
             <BookOpen className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-            <div className="text-2xl font-bold text-gray-900">{naturalScienceSubjects.length}</div>
+            <div className="text-2xl font-bold text-gray-900">
+              {naturalScienceSubjects.length}
+            </div>
             <div className="text-gray-600">Subjects</div>
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center shadow-lg">
@@ -160,15 +163,15 @@ export default function Natural() {
               onClick={() => handleSubjectSelect(subject.id)}
             >
               {/* Subject Header */}
-              <div className={`bg-gradient-to-r ${subject.color} p-6 text-white`}>
+              <div
+                className={`bg-gradient-to-r ${subject.color} p-6 text-white`}
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     {subject.icon}
                     <h3 className="text-2xl font-bold">{subject.name}</h3>
                   </div>
-                
                 </div>
-               
               </div>
 
               {/* Subject Details */}
@@ -176,19 +179,24 @@ export default function Natural() {
                 {/* Stats */}
                 <div className="flex justify-between mb-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900">{subject.questions}</div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {subject.questions}
+                    </div>
                     <div className="text-sm text-gray-600">Questions</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900">{subject.duration}</div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {subject.duration}
+                    </div>
                     <div className="text-sm text-gray-600">Minutes</div>
                   </div>
                 </div>
 
                 {/* Topics */}
                 <div className="mb-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">Just press the button to practice exams and to level up man</h4>
-                  
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Just press the button to practice exams and to level up man
+                  </h4>
                 </div>
 
                 {/* Start Button */}
@@ -203,28 +211,6 @@ export default function Natural() {
             </motion.div>
           ))}
         </div>
-
-        {/* Footer CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 text-white">
-            <h2 className="text-3xl font-bold mb-4">Ready to Explore Natural Sciences?</h2>
-            <p className="text-blue-100 text-lg mb-6 max-w-2xl mx-auto">
-              Join thousands of students who are discovering the fascinating world of science through our interactive learning platform.
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold shadow-lg"
-            >
-              Get Started Today
-            </motion.button>
-          </div>
-        </motion.div>
       </div>
     </div>
   );
