@@ -13,7 +13,8 @@ import {
   ChevronDown,
   ClipboardList,
   CreditCard,
-  Globe
+  Globe,
+  Atom
 } from "lucide-react";
 
 // User session hook with your actual API
@@ -82,7 +83,7 @@ export default function Navbar() {
     { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
      { path: "/dashboard/demo", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
       { path: "/dashboard/price", label: "Pricing", icon: <CreditCard className="w-4 h-4" /> },
-      { path: "/dashboard/natural", label: "Natural Exams", icon: <Globe className="w-4 h-4" /> },
+      { path: "/dashboard/natural", label: "Natural Exams", icon: <Atom className="w-4 h-4" /> },
   ];
 
   const navItems = session ? userNavItems : guestNavItems;
