@@ -13,6 +13,8 @@ import SimpleTest from "./components/Simpletest";
 import Dashboard from "./dashboard";
 import DashLayout from "./layouts/DashLayout";
 import Profile from "./Profile";
+import Demo from "./Demo";
+import Price from "./Price";
 
 function App() {
   return (
@@ -94,10 +96,18 @@ function App() {
           }
         />
            <Route
-          path="/dashboard/profile"
+          path="/price"
           element={
             <DashLayout>
-              <Profile/>
+              <Price/>
+            </DashLayout>
+          }
+        />
+           <Route
+          path="/demo"
+          element={
+            <DashLayout>
+              <Demo/>
             </DashLayout>
           }
         />
