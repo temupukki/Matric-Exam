@@ -491,15 +491,7 @@ export default function Demo() {
                   >
                     Start Free Trial <ArrowRight className="w-5 h-5" />
                   </motion.button>
-                  
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate("/feature")}
-                    className="border-2 border-white/50 bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition-all duration-300"
-                  >
-                    View All Features
-                  </motion.button>
+              
                 </div>
 
                 <motion.div
