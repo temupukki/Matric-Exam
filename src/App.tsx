@@ -15,7 +15,8 @@ import DashLayout from "./layouts/DashLayout";
 import Profile from "./Profile";
 import Demo from "./Demo";
 import Price from "./Price";
-import Math from "./Math";
+
+import Mathmatics from "./Math";
 
 function App() {
   return (
@@ -64,7 +65,7 @@ function App() {
             </AuthLayout>
           }
         />
-            <Route
+        <Route
           path="/privacy"
           element={
             <MainLayout>
@@ -72,7 +73,7 @@ function App() {
             </MainLayout>
           }
         />
-          <Route
+        <Route
           path="/terms"
           element={
             <MainLayout>
@@ -88,43 +89,43 @@ function App() {
             </MainLayout>
           }
         />
-          <Route
+        <Route
           path="/dashboard"
           element={
             <DashLayout>
-              <Dashboard/>
+              <Dashboard />
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/price"
           element={
             <DashLayout>
-              <Price/>
+              <Price />
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/demo"
           element={
             <DashLayout>
-              <Demo/>
+              <Demo />
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/profile"
           element={
             <DashLayout>
-              <Profile/>
+              <Profile />
             </DashLayout>
           }
         />
-          <Route
+        <Route
           path="/dashboard/demo/math"
           element={
             <DashLayout>
-              <Math/>
+              <Mathmatics />
             </DashLayout>
           }
         />
