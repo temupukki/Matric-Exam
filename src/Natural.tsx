@@ -35,7 +35,7 @@ export default function Natural() {
       icon: <Atom className="w-8 h-8" />,
       color: "from-purple-500 to-indigo-600",
       questions: 50,
-      duration: "2 Hour and 30 minute",
+      duration: "2:30 Hours",
     },
     {
       id: "chemistry",
