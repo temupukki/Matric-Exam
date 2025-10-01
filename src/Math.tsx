@@ -309,7 +309,7 @@ export default function Mathmatics() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/exams')}
+                onClick={() => navigate('/dashboard/demo')}
                 className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-8 py-3 rounded-xl font-semibold"
               >
                 Back to Exams
