@@ -110,9 +110,10 @@ export default function Natural() {
               </h1>
             </div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Explore the wonders of the natural world through our comprehensive
-              science curriculum. From microscopic organisms to cosmic
-              phenomena, discover how our universe works.
+              Build a strong foundation in natural science with our exam-focused
+              practice. Explore essential concepts, review important theories,
+              and sharpen your problem-solving skills to perform your best on
+              test day.
             </p>
           </motion.div>
         </div>

@@ -107,13 +107,14 @@ export default function Social() {
             <div className="flex items-center justify-center gap-3 mb-4">
               <FlaskConical className="w-12 h-12 text-blue-600" />
               <h1 className="text-5xl font-bold text-gray-900">
-                Natural Sciences
+                Social Sciences
               </h1>
             </div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Explore the wonders of the natural world through our comprehensive
-              science curriculum. From microscopic organisms to cosmic
-              phenomena, discover how our universe works.
+              Strengthen your understanding of society and its dynamics with our
+              exam-focused social science prep. Dive into key topics, practice
+              important concepts, and build the confidence you need to excel in
+              your tests.
             </p>
           </motion.div>
         </div>
