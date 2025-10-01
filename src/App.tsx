@@ -19,6 +19,7 @@ import Price from "./Price";
 import Mathmatics from "./Math";
 import DemoStart from "./DemoStart";
 import Natural from "./Natural";
+import Social from "./Social";
 
 function App() {
   return (
@@ -144,6 +145,14 @@ function App() {
           element={
             <DashLayout>
               <Natural />
+            </DashLayout>
+          }
+        />
+           <Route
+          path="/dashboard/social"
+          element={
+            <DashLayout>
+              <Social />
             </DashLayout>
           }
         />
