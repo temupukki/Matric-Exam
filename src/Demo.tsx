@@ -486,10 +486,10 @@ export default function Demo() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate("/sign-in")}
+                    onClick={() => navigate("/dashboard/price")}
                     className="bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
                   >
-                    Start Free Trial <ArrowRight className="w-5 h-5" />
+                    Start Now <ArrowRight className="w-5 h-5" />
                   </motion.button>
               
                 </div>
