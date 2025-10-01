@@ -36,7 +36,7 @@ export default function Natural() {
       description: "Explore the fundamental laws of the universe, from motion and energy to electricity and magnetism.",
       icon: <Atom className="w-8 h-8" />,
       color: "from-purple-500 to-indigo-600",
-      questions: 40,
+      questions: 50,
       duration: "2 Hour and 30 minute" ,
      
     },
