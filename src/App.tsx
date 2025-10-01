@@ -17,6 +17,7 @@ import Demo from "./Demo";
 import Price from "./Price";
 
 import Mathmatics from "./Math";
+import DemoStart from "./DemoStart";
 
 function App() {
   return (
@@ -86,6 +87,14 @@ function App() {
           element={
             <MainLayout>
               <SimpleTest />
+            </MainLayout>
+          }
+        />
+         <Route
+          path="/demostart"
+          element={
+            <MainLayout>
+              <DemoStart />
             </MainLayout>
           }
         />

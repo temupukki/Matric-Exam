@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, type JSX } from "react";
-import { Menu, X, BookOpen, Star, GraduationCap } from "lucide-react";
+import { Menu, X, BookOpen, Star, GraduationCap, ClipboardList } from "lucide-react";
 
 export default function Navbar() {
   const location = useLocation();
@@ -26,6 +26,7 @@ export default function Navbar() {
     { path: "/", label: "Home", icon: <Star className="w-4 h-4" /> },
     { path: "/stream", label: "Stream", icon: <BookOpen className="w-4 h-4" /> },
     { path: "/feature", label: "Features", icon: <GraduationCap className="w-4 h-4" /> },
+     { path: "/demostart", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
     { path: "/contact", label: "Contact us" },
     { path: "/sign-in", label: "Get Started", highlight: true },
   ];
