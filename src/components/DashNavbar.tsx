@@ -81,7 +81,7 @@ export default function Navbar() {
     { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
      { path: "/dashboard/demo", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
       { path: "/dashboard/price", label: "Pricing", icon: <CreditCard className="w-4 h-4" /> },
-      { path: "/dashboard/natural", label: "Pricing", icon: <CreditCard className="w-4 h-4" /> },
+      { path: "/dashboard/natural", label: "Natural Exams", icon: <CreditCard className="w-4 h-4" /> },
   ];
 
   const navItems = session ? userNavItems : guestNavItems;
