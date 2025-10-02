@@ -24,37 +24,11 @@ export default function Price() {
   const [billingPeriod, setBillingPeriod] = useState("monthly");
 
   const pricingPlans = [
+    
     {
-      name: "Starter",
-      description: "Perfect for students who want to try out our platform",
-      price: {
-        monthly: "249",
-        yearly: "2,390"
-      },
-      savings: "Save 20%",
-      popular: false,
-      color: "from-blue-500 to-cyan-500",
-      features: [
-        { text: "Access to 5 demo exams", included: true },
-        { text: "Basic subject materials", included: true },
-        { text: "Community support", included: true },
-        { text: "Progress tracking", included: true },
-        { text: "Unlimited exam attempts", included: false },
-        { text: "Advanced analytics", included: false },
-        { text: "Video explanations", included: false },
-        { text: "Premium support", included: false },
-        { text: "All subjects access", included: false }
-      ],
-      buttonText: "Get Started Free",
-      buttonVariant: "outline"
-    },
-    {
-      name: "Pro Learner",
-      description: "Most popular choice for serious students",
-      price: {
-        monthly: "499",
-        yearly: "4,790"
-      },
+      name: "Natural Science",
+      description: "Practice Natural Science for university entry anytime, anywhere.",
+      price: "99 Birr one time",
       savings: "Save 25%",
       popular: true,
       color: "from-purple-500 to-pink-500",
