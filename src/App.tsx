@@ -20,8 +20,10 @@ import Mathmatics from "./Math";
 import DemoStart from "./DemoStart";
 import Natural from "./Natural";
 import Social from "./Social";
-import Physics from "./Physics";
-import Test from "./Test";
+
+
+import Physics2017Exam from "../server/src/physics/PHY2017";
+import PhysicsExamsPage from "../server/src/physics/Physics";
 
 function App() {
   return (
@@ -162,15 +164,15 @@ function App() {
           path="/dashboard/natural/physics"
           element={
             <DashLayout>
-              <Physics />
+              <PhysicsExamsPage />
             </DashLayout>
           }
         />
          <Route
-          path="/dashboard/natural/test"
+          path="/dashboard/natural/phy2017"
           element={
             <DashLayout>
-              <Test />
+              <Physics2017Exam />
             </DashLayout>
           }
         />

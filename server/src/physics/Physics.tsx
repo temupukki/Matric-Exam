@@ -1,32 +1,20 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { 
-  BookOpen,
-  Clock,
-  Calendar,
-  ArrowRight
-} from "lucide-react";
+import { BookOpen, Clock, Calendar, ArrowRight } from "lucide-react";
 
 export default function PhysicsExamsPage() {
   const navigate = useNavigate();
 
   // Physics exams from 2010 to 2024
   const physicsExams = [
-    { year: 2010, difficulty: "Easy", color: "from-green-500 to-emerald-600" },
-    { year: 2011, difficulty: "Medium", color: "from-blue-500 to-cyan-600" },
-    { year: 2012, difficulty: "Hard", color: "from-purple-500 to-indigo-600" },
-    { year: 2013, difficulty: "Easy", color: "from-green-500 to-emerald-600" },
-    { year: 2014, difficulty: "Medium", color: "from-blue-500 to-cyan-600" },
-    { year: 2015, difficulty: "Hard", color: "from-purple-500 to-indigo-600" },
-    { year: 2016, difficulty: "Easy", color: "from-green-500 to-emerald-600" },
-    { year: 2017, difficulty: "Medium", color: "from-blue-500 to-cyan-600" },
-    { year: 2018, difficulty: "Hard", color: "from-purple-500 to-indigo-600" },
-    { year: 2019, difficulty: "Easy", color: "from-green-500 to-emerald-600" },
-    { year: 2020, difficulty: "Medium", color: "from-blue-500 to-cyan-600" },
-    { year: 2021, difficulty: "Hard", color: "from-purple-500 to-indigo-600" },
-    { year: 2022, difficulty: "Easy", color: "from-green-500 to-emerald-600" },
-    { year: 2023, difficulty: "Medium", color: "from-blue-500 to-cyan-600" },
-    { year: 2024, difficulty: "Hard", color: "from-purple-500 to-indigo-600" }
+    { year: 2010, color: "from-green-500 to-emerald-600" },
+    { year: 2011, color: "from-blue-500 to-cyan-600" },
+    { year: 2012, color: "from-purple-500 to-indigo-600" },
+    { year: 2013, color: "from-green-500 to-emerald-600" },
+    { year: 2014, color: "from-blue-500 to-cyan-600" },
+    { year: 2015, color: "from-purple-500 to-indigo-600" },
+    { year: 2016, color: "from-green-500 to-emerald-600" },
+    { year: 2017, color: "from-blue-500 to-cyan-600" },
   ];
 
   return (
@@ -81,19 +69,16 @@ export default function PhysicsExamsPage() {
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05 }}
               className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden cursor-pointer group"
-              onClick={() => navigate(`/physics-${exam.year}`)}
+              onClick={() => navigate(`/phy${exam.year}`)}
             >
               {/* Exam Header */}
               <div className={`bg-gradient-to-r ${exam.color} p-6 text-white`}>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-2xl font-bold">Physics {exam.year}</h3>
-                  <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-semibold">
-                    {exam.difficulty}
-                  </span>
                 </div>
                 <p className="text-white/90">ESSLCE Examination</p>
                 <p className="text-white/80 text-sm mt-2">
-                  {exam.year} E.C / {exam.year + 8} G.C
+                  {exam.year} E.C / {exam.year + 8} E.C
                 </p>
               </div>
 
