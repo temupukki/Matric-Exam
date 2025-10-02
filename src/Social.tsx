@@ -59,7 +59,7 @@ export default function Social() {
       duration: "2 Hours",
     },
     {
-      id: "mathmatics",
+      id: "mathmaticssoc",
       name: "Mathmatics",
       description:
         "Understand our planet's systems, including geology, meteorology, oceanography, and astronomy.",

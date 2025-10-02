@@ -32,6 +32,7 @@ import MathNaturalExamsPage from "../server/src/Math-natural/MathNatural"
 import HistoryExamsPage from "../server/src/history/History"
 import  GeographyExamsPage from "../server/src/geography/Geography"
 import EconomicsExamsPage from "../server/src/economics/Economics"
+import MathSocialExamsPage from "../server/src/Math-social/MathSocial"
 
 function App() {
   return (
@@ -245,6 +246,14 @@ function App() {
           element={
             <DashLayout>
               <EconomicsExamsPage />
+            </DashLayout>
+          }
+        />
+            <Route
+          path="/dashboard/social/mathmaticssoc"
+          element={
+            <DashLayout>
+              <MathSocialExamsPage />
             </DashLayout>
           }
         />
