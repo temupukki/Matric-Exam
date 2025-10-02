@@ -69,7 +69,7 @@ export default function Social() {
       duration: "3 Hours",
     },
     {
-      id: "scholaticApptitude",
+      id: "apptitude",
       name: "Scholastic Apptitude",
       description:
         "Learn about the structure and organization of the human body and its systems.",
@@ -91,7 +91,12 @@ export default function Social() {
   ];
 
   const handleSubjectSelect = (subjectId: string) => {
-    navigate(`/dashboard/social/${subjectId}`);
+   
+    if (subjectId === "english" || subjectId === "apptitude") {
+      navigate(`/dashboard/${subjectId}`);
+    } else {
+      navigate(`/dashboard/social/${subjectId}`);
+    }
   };
 
   return (

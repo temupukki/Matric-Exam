@@ -202,7 +202,7 @@ function App() {
           }
         />
           <Route
-          path="/dashboard/natural/apptitude"
+          path="/dashboard/apptitude"
           element={
             <DashLayout>
               <ApptitudeExamsPage />
@@ -210,7 +210,7 @@ function App() {
           }
         />
            <Route
-          path="/dashboard/natural/english"
+          path="/dashboard/english"
           element={
             <DashLayout>
               <EnglishExamsPage />
