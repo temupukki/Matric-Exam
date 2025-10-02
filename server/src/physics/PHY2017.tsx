@@ -958,10 +958,11 @@ export default function Physics2017Exam() {
 
               <div className="grid grid-cols-5 gap-2">
                 {examQuestions.map((question, index) => {
-                  const questionAnswer = answers[index];
+                  const questionAnswer = answers[question.id];
                   const isCorrect = questionAnswer === question.correctAnswer;
                   const isCurrent = currentQuestion === index;
                   const isFlagged = flagged.has(index);
+                  const isAnswered = questionAnswer !== undefined;
                   
                   return (
                     <button
@@ -970,7 +971,7 @@ export default function Physics2017Exam() {
                       className={`relative w-10 h-10 rounded-lg flex items-center justify-center text-sm font-semibold transition-all ${
                         isCurrent
                           ? 'bg-purple-500 text-white'
-                          : questionAnswer !== undefined
+                          : isAnswered
                           ? showAnswers && isCorrect
                             ? 'bg-green-500 text-white'
                             : showAnswers && !isCorrect
@@ -987,7 +988,7 @@ export default function Physics2017Exam() {
                       {isFlagged && (
                         <Flag className="w-3 h-3 absolute -top-1 -right-1 fill-current text-yellow-500" />
                       )}
-                      {showAnswers && questionAnswer === undefined && (
+                      {showAnswers && !isAnswered && (
                         <div className="w-2 h-2 bg-blue-500 rounded-full absolute -top-1 -right-1"></div>
                       )}
                     </button>
