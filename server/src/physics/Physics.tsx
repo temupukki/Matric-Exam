@@ -69,7 +69,7 @@ export default function PhysicsExamsPage() {
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05 }}
               className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden cursor-pointer group"
-              onClick={() => navigate(`/phy${exam.year}`)}
+              onClick={() => navigate(`/dashboard/natural/phy${exam.year}`)}
             >
               {/* Exam Header */}
               <div className={`bg-gradient-to-r ${exam.color} p-6 text-white`}>
