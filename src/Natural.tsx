@@ -58,7 +58,7 @@ export default function Natural() {
       duration: "2 Hours",
     },
     {
-      id: "mathmatics",
+      id: "mathmaticsnat",
       name: "Mathmatics",
       description:
         "Understand our planet's systems, including geology, meteorology, oceanography, and astronomy.",

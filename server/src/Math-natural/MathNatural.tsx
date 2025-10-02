@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { BookOpen, Clock, Calendar, ArrowRight } from "lucide-react";
 
-export default function ApptitudeExamsPage() {
+export default function MathNaturalExamsPage() {
   const navigate = useNavigate();
 
-  // apptitude exams from 2010 to 2024
-  const apptitudeExams = [
+  // mathNatural exams from 2010 to 2024
+  const mathNaturalExams = [
     { year: 2010, color: "from-green-500 to-emerald-600" },
     { year: 2011, color: "from-blue-500 to-cyan-600" },
     { year: 2012, color: "from-purple-500 to-indigo-600" },
@@ -28,10 +28,10 @@ export default function ApptitudeExamsPage() {
         >
           <div className="flex items-center justify-center gap-3 mb-4">
             <BookOpen className="w-12 h-12 text-purple-600" />
-            <h1 className="text-5xl font-bold text-gray-900">Scholastic Apptitude Exams</h1>
+            <h1 className="text-5xl font-bold text-gray-900">Mathmatics for natural science Exams</h1>
           </div>
           <p className="text-xl text-gray-600">
-            ESSLCE apptitude Examinations 2010-2024
+            ESSLCE Mathmatics for natural science  Examinations 2010-2024
           </p>
         </motion.div>
 
@@ -61,7 +61,7 @@ export default function ApptitudeExamsPage() {
 
         {/* Exams Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {apptitudeExams.map((exam, index) => (
+          {mathNaturalExams.map((exam, index) => (
             <motion.div
               key={exam.year}
               initial={{ opacity: 0, y: 30 }}
@@ -69,12 +69,12 @@ export default function ApptitudeExamsPage() {
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05 }}
               className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden cursor-pointer group"
-              onClick={() => navigate(`/dashboard/natural/app${exam.year}`)}
+              onClick={() => navigate(`/dashboard/natural/matnat${exam.year}`)}
             >
               {/* Exam Header */}
               <div className={`bg-gradient-to-r ${exam.color} p-6 text-white`}>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-bold">apptitude {exam.year}</h3>
+                  <h3 className="text-2xl font-bold">mathNatural {exam.year}</h3>
                 </div>
                 <p className="text-white/90">ESSLCE Examination</p>
                 <p className="text-white/80 text-sm mt-2">
@@ -116,7 +116,7 @@ export default function ApptitudeExamsPage() {
           className="text-center mt-16"
         >
           <p className="text-gray-600">
-            Select any year to start the apptitude examination
+            Select any year to start the mathNatural examination
           </p>
         </motion.div>
       </div>

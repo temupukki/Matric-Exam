@@ -27,6 +27,10 @@ import PhysicsExamsPage from "../server/src/physics/Physics";
 import BiologyExamsPage from "../server/src/biology/Biology"
 import ChemistryExamsPage from "../server/src/chemistry/Chemistry"
 import ApptitudeExamsPage from "../server/src/scholastic-apptitude/Apptitude"
+import EnglishExamsPage from "../server/src/english/English"
+import MathNaturalExamsPage from "../server/src/Math-natural/MathNatural"
+import HistoryExamsPage from "../server/src/history/History"
+import  GeographyExamsPage from "../server/src/geography/Geography"
 
 function App() {
   return (
@@ -200,6 +204,38 @@ function App() {
           element={
             <DashLayout>
               <ApptitudeExamsPage />
+            </DashLayout>
+          }
+        />
+           <Route
+          path="/dashboard/natural/english"
+          element={
+            <DashLayout>
+              <EnglishExamsPage />
+            </DashLayout>
+          }
+        />
+         <Route
+          path="/dashboard/natural/mathmaticsnat"
+          element={
+            <DashLayout>
+              <MathNaturalExamsPage />
+            </DashLayout>
+          }
+        />
+             <Route
+          path="/dashboard/social/history"
+          element={
+            <DashLayout>
+              <HistoryExamsPage />
+            </DashLayout>
+          }
+        />
+          <Route
+          path="/dashboard/social/geography"
+          element={
+            <DashLayout>
+              <GeographyExamsPage />
             </DashLayout>
           }
         />
