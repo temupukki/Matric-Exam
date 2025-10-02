@@ -90,7 +90,7 @@ export default function Navbar() {
     { path: "/dashboard/social", label: "Social Exams", icon: <Globe className="w-4 h-4" /> },
   ];
 
-  // Combine navigation items based on user role
+ 
   const getUserNavItems = () => {
     if (!session) return guestNavItems;
     
