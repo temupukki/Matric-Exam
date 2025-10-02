@@ -1,18 +1,14 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { 
   CheckCircle, 
   Star, 
- 
   BookOpen,
-
   Shield,
   BarChart3,
   Video,
- 
   HelpCircle,
-
   TrendingUp,
   ArrowRight
 } from "lucide-react";
@@ -20,13 +16,12 @@ import {
 export default function Price() {
   const navigate = useNavigate();
 
-
   const pricingPlans = [
-    
     {
       name: "Natural Science",
       description: "Practice Natural Science for university entry anytime, anywhere.",
-      price: "99 Birr one time",
+      price: "99 Birr",
+      period: "one time payment",
       savings: "Save 25%",
       popular: false,
       color: "from-purple-500 to-pink-500",
@@ -37,16 +32,15 @@ export default function Price() {
         { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
         { text: "Detailed analytics", included: true },
-
-       
       ],
       buttonText: "Proceed To Payment",
       buttonVariant: "primary"
     },
-     {
+    {
       name: "Social Science",
       description: "Practice Social Science for university entry anytime, anywhere.",
-      price: "99 Birr one time",
+      price: "99 Birr",
+      period: "one time payment",
       savings: "Save 25%",
       popular: false,
       color: "from-purple-500 to-pink-500",
@@ -57,17 +51,15 @@ export default function Price() {
         { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
         { text: "Detailed analytics", included: true },
-
-       
       ],
       buttonText: "Proceed To Payment",
       buttonVariant: "primary"
     },
-    
     {
       name: "Family Package",
       description: "Practice Social Science and Natural Science for university entry anytime, anywhere.",
-      price: "170 ETB",
+      price: "170 Birr",
+      period: "one time payment",
       savings: "Save 30%",
       popular: true,
       color: "from-orange-500 to-amber-500",
@@ -78,7 +70,7 @@ export default function Price() {
         { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
         { text: "Detailed analytics", included: true },
-        { text: "Access Both Streams ", included: true }
+        { text: "Access Both Streams", included: true }
       ],
       buttonText: "Proceed To Payment",
       buttonVariant: "primary"
@@ -188,8 +180,6 @@ export default function Price() {
               Choose the perfect plan for your learning journey. All prices in Ethiopian Birr (ETB). 
               Start free, upgrade anytime.
             </motion.p>
-
-           
           </motion.div>
         </div>
       </section>
@@ -220,7 +210,7 @@ export default function Price() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.8 }}
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full font-semibold flex items-center gap-2 shadow-lg"
+                      className="bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-2 rounded-full font-semibold flex items-center gap-2 shadow-lg"
                     >
                       <Star className="w-4 h-4 fill-current" />
                       Most Popular
@@ -232,7 +222,32 @@ export default function Price() {
                   {/* Plan Header */}
                   <div className="text-center mb-8">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                    <p className="text-gray-600 mb-4">{plan.description}</p>
+                    <p className="text-gray-600 mb-6">{plan.description}</p>
+                    
+                    {/* Price Display - Made more prominent */}
+                    <div className="mb-4">
+                      <motion.div
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="inline-block bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-2xl shadow-lg"
+                      >
+                        <div className="text-3xl font-bold">{plan.price}</div>
+                        <div className="text-blue-100 text-sm">{plan.period}</div>
+                      </motion.div>
+                    </div>
+
+                    {/* Savings Badge */}
+                    {plan.savings && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.7 }}
+                        className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium"
+                      >
+                        {plan.savings}
+                      </motion.div>
+                    )}
                   </div>
 
                   {/* Features */}
