@@ -19,7 +19,6 @@ import {
 import { useState } from "react";
 const MotionLink = motion(Link);
 
-
 export default function DashFooter() {
   const [email, setEmail] = useState("");
 
@@ -346,25 +345,6 @@ export default function DashFooter() {
               Terms of Service
             </MotionLink>
           </motion.div>
-        </motion.div>
-
-        {/* Floating CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          viewport={{ once: true }}
-          className="mt-8 text-center"
-        >
-          <MotionLink
-            to="/sign-in" // change to the route you want
-            whileHover={{ scale: 1.02 }}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-6 py-3 rounded-full font-semibold shadow-lg"
-          >
-            <Star className="w-5 h-5" />
-            <span>Start Your Success Journey Today!</span>
-            <ArrowRight className="w-5 h-5" />
-          </MotionLink>
         </motion.div>
       </div>
     </footer>
