@@ -1,16 +1,14 @@
 import { motion } from "framer-motion";
 
 import { useNavigate } from "react-router-dom";
-import { 
-  CheckCircle, 
-  Star, 
+import {
+  CheckCircle,
+  Star,
   BookOpen,
   Shield,
   BarChart3,
-  Video,
   HelpCircle,
   TrendingUp,
-  ArrowRight
 } from "lucide-react";
 
 export default function Price() {
@@ -19,7 +17,8 @@ export default function Price() {
   const pricingPlans = [
     {
       name: "Natural Science",
-      description: "Practice Natural Science for university entry anytime, anywhere.",
+      description:
+        "Practice Natural Science for university entry anytime, anywhere.",
       price: "99 ETB",
       period: "one time payment",
       savings: "Save 25%",
@@ -34,11 +33,12 @@ export default function Price() {
         { text: "Detailed analytics", included: true },
       ],
       buttonText: "Proceed To Payment",
-      buttonVariant: "primary"
+      buttonVariant: "primary",
     },
     {
       name: "Social Science",
-      description: "Practice Social Science for university entry anytime, anywhere.",
+      description:
+        "Practice Social Science for university entry anytime, anywhere.",
       price: "99 ETB",
       period: "one time payment",
       savings: "Save 25%",
@@ -53,11 +53,12 @@ export default function Price() {
         { text: "Detailed analytics", included: true },
       ],
       buttonText: "Proceed To Payment",
-      buttonVariant: "primary"
+      buttonVariant: "primary",
     },
     {
       name: "Family Package",
-      description: "Practice Social Science and Natural Science for university entry anytime, anywhere.",
+      description:
+        "Practice Social Science and Natural Science for university entry anytime, anywhere.",
       price: "170 ETB",
       period: "one time payment",
       savings: "Save 30%",
@@ -70,53 +71,52 @@ export default function Price() {
         { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
         { text: "Detailed analytics", included: true },
-        { text: "Access Both Streams", included: true }
+        { text: "Access Both Streams", included: true },
       ],
       buttonText: "Proceed To Payment",
-      buttonVariant: "primary"
-    }
+      buttonVariant: "primary",
+    },
   ];
 
   const features = [
     {
       icon: <BookOpen className="w-6 h-6" />,
       title: "Comprehensive Materials",
-      description: "Access to all subject materials and practice exams"
+      description: "Access to all subject materials and practice exams",
     },
     {
       icon: <BarChart3 className="w-6 h-6" />,
       title: "Advanced Analytics",
-      description: "Detailed performance tracking and insights"
-    },
-    {
-      icon: <Video className="w-6 h-6" />,
-      title: "Video Explanations",
-      description: "Step-by-step video solutions for all questions"
+      description: "Detailed performance tracking and insights",
     },
     {
       icon: <Shield className="w-6 h-6" />,
       title: "Secure Platform",
-      description: "Your data and progress are always protected"
-    }
+      description: "Your data and progress are always protected",
+    },
   ];
 
   const faqs = [
     {
       question: "Can I change plans later?",
-      answer: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately."
+      answer:
+        "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
     },
     {
       question: "Is there a free trial?",
-      answer: "Yes! All paid plans come with a 7-day free trial. No credit card required for the Starter plan."
+      answer:
+        "Yes! All paid plans come with a 7-day free trial. No credit card required for the Starter plan.",
     },
     {
       question: "What payment methods do you accept?",
-      answer: "We accept all major Ethiopian payment methods including CBE Birr, Tele Birr, and bank transfers."
+      answer:
+        "We accept all major Ethiopian payment methods including CBE Birr, Tele Birr, and bank transfers.",
     },
     {
       question: "Can I cancel anytime?",
-      answer: "Absolutely! You can cancel your subscription anytime without any cancellation fees."
-    }
+      answer:
+        "Absolutely! You can cancel your subscription anytime without any cancellation fees.",
+    },
   ];
 
   return (
@@ -127,7 +127,7 @@ export default function Price() {
           animate={{
             x: [0, 100, 0],
             y: [0, -50, 0],
-            transition: { duration: 25, repeat: Infinity, ease: "linear" }
+            transition: { duration: 25, repeat: Infinity, ease: "linear" },
           }}
           className="absolute -top-20 -left-20 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl"
         />
@@ -135,7 +135,7 @@ export default function Price() {
           animate={{
             x: [0, -100, 0],
             y: [0, 50, 0],
-            transition: { duration: 30, repeat: Infinity, ease: "linear" }
+            transition: { duration: 30, repeat: Infinity, ease: "linear" },
           }}
           className="absolute -bottom-20 -right-20 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl"
         />
@@ -156,7 +156,9 @@ export default function Price() {
               className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full mb-6"
             >
               <TrendingUp className="w-5 h-5 text-blue-600" />
-              <span className="font-semibold text-blue-600">Affordable Excellence</span>
+              <span className="font-semibold text-blue-600">
+                Affordable Excellence
+              </span>
             </motion.div>
 
             <motion.h1
@@ -177,8 +179,8 @@ export default function Price() {
               transition={{ delay: 0.4 }}
               className="text-xl text-gray-600 max-w-3xl mx-auto mb-8"
             >
-              Choose the perfect plan for your learning journey. All prices in Ethiopian Birr (ETB). 
-              Start free, upgrade anytime.
+              Choose the perfect plan for your learning journey. All prices in
+              Ethiopian Birr (ETB). Start free, upgrade anytime.
             </motion.p>
           </motion.div>
         </div>
@@ -200,7 +202,9 @@ export default function Price() {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 whileHover={{ y: -5, scale: plan.popular ? 1.02 : 1 }}
                 className={`relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 ${
-                  plan.popular ? 'ring-4 ring-purple-500/20 transform scale-105' : ''
+                  plan.popular
+                    ? "ring-4 ring-purple-500/20 transform scale-105"
+                    : ""
                 }`}
               >
                 {/* Popular Badge */}
@@ -221,9 +225,11 @@ export default function Price() {
                 <div className="p-8">
                   {/* Plan Header */}
                   <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      {plan.name}
+                    </h3>
                     <p className="text-gray-600 mb-6">{plan.description}</p>
-                    
+
                     {/* Price Display - Made more prominent */}
                     <div className="mb-4">
                       <motion.div
@@ -233,7 +239,9 @@ export default function Price() {
                         className="inline-block bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-2xl shadow-lg"
                       >
                         <div className="text-3xl font-bold">{plan.price}</div>
-                        <div className="text-blue-100 text-sm">{plan.period}</div>
+                        <div className="text-blue-100 text-sm">
+                          {plan.period}
+                        </div>
                       </motion.div>
                     </div>
 
@@ -265,9 +273,11 @@ export default function Price() {
                         ) : (
                           <div className="w-5 h-5 border-2 border-gray-300 rounded-full flex-shrink-0" />
                         )}
-                        <span className={`text-sm ${
-                          feature.included ? 'text-gray-700' : 'text-gray-400'
-                        }`}>
+                        <span
+                          className={`text-sm ${
+                            feature.included ? "text-gray-700" : "text-gray-400"
+                          }`}
+                        >
                           {feature.text}
                         </span>
                       </motion.div>
@@ -281,8 +291,8 @@ export default function Price() {
                     onClick={() => navigate("/sign-in")}
                     className={`w-full py-4 rounded-xl font-semibold transition-all duration-300 ${
                       plan.buttonVariant === "primary"
-                        ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg hover:shadow-xl'
-                        : 'border-2 border-blue-500 text-blue-600 hover:bg-blue-50'
+                        ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg hover:shadow-xl"
+                        : "border-2 border-blue-500 text-blue-600 hover:bg-blue-50"
                     }`}
                   >
                     {plan.buttonText}
@@ -311,7 +321,8 @@ export default function Price() {
               </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our platform provides all the tools and resources you need to excel in your matric exams
+              Our platform provides all the tools and resources you need to
+              excel in your matric exams
             </p>
           </motion.div>
 
@@ -332,7 +343,9 @@ export default function Price() {
                 >
                   {feature.icon}
                 </motion.div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {feature.title}
+                </h3>
                 <p className="text-gray-600 text-sm">{feature.description}</p>
               </motion.div>
             ))}
@@ -357,7 +370,8 @@ export default function Price() {
               </span>
             </h2>
             <p className="text-xl text-gray-600">
-              Get answers to the most common questions about our pricing and plans
+              Get answers to the most common questions about our pricing and
+              plans
             </p>
           </motion.div>
 
@@ -375,7 +389,9 @@ export default function Price() {
                 <div className="flex items-start gap-4">
                   <HelpCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{faq.question}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      {faq.question}
+                    </h3>
                     <p className="text-gray-600">{faq.answer}</p>
                   </div>
                 </div>
@@ -383,78 +399,6 @@ export default function Price() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-20 px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto text-center"
-        >
-          <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-3xl p-12 text-white relative overflow-hidden">
-            <div className="absolute inset-0 overflow-hidden">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute -top-20 -left-20 w-40 h-40 bg-yellow-400/10 rounded-full"
-              />
-            </div>
-
-            <div className="relative z-10">
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-3xl md:text-4xl font-bold mb-4"
-              >
-                Ready to Start Your Success Journey?
-              </motion.h2>
-              
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="text-xl text-blue-100 mb-8"
-              >
-                Join thousands of Ethiopian students achieving academic excellence
-              </motion.p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/sign-in")}
-                  className="bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
-                >
-                  Start Free Trial <ArrowRight className="w-5 h-5" />
-                </motion.button>
-                
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/contact")}
-                  className="border-2 border-white/50 bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition-all duration-300"
-                >
-                  Contact Sales
-                </motion.button>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="mt-8 text-blue-200 text-sm"
-              >
-                <p>✓ 7-day free trial on all paid plans</p>
-                <p>✓ No credit card required for Starter plan</p>
-                <p>✓ Cancel anytime</p>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
       </section>
     </div>
   );
