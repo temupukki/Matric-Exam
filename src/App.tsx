@@ -21,6 +21,7 @@ import DemoStart from "./DemoStart";
 import Natural from "./Natural";
 import Social from "./Social";
 import Physics from "./Physics";
+import Test from "./Test";
 
 function App() {
   return (
@@ -162,6 +163,14 @@ function App() {
           element={
             <DashLayout>
               <Physics />
+            </DashLayout>
+          }
+        />
+         <Route
+          path="/dashboard/natural/test"
+          element={
+            <DashLayout>
+              <Test />
             </DashLayout>
           }
         />
