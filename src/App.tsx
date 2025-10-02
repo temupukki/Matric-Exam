@@ -26,6 +26,7 @@ import Physics2017Exam from "../server/src/physics/PHY2017";
 import PhysicsExamsPage from "../server/src/physics/Physics";
 import BiologyExamsPage from "../server/src/biology/Biology"
 import ChemistryExamsPage from "../server/src/chemistry/Chemistry"
+import ApptitudeExamsPage from "../server/src/scholastic-apptitude/Apptitude"
 
 function App() {
   return (
@@ -191,6 +192,14 @@ function App() {
           element={
             <DashLayout>
               <ChemistryExamsPage />
+            </DashLayout>
+          }
+        />
+          <Route
+          path="/dashboard/natural/apptitude"
+          element={
+            <DashLayout>
+              <ApptitudeExamsPage />
             </DashLayout>
           }
         />

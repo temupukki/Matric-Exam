@@ -68,7 +68,7 @@ export default function Natural() {
       duration: "3 Hours",
     },
     {
-      id: "scholaticApptitude",
+      id: "apptitude",
       name: "Scholastic Apptitude",
       description:
         "Learn about the structure and organization of the human body and its systems.",
