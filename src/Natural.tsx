@@ -90,7 +90,13 @@ export default function Natural() {
   ];
 
   const handleSubjectSelect = (subjectId: string) => {
-    navigate(`/dashboard/natural/${subjectId}`);
+    // For english and aptitude, navigate to /dashboard/{subjectId}
+    // For others, keep the existing navigation /dashboard/natural/{subjectId}
+    if (subjectId === "english" || subjectId === "apptitude") {
+      navigate(`/dashboard/${subjectId}`);
+    } else {
+      navigate(`/dashboard/natural/${subjectId}`);
+    }
   };
 
   return (
