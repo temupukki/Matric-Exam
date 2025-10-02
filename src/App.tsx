@@ -31,6 +31,7 @@ import EnglishExamsPage from "../server/src/english/English"
 import MathNaturalExamsPage from "../server/src/Math-natural/MathNatural"
 import HistoryExamsPage from "../server/src/history/History"
 import  GeographyExamsPage from "../server/src/geography/Geography"
+import EconomicsExamsPage from "../server/src/economics/Economics"
 
 function App() {
   return (
@@ -236,6 +237,14 @@ function App() {
           element={
             <DashLayout>
               <GeographyExamsPage />
+            </DashLayout>
+          }
+        />
+             <Route
+          path="/dashboard/social/economics"
+          element={
+            <DashLayout>
+              <EconomicsExamsPage />
             </DashLayout>
           }
         />
