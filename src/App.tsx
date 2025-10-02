@@ -24,6 +24,8 @@ import Social from "./Social";
 
 import Physics2017Exam from "../server/src/physics/PHY2017";
 import PhysicsExamsPage from "../server/src/physics/Physics";
+import BiologyExamsPage from "../server/src/biology/Biology"
+import ChemistryExamsPage from "../server/src/chemistry/Chemistry"
 
 function App() {
   return (
@@ -173,6 +175,22 @@ function App() {
           element={
             <DashLayout>
               <Physics2017Exam />
+            </DashLayout>
+          }
+        />
+            <Route
+          path="/dashboard/natural/biology"
+          element={
+            <DashLayout>
+              <BiologyExamsPage />
+            </DashLayout>
+          }
+        />
+           <Route
+          path="/dashboard/natural/chemistry"
+          element={
+            <DashLayout>
+              <ChemistryExamsPage />
             </DashLayout>
           }
         />
