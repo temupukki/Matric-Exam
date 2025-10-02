@@ -58,7 +58,7 @@ export default function Price() {
     {
       name: "Family Package",
       description:
-        "Practice Social Science and Natural Science for university entry anytime, anywhere.",
+        "Practice Both Social Science and Natural Science for university entry anytime, anywhere.",
       price: "170 ETB",
       period: "one time payment",
       savings: "Save 30%",
