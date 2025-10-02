@@ -4,17 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { 
   CheckCircle, 
   Star, 
-  Award, 
-  Zap, 
-  Users, 
+ 
   BookOpen,
-  Clock,
+
   Shield,
   BarChart3,
   Video,
-  FileText,
+ 
   HelpCircle,
-  Crown,
+
   TrendingUp,
   ArrowRight
 } from "lucide-react";
@@ -42,7 +40,7 @@ export default function Price() {
 
        
       ],
-      buttonText: "Start Pro Trial",
+      buttonText: "Proceed To Payment",
       buttonVariant: "primary"
     },
      {
@@ -62,7 +60,7 @@ export default function Price() {
 
        
       ],
-      buttonText: "Start Pro Trial",
+      buttonText: "Proceed To Payment",
       buttonVariant: "primary"
     },
     
@@ -82,7 +80,7 @@ export default function Price() {
         { text: "Detailed analytics", included: true },
         { text: "Access Both Streams ", included: true }
       ],
-      buttonText: "Go Elite",
+      buttonText: "Proceed To Payment",
       buttonVariant: "primary"
     }
   ];
@@ -191,34 +189,7 @@ export default function Price() {
               Start free, upgrade anytime.
             </motion.p>
 
-            {/* Billing Toggle */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="inline-flex bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg mb-12"
-            >
-              <button
-                onClick={() => setBillingPeriod("monthly")}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                  billingPeriod === "monthly"
-                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
-                    : 'text-gray-600 hover:text-blue-600'
-                }`}
-              >
-                Monthly
-              </button>
-              <button
-                onClick={() => setBillingPeriod("yearly")}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                  billingPeriod === "yearly"
-                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
-                    : 'text-gray-600 hover:text-blue-600'
-                }`}
-              >
-                Yearly (Save up to 30%)
-              </button>
-            </motion.div>
+           
           </motion.div>
         </div>
       </section>
