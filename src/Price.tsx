@@ -30,7 +30,7 @@ export default function Price() {
       description: "Practice Natural Science for university entry anytime, anywhere.",
       price: "99 Birr one time",
       savings: "Save 25%",
-      popular: true,
+      popular: false,
       color: "from-purple-500 to-pink-500",
       features: [
         { text: "Access to all demo exams", included: true },
@@ -39,33 +39,48 @@ export default function Price() {
         { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
         { text: "Detailed analytics", included: true },
-        { text: "Video explanations", included: true },
-        { text: "Mobile app access", included: true },
-        { text: "Study planner", included: false }
+
+       
       ],
       buttonText: "Start Pro Trial",
       buttonVariant: "primary"
     },
-    {
-      name: "Elite Master",
-      description: "Complete package for academic excellence",
-      price: {
-        monthly: "799",
-        yearly: "7,590"
-      },
-      savings: "Save 30%",
+     {
+      name: "Social Science",
+      description: "Practice Social Science for university entry anytime, anywhere.",
+      price: "99 Birr one time",
+      savings: "Save 25%",
       popular: false,
+      color: "from-purple-500 to-pink-500",
+      features: [
+        { text: "Access to all demo exams", included: true },
+        { text: "All subject materials", included: true },
+        { text: "Priority support", included: true },
+        { text: "Advanced progress tracking", included: true },
+        { text: "Unlimited exam attempts", included: true },
+        { text: "Detailed analytics", included: true },
+
+       
+      ],
+      buttonText: "Start Pro Trial",
+      buttonVariant: "primary"
+    },
+    
+    {
+      name: "Family Package",
+      description: "Practice Social Science and Natural Science for university entry anytime, anywhere.",
+      price: "170 ETB",
+      savings: "Save 30%",
+      popular: true,
       color: "from-orange-500 to-amber-500",
       features: [
-        { text: "Unlimited access to all exams", included: true },
-        { text: "Premium subject materials", included: true },
-        { text: "24/7 premium support", included: true },
-        { text: "AI-powered progress tracking", included: true },
+        { text: "Access to all demo exams", included: true },
+        { text: "All subject materials", included: true },
+        { text: "Priority support", included: true },
+        { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
-        { text: "Advanced AI analytics", included: true },
-        { text: "HD video explanations", included: true },
-        { text: "Personal tutor sessions (2/month)", included: true },
-        { text: "Custom study planner", included: true }
+        { text: "Detailed analytics", included: true },
+        { text: "Access Both Streams ", included: true }
       ],
       buttonText: "Go Elite",
       buttonVariant: "primary"
