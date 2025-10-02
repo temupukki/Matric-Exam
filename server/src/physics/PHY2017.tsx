@@ -891,7 +891,7 @@ export default function Physics2017Exam() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/exams')}
+                onClick={() => navigate('/dashboard/natural')}
                 className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-8 py-3 rounded-xl font-semibold shadow-lg"
               >
                 Back to Exams
