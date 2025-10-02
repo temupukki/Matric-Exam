@@ -9,12 +9,12 @@ import {
   GraduationCap, 
   User, 
   LayoutDashboard,
-  
   ChevronDown,
   ClipboardList,
   CreditCard,
   Globe,
-  Atom
+  Atom,
+  Shield
 } from "lucide-react";
 
 // User session hook with your actual API
@@ -77,17 +77,33 @@ export default function Navbar() {
     { path: "/sign-in", label: "Get Started", highlight: true },
   ];
 
-  // Navigation items for signed in users
-  const userNavItems = [
- 
+  // Base navigation items for signed in users
+  const baseUserNavItems = [
     { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-     { path: "/dashboard/demo", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
-      { path: "/dashboard/price", label: "Pricing", icon: <CreditCard className="w-4 h-4" /> },
-      { path: "/dashboard/natural", label: "Natural Exams", icon: <Atom className="w-4 h-4" /> },
-        { path: "/dashboard/social", label: "Social Exams", icon: <Globe className="w-4 h-4" /> },
+    { path: "/dashboard/demo", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
+    { path: "/dashboard/price", label: "Pricing", icon: <CreditCard className="w-4 h-4" /> },
   ];
 
-  const navItems = session ? userNavItems : guestNavItems;
+  // Admin-only navigation items
+  const adminNavItems = [
+    { path: "/dashboard/natural", label: "Natural Exams", icon: <Atom className="w-4 h-4" /> },
+    { path: "/dashboard/social", label: "Social Exams", icon: <Globe className="w-4 h-4" /> },
+  ];
+
+  // Combine navigation items based on user role
+  const getUserNavItems = () => {
+    if (!session) return guestNavItems;
+    
+    const isAdmin = session.user?.role === 'ADMIN';
+    
+    if (isAdmin) {
+      return [...baseUserNavItems, ...adminNavItems];
+    }
+    
+    return baseUserNavItems;
+  };
+
+  const navItems = getUserNavItems();
 
   const getUserInitials = (name: string) => {
     if (!name) return 'U';
@@ -108,6 +124,8 @@ export default function Navbar() {
     if (!email) return 'user';
     return email.split('@')[0];
   };
+
+  const isAdmin = session?.user?.role === 'admin';
 
   // Show loading state
   if (loading) {
@@ -225,9 +243,13 @@ export default function Navbar() {
                     <div className="text-left">
                       <p className="font-semibold text-sm leading-tight">
                         {getFirstName(session.user?.name || session.user?.email)}
+                        {isAdmin && (
+                          <Shield className="w-3 h-3 text-yellow-400 inline ml-1" />
+                        )}
                       </p>
                       <p className="text-xs text-white/70 leading-tight">
                         {getUsername(session.user?.email)}
+                        {isAdmin && " • Admin"}
                       </p>
                     </div>
                   </div>
@@ -256,8 +278,18 @@ export default function Navbar() {
                             {getUserInitials(session.user?.name || session.user?.email)}
                           </div>
                           <div className="flex-1">
-                            <p className="font-semibold">{session.user?.name || 'User'}</p>
-                            <p className="text-sm text-white/80">{session.user?.email}</p>
+                            <p className="font-semibold flex items-center gap-2">
+                              {session.user?.name || 'User'}
+                              {isAdmin && (
+                                <Shield className="w-4 h-4 text-yellow-400" />
+                              )}
+                            </p>
+                            <p className="text-sm text-white/80">
+                              {session.user?.email}
+                              {isAdmin && (
+                                <span className="block text-yellow-300 text-xs">Administrator</span>
+                              )}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -292,7 +324,18 @@ export default function Navbar() {
                           </div>
                         </Link>
 
-                 
+                        {/* Admin badge in dropdown */}
+                        {isAdmin && (
+                          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-yellow-50 border border-yellow-200 mt-2">
+                            <div className="p-2 bg-yellow-100 rounded-lg">
+                              <Shield className="w-4 h-4 text-yellow-600" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-yellow-800">Admin Access</p>
+                              <p className="text-xs text-yellow-600">Full system permissions</p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -403,8 +446,18 @@ export default function Navbar() {
                           {getUserInitials(session.user?.name || session.user?.email)}
                         </div>
                         <div className="flex-1">
-                          <p className="font-semibold text-white">{session.user?.name || 'User'}</p>
-                          <p className="text-sm text-white/70">{session.user?.email}</p>
+                          <p className="font-semibold text-white flex items-center gap-2">
+                            {session.user?.name || 'User'}
+                            {isAdmin && (
+                              <Shield className="w-3 h-3 text-yellow-400" />
+                            )}
+                          </p>
+                          <p className="text-sm text-white/70">
+                            {session.user?.email}
+                            {isAdmin && (
+                              <span className="block text-yellow-300 text-xs">Administrator</span>
+                            )}
+                          </p>
                         </div>
                       </div>
 
@@ -417,7 +470,7 @@ export default function Navbar() {
                         <User className="w-4 h-4" />
                         My Profile
                       </Link>
-                        <Link
+                      <Link
                         to="/dashboard"
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/10 transition-colors"
@@ -425,7 +478,17 @@ export default function Navbar() {
                         <LayoutDashboard className="w-4 h-4" />
                         Dashboard
                       </Link>
-                   
+
+                      {/* Admin badge in mobile menu */}
+                      {isAdmin && (
+                        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400/20 border border-yellow-400/30 mt-2">
+                          <Shield className="w-4 h-4 text-yellow-400" />
+                          <div>
+                            <p className="font-semibold text-yellow-300">Admin Access</p>
+                            <p className="text-xs text-yellow-200">Full system permissions</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </>
                 ) : (

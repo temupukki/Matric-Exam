@@ -16,6 +16,9 @@ datasource db {
 enum UserRole{
   USER 
   ADMIN
+  NATURAL
+  SOCIAL
+  BOTH
 }
 model User {
   id            String    @id
