@@ -19,7 +19,7 @@ import {
 
 export default function Price() {
   const navigate = useNavigate();
-  const [billingPeriod, setBillingPeriod] = useState("monthly");
+
 
   const pricingPlans = [
     
@@ -233,27 +233,6 @@ export default function Price() {
                   <div className="text-center mb-8">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                     <p className="text-gray-600 mb-4">{plan.description}</p>
-                    
-                    {/* Price */}
-                    <div className="mb-4">
-                      <div className="flex items-baseline justify-center gap-2">
-                        <span className="text-4xl font-bold text-gray-900">
-                       
-                        </span>
-                        <span className="text-gray-600">
-                          /{billingPeriod === "monthly" ? "month" : "year"}
-                        </span>
-                      </div>
-                      {billingPeriod === "yearly" && (
-                        <motion.p
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="text-green-600 font-semibold text-sm mt-2"
-                        >
-                          {plan.savings}
-                        </motion.p>
-                      )}
-                    </div>
                   </div>
 
                   {/* Features */}
