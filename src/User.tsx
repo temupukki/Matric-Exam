@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 type UserRole = "USER" | "ADMIN" | "NATURAL" | "SOCIAL" | "BOTH";
+MODERATOR
 
 interface User {
   id: string;
@@ -415,7 +416,9 @@ const Userpage: React.FC = () => {
                           )} focus:ring-2 focus:ring-blue-500`}
                         >
                           <option value="USER">USER</option>
-                          <option value="MODERATOR">MODERATOR</option>
+                          <option value="NATURAL">NATURAL</option>
+                          <option value="SOCIAL">SOCIAL</option>
+                          <option value="BOTH">BOTH</option>
                           <option value="ADMIN">ADMIN</option>
                         </select>
                       </td>
