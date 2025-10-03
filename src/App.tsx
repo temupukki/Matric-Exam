@@ -33,6 +33,7 @@ import HistoryExamsPage from "./history/History"
 import  GeographyExamsPage from "./geography/Geography"
 import EconomicsExamsPage from "./economics/Economics"
 import MathSocialExamsPage from "./Math-social/MathSocial"
+import Payment from "./Payment";
 
 function App() {
   return (
@@ -270,6 +271,14 @@ function App() {
           element={
             <DashLayout>
               <Terms />
+            </DashLayout>
+          }
+        />
+         <Route
+          path="/dashboard/payment"
+          element={
+            <DashLayout>
+              <Payment/>
             </DashLayout>
           }
         />
