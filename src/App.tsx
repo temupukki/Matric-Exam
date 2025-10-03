@@ -36,6 +36,7 @@ import MathSocialExamsPage from "./Math-social/MathSocial"
 import Payment from "./Payment";
 import Support from "./Support";
 import Paid from "./Paid";
+import { User } from "lucide-react";
 
 function App() {
   return (
@@ -297,6 +298,14 @@ function App() {
           element={
             <DashLayout>
               <Paid/>
+            </DashLayout>
+          }
+        />
+           <Route
+          path="/dashboard/admin/user"
+          element={
+            <DashLayout>
+              <User/>
             </DashLayout>
           }
         />
