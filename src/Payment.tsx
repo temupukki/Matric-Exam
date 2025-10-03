@@ -1,18 +1,18 @@
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
-import { 
-  Upload, 
-  CheckCircle, 
-  AlertCircle, 
-  CreditCard, 
-  Smartphone, 
+import {
+  Upload,
+  CheckCircle,
+  AlertCircle,
+  CreditCard,
+  Smartphone,
   Receipt,
   Shield,
   ArrowRight,
   X,
   Camera,
   FileText,
-  Loader2
+  Loader2,
 } from "lucide-react";
 
 interface PaymentOption {
@@ -43,53 +43,26 @@ export default function Payment() {
         "Enter our account number: 251912345678",
         "Enter amount: 99 ETB",
         "Add note: 'ExamMaster Payment'",
-        "Complete the transaction"
+        "Complete the transaction",
       ],
-      accountInfo: "Account: 251912345678\nName: ExamMaster EdTech"
+      accountInfo: "Account: 251912345678\nName: TEMESGEN GASHAW",
     },
-    {
-      id: "cbe-birr",
-      name: "CBE Birr",
-      description: "Commercial Bank of Ethiopia mobile payment",
-      icon: <Smartphone className="w-8 h-8" />,
-      steps: [
-        "Open your CBE Birr app",
-        "Select 'Send Money'",
-        "Enter phone: 251912345678",
-        "Enter amount: 99 ETB",
-        "Add description: 'ExamMaster'",
-        "Confirm and send"
-      ],
-      accountInfo: "Phone: 251912345678\nName: ExamMaster"
-    },
-    {
-      id: "bank-transfer",
-      name: "Bank Transfer",
-      description: "Direct bank transfer",
-      icon: <CreditCard className="w-8 h-8" />,
-      steps: [
-        "Visit any bank branch",
-        "Fill deposit slip for Commercial Bank of Ethiopia",
-        "Account Number: 1000000000001",
-        "Account Name: ExamMaster EdTech PLC",
-        "Amount: 99 ETB",
-        "Get receipt and upload below"
-      ],
-      accountInfo: "Bank: Commercial Bank of Ethiopia\nAccount: 1000000000001\nName: ExamMaster EdTech PLC"
-    }
   ];
 
-  const selectedPayment = paymentMethods.find(method => method.id === selectedMethod);
+  const selectedPayment = paymentMethods.find(
+    (method) => method.id === selectedMethod
+  );
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      if (file.size > 5 * 1024 * 1024) {
+        // 5MB limit
         alert("File size too large. Please select an image under 5MB.");
         return;
       }
 
-      if (!file.type.startsWith('image/')) {
+      if (!file.type.startsWith("image/")) {
         alert("Please select an image file.");
         return;
       }
@@ -105,7 +78,7 @@ export default function Payment() {
   const handleRemoveImage = () => {
     setUploadedImage(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -117,10 +90,10 @@ export default function Payment() {
     }
 
     setIsSubmitting(true);
-    
+
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     setIsSubmitting(false);
     setIsSubmitted(true);
   };
@@ -141,26 +114,29 @@ export default function Payment() {
           >
             <CheckCircle className="w-10 h-10 text-green-500" />
           </motion.div>
-          
+
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Payment Received!
           </h2>
-          
+
           <p className="text-gray-600 mb-6">
-            Thank you for your payment. We've received your receipt and will activate your account within 24 hours.
+            Thank you for your payment. We've received your receipt and will
+            activate your account within 24 hours.
           </p>
-          
+
           <div className="bg-blue-50 rounded-xl p-4 mb-6">
             <p className="text-sm text-blue-700">
-              <strong>What's next?</strong><br />
-              You'll receive a confirmation email once your payment is verified and your account is activated.
+              <strong>What's next?</strong>
+              <br />
+              You'll receive a confirmation email once your payment is verified
+              and your account is activated.
             </p>
           </div>
-          
+
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => window.location.href = '/dashboard'}
+            onClick={() => (window.location.href = "/dashboard")}
             className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
           >
             Go to Dashboard
@@ -195,9 +171,10 @@ export default function Payment() {
               Payment
             </span>
           </h1>
-          
+
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose your preferred payment method and upload the receipt screenshot to activate your account.
+            Choose your preferred payment method and upload the receipt
+            screenshot to activate your account.
           </p>
         </motion.div>
 
@@ -214,7 +191,7 @@ export default function Payment() {
                 <CreditCard className="w-6 h-6 text-blue-600" />
                 Payment Methods
               </h3>
-              
+
               <div className="space-y-4">
                 {paymentMethods.map((method) => (
                   <motion.button
@@ -224,19 +201,27 @@ export default function Payment() {
                     onClick={() => setSelectedMethod(method.id)}
                     className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left ${
                       selectedMethod === method.id
-                        ? 'border-blue-500 bg-blue-50 shadow-md'
-                        : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                        ? "border-blue-500 bg-blue-50 shadow-md"
+                        : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${
-                        selectedMethod === method.id ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
-                      }`}>
+                      <div
+                        className={`p-2 rounded-lg ${
+                          selectedMethod === method.id
+                            ? "bg-blue-100 text-blue-600"
+                            : "bg-gray-100 text-gray-600"
+                        }`}
+                      >
                         {method.icon}
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">{method.name}</h4>
-                        <p className="text-sm text-gray-600">{method.description}</p>
+                        <h4 className="font-semibold text-gray-900">
+                          {method.name}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {method.description}
+                        </p>
                       </div>
                     </div>
                   </motion.button>
@@ -321,21 +306,22 @@ export default function Payment() {
                         accept="image/*"
                         className="hidden"
                       />
-                      
+
                       <div className="flex flex-col items-center gap-4">
                         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
                           <Camera className="w-8 h-8 text-blue-600" />
                         </div>
-                        
+
                         <div>
                           <h4 className="text-lg font-semibold text-gray-900 mb-2">
                             Upload Screenshot
                           </h4>
                           <p className="text-gray-600 mb-4">
-                            Take a screenshot of your payment confirmation and upload it here
+                            Take a screenshot of your payment confirmation and
+                            upload it here
                           </p>
                         </div>
-                        
+
                         <div className="bg-blue-50 rounded-lg px-4 py-2">
                           <p className="text-blue-700 text-sm font-medium">
                             Supports: JPG, PNG, WEBP (Max 5MB)
@@ -354,7 +340,7 @@ export default function Payment() {
                         alt="Uploaded receipt"
                         className="w-full h-64 object-contain rounded-2xl border-2 border-green-200 bg-gray-50"
                       />
-                      
+
                       <motion.button
                         type="button"
                         whileHover={{ scale: 1.1 }}
@@ -364,10 +350,12 @@ export default function Payment() {
                       >
                         <X className="w-4 h-4" />
                       </motion.button>
-                      
+
                       <div className="flex items-center gap-2 mt-3 p-3 bg-green-50 rounded-xl">
                         <CheckCircle className="w-5 h-5 text-green-500" />
-                        <span className="text-green-700 font-medium">Receipt uploaded successfully!</span>
+                        <span className="text-green-700 font-medium">
+                          Receipt uploaded successfully!
+                        </span>
                       </div>
                     </motion.div>
                   )}
@@ -379,9 +367,7 @@ export default function Payment() {
                       Upload Tips:
                     </h4>
                     <ul className="text-blue-700 text-sm space-y-1">
-                      <li>• Make sure the transaction ID and amount are visible</li>
                       <li>• Ensure the screenshot is clear and readable</li>
-                      <li>• Include the date and time in the screenshot if possible</li>
                       <li>• Double-check that you've paid exactly 99 ETB</li>
                     </ul>
                   </div>
@@ -394,8 +380,8 @@ export default function Payment() {
                     whileTap={{ scale: uploadedImage ? 0.98 : 1 }}
                     className={`w-full mt-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
                       uploadedImage && !isSubmitting
-                        ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-lg'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-lg"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                   >
                     {isSubmitting ? (
