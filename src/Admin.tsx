@@ -3,10 +3,10 @@ import { Users, DollarSign, Package, Settings } from "lucide-react";
 
 export default function AdminDashboard() {
   const links = [
-    { name: "Manage Users", icon: <Users className="w-6 h-6" />, to: "/admin/users" },
-    { name: "Payments", icon: <DollarSign className="w-6 h-6" />, to: "/admin/payments" },
-    { name: "Packages", icon: <Package className="w-6 h-6" />, to: "/admin/packages" },
-    { name: "Settings", icon: <Settings className="w-6 h-6" />, to: "/admin/settings" },
+    { name: "Manage Users", icon: <Users className="w-6 h-6" />, to: "/dashboard/admin/user" },
+    { name: "Payments", icon: <DollarSign className="w-6 h-6" />, to: "/dashboard/admin/paid" },
+    { name: "Packages", icon: <Package className="w-6 h-6" />, to: "/dashboard/admin/packages" },
+    { name: "Settings", icon: <Settings className="w-6 h-6" />, to: "/dashboard/admin/settings" },
   ];
 
   return (
