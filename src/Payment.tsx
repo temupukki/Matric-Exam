@@ -40,9 +40,10 @@ export default function Payment() {
       steps: [
         "Open your Tele Birr app",
         "Go to 'Send Money' section",
+        "Choose the To individual",
         "Enter our account number: 251912345678",
         "Enter amount: 99 ETB",
-        "Add note: 'ExamMaster Payment'",
+        "Enter your password",
         "Complete the transaction",
       ],
       accountInfo: "Account: 251912345678\nName: TEMESGEN GASHAW",
