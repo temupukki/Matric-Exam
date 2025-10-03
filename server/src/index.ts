@@ -48,6 +48,18 @@ app.post("/api/pay", async (req, res) => {
     res.status(400).json({});
   }
 });
+
+app.get("/api/paid", async (req: Request, res: Response) => {
+  try {
+    
+    const paidUsers = await prisma.payment.findMany();
+
+    res.json(paidUsers);
+  } catch (error) {
+    console.error("Error fetching paid users:", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
 });
