@@ -80,3 +80,13 @@ model Verification {
 
   @@map("verification")
 }
+model Payment{
+  id  String @id
+  email String 
+  package UserRole
+  evidence String
+  paidAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+
+}
