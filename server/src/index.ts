@@ -2,8 +2,7 @@ import express, { Request, Response } from "express";
 import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import cors from "cors";
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "./lib/prisma";
 const app = express();
 const port = 3000;
 app.use(
@@ -13,9 +12,7 @@ app.use(
     credentials: true,
   })
 );
-
-app.all("/api/auth/*", toNodeHandler(auth)); // Express 5.x
-
+app.all("/api/auth/*", toNodeHandler(auth)); 
 app.use(express.json());
 app.use(
   cors({
@@ -40,8 +37,9 @@ app.post("/pay", async (req, res) => {
 
     const user = await prisma.payment.create({
       data: {
-        name,
         email,
+        pack,
+        evidence
       },
     });
 
