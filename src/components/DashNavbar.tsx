@@ -114,6 +114,13 @@ export default function Navbar() {
       icon: <Globe className="w-4 h-4" />,
     },
   ];
+  const adminNavItems = [
+    {
+      path: "/dashboard/admin/paid",
+      label: "Admin",
+      icon: <Shield className="w-4 h-4" />,
+    },
+  ];
 
   const getUserNavItems = () => {
     if (!session) return guestNavItems;
@@ -134,7 +141,7 @@ export default function Navbar() {
     }
 
     if (userRole === "ADMIN") {
-      navItems = [...navItems, ...naturalNavItems, ...socialNavItems];
+      navItems = [...navItems, ...naturalNavItems, ...socialNavItems,...adminNavItems];
     } else if (userRole === "BOTH") {
       navItems = [...navItems, ...naturalNavItems, ...socialNavItems];
     } else if (userRole === "NATURAL") {
