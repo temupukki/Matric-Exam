@@ -257,6 +257,22 @@ function App() {
             </DashLayout>
           }
         />
+           <Route
+          path="/dashboard/privacy"
+          element={
+            <DashLayout>
+              <Privacy />
+            </DashLayout>
+          }
+        />
+            <Route
+          path="/dashboard/terms"
+          element={
+            <DashLayout>
+              <Terms />
+            </DashLayout>
+          }
+        />
       </Routes>
     </Router>
   );

@@ -332,14 +332,14 @@ export default function DashFooter() {
           >
             <MotionLink
               whileHover={{ color: "#facc15", scale: 1.05 }}
-              to="/privacy"
+              to="/dashboard/privacy"
               className="hover:text-yellow-400 transition-colors"
             >
               Privacy Policy
             </MotionLink>
             <MotionLink
               whileHover={{ color: "#facc15", scale: 1.05 }}
-              to="/terms"
+              to="/dashboard/terms"
               className="hover:text-yellow-400 transition-colors"
             >
               Terms of Service
