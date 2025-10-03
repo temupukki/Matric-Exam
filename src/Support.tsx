@@ -8,7 +8,6 @@ import {
   CheckCircle,
   Clock,
   Phone,
-  MessageSquare,
   HelpCircle,
   ArrowRight,
   Loader2,
@@ -18,7 +17,7 @@ import {
   Bug,
   UserCheck,
   Globe,
-  FileQuestion
+  FileQuestion,
 } from "lucide-react";
 
 interface SupportForm {
@@ -41,7 +40,7 @@ export default function SupportPage() {
     subject: "",
     description: "",
     attachments: [],
-    urgency: "medium"
+    urgency: "medium",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -51,32 +50,32 @@ export default function SupportPage() {
       id: "payment",
       name: "Payment Issues",
       icon: <CreditCard className="w-5 h-5" />,
-      description: "Problems with payments, receipts, or account activation"
+      description: "Problems with payments, receipts, or account activation",
     },
     {
       id: "technical",
       name: "Technical Issues",
       icon: <Bug className="w-5 h-5" />,
-      description: "Website errors, bugs, or performance problems"
+      description: "Website errors, bugs, or performance problems",
     },
     {
       id: "account",
       name: "Account Issues",
       icon: <UserCheck className="w-5 h-5" />,
-      description: "Login problems, profile issues, or access denied"
+      description: "Login problems, profile issues, or access denied",
     },
     {
       id: "content",
       name: "Content & Exams",
       icon: <BookOpen className="w-5 h-5" />,
-      description: "Questions about study materials or exam problems"
+      description: "Questions about study materials or exam problems",
     },
     {
       id: "general",
       name: "General Support",
       icon: <HelpCircle className="w-5 h-5" />,
-      description: "Other questions or feedback"
-    }
+      description: "Other questions or feedback",
+    },
   ];
 
   const issueTypes: { [key: string]: string[] } = {
@@ -86,19 +85,18 @@ export default function SupportPage() {
       "Wrong amount paid",
       "Account not activated after payment",
       "Transaction failed",
-      "Refund request",
+
       "Payment method not working",
-      "Other payment issue"
+      "Other payment issue",
     ],
     technical: [
       "Website not loading",
       "Page errors or crashes",
       "Slow performance",
-      "Mobile app issues",
+
       "Browser compatibility",
-      "Upload problems",
-      "Video playback issues",
-      "Other technical issue"
+
+      "Other technical issue",
     ],
     account: [
       "Can't login to account",
@@ -108,17 +106,16 @@ export default function SupportPage() {
       "Wrong user information",
       "Account access denied",
       "Need to change email",
-      "Other account issue"
+      "Other account issue",
     ],
     content: [
-      "Missing study materials",
       "Wrong answers in exams",
       "Can't access certain subjects",
-      "Video explanations not working",
+
       "Practice tests not loading",
       "Content quality issue",
       "Request new subjects",
-      "Other content issue"
+      "Other content issue",
     ],
     general: [
       "Feature request",
@@ -128,40 +125,51 @@ export default function SupportPage() {
       "Business inquiries",
       "Career opportunities",
       "Press & media",
-      "Other general inquiry"
-    ]
+      "Other general inquiry",
+    ],
   };
 
   const urgencyLevels = [
     { value: "low", label: "Low", description: "General question, no urgency" },
-    { value: "medium", label: "Medium", description: "Important but not critical" },
+    {
+      value: "medium",
+      label: "Medium",
+      description: "Important but not critical",
+    },
     { value: "high", label: "High", description: "Need help within few hours" },
-    { value: "critical", label: "Critical", description: "System down or urgent issue" }
+    {
+      value: "critical",
+      label: "Critical",
+      description: "System down or urgent issue",
+    },
   ];
 
-  const handleInputChange = (field: keyof SupportForm, value: string | File[]) => {
-    setFormData(prev => ({ 
-      ...prev, 
+  const handleInputChange = (
+    field: keyof SupportForm,
+    value: string | File[]
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
       [field]: value,
       // Reset issue type when category changes
-      ...(field === 'issueCategory' && { issueType: '' })
+      ...(field === "issueCategory" && { issueType: "" }),
     }));
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     if (files.length > 0) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        attachments: [...prev.attachments, ...files.slice(0, 5)] // Limit to 5 files
+        attachments: [...prev.attachments, ...files.slice(0, 5)], // Limit to 5 files
       }));
     }
   };
 
   const removeAttachment = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index)
+      attachments: prev.attachments.filter((_, i) => i !== index),
     }));
   };
 
@@ -170,7 +178,7 @@ export default function SupportPage() {
     setIsSubmitting(true);
 
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     setIsSubmitting(false);
     setIsSubmitted(true);
@@ -192,34 +200,42 @@ export default function SupportPage() {
           >
             <CheckCircle className="w-10 h-10 text-green-500" />
           </motion.div>
-          
+
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Support Request Sent!
           </h2>
-          
+
           <p className="text-gray-600 mb-6">
-            We've received your support request for <strong>"{formData.subject}"</strong> and will get back to you within 24 hours at <strong>{formData.email}</strong>.
+            We've received your support request for{" "}
+            <strong>"{formData.subject}"</strong> and will get back to you
+            within 24 hours at <strong>{formData.email}</strong>.
           </p>
-          
+
           <div className="bg-blue-50 rounded-xl p-4 mb-6 space-y-3">
             <div className="flex items-center gap-3">
               <Clock className="w-5 h-5 text-blue-600" />
-              <span className="text-blue-700 font-medium">Response Time: 24 hours</span>
+              <span className="text-blue-700 font-medium">
+                Response Time: 24 hours
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <Mail className="w-5 h-5 text-blue-600" />
-              <span className="text-blue-700 font-medium">Check your email regularly</span>
+              <span className="text-blue-700 font-medium">
+                Check your email regularly
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <Shield className="w-5 h-5 text-blue-600" />
-              <span className="text-blue-700 font-medium">Ticket ID: #SM{Date.now().toString().slice(-6)}</span>
+              <span className="text-blue-700 font-medium">
+                Ticket ID: #SM{Date.now().toString().slice(-6)}
+              </span>
             </div>
           </div>
-          
+
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => window.location.href = '/dashboard'}
+            onClick={() => (window.location.href = "/dashboard")}
             className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
           >
             Return to Dashboard
@@ -245,7 +261,9 @@ export default function SupportPage() {
             className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full mb-6"
           >
             <HelpCircle className="w-6 h-6 text-blue-600" />
-            <span className="font-semibold text-blue-600">Customer Support</span>
+            <span className="font-semibold text-blue-600">
+              Customer Support
+            </span>
           </motion.div>
 
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -254,9 +272,10 @@ export default function SupportPage() {
               Help You?
             </span>
           </h1>
-          
+
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            We're here to help with any issues you're facing. Describe your problem and we'll get back to you quickly.
+            We're here to help with any issues you're facing. Describe your
+            problem and we'll get back to you quickly.
           </p>
         </motion.div>
 
@@ -275,34 +294,40 @@ export default function SupportPage() {
                   <MessageCircle className="w-6 h-6 text-blue-600" />
                   Contact Support
                 </h3>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
                     <div className="p-3 bg-blue-100 rounded-lg">
                       <Mail className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Email Support</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        Email Support
+                      </h4>
                       <p className="text-blue-600">support@exammaster.com</p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-4 p-4 bg-green-50 rounded-xl">
                     <div className="p-3 bg-green-100 rounded-lg">
                       <Phone className="w-6 h-6 text-green-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Phone Support</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        Phone Support
+                      </h4>
                       <p className="text-green-600">+251 912 345 678</p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-xl">
                     <div className="p-3 bg-purple-100 rounded-lg">
                       <Clock className="w-6 h-6 text-purple-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Response Time</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        Response Time
+                      </h4>
                       <p className="text-purple-600">Within 24 hours</p>
                     </div>
                   </div>
@@ -312,7 +337,9 @@ export default function SupportPage() {
                       <Globe className="w-6 h-6 text-orange-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Support Hours</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        Support Hours
+                      </h4>
                       <p className="text-orange-600">Mon-Sun: 8AM - 8PM EAT</p>
                     </div>
                   </div>
@@ -325,11 +352,13 @@ export default function SupportPage() {
                   <Shield className="w-5 h-5 text-green-600" />
                   Quick Tips
                 </h3>
-                
+
                 <ul className="space-y-3 text-sm text-gray-600">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span>Be specific about your issue for faster resolution</span>
+                    <span>
+                      Be specific about your issue for faster resolution
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
@@ -373,12 +402,14 @@ export default function SupportPage() {
                       type="text"
                       required
                       value={formData.name}
-                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("name", e.target.value)
+                      }
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
                       placeholder="Enter your full name"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                       <Mail className="w-4 h-4" />
@@ -388,7 +419,9 @@ export default function SupportPage() {
                       type="email"
                       required
                       value={formData.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
                       placeholder="your@email.com"
                     />
@@ -407,24 +440,32 @@ export default function SupportPage() {
                         type="button"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={() => handleInputChange('issueCategory', category.id)}
+                        onClick={() =>
+                          handleInputChange("issueCategory", category.id)
+                        }
                         className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
                           formData.issueCategory === category.id
-                            ? 'border-blue-500 bg-blue-50 shadow-md'
-                            : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                            ? "border-blue-500 bg-blue-50 shadow-md"
+                            : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
                         }`}
                       >
                         <div className="flex items-center gap-3 mb-2">
-                          <div className={`p-2 rounded-lg ${
-                            formData.issueCategory === category.id 
-                              ? 'bg-blue-100 text-blue-600' 
-                              : 'bg-gray-100 text-gray-600'
-                          }`}>
+                          <div
+                            className={`p-2 rounded-lg ${
+                              formData.issueCategory === category.id
+                                ? "bg-blue-100 text-blue-600"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
                             {category.icon}
                           </div>
-                          <h4 className="font-semibold text-gray-900">{category.name}</h4>
+                          <h4 className="font-semibold text-gray-900">
+                            {category.name}
+                          </h4>
                         </div>
-                        <p className="text-sm text-gray-600">{category.description}</p>
+                        <p className="text-sm text-gray-600">
+                          {category.description}
+                        </p>
                       </motion.button>
                     ))}
                   </div>
@@ -439,27 +480,34 @@ export default function SupportPage() {
                     <select
                       required
                       value={formData.issueType}
-                      onChange={(e) => handleInputChange('issueType', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("issueType", e.target.value)
+                      }
                       disabled={!formData.issueCategory}
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
                       <option value="">Select issue type</option>
-                      {formData.issueCategory && issueTypes[formData.issueCategory]?.map(issue => (
-                        <option key={issue} value={issue}>{issue}</option>
-                      ))}
+                      {formData.issueCategory &&
+                        issueTypes[formData.issueCategory]?.map((issue) => (
+                          <option key={issue} value={issue}>
+                            {issue}
+                          </option>
+                        ))}
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Urgency Level
                     </label>
                     <select
                       value={formData.urgency}
-                      onChange={(e) => handleInputChange('urgency', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("urgency", e.target.value)
+                      }
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
                     >
-                      {urgencyLevels.map(level => (
+                      {urgencyLevels.map((level) => (
                         <option key={level.value} value={level.value}>
                           {level.label} - {level.description}
                         </option>
@@ -477,7 +525,9 @@ export default function SupportPage() {
                     type="text"
                     required
                     value={formData.subject}
-                    onChange={(e) => handleInputChange('subject', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("subject", e.target.value)
+                    }
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
                     placeholder="Brief description of your issue"
                   />
@@ -491,7 +541,9 @@ export default function SupportPage() {
                   <textarea
                     required
                     value={formData.description}
-                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("description", e.target.value)
+                    }
                     rows={6}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 resize-none"
                     placeholder="Please describe your issue in detail. Include steps to reproduce, error messages, and any other relevant information..."
@@ -525,7 +577,8 @@ export default function SupportPage() {
                             Click to upload screenshots or documents
                           </p>
                           <p className="text-sm text-gray-500">
-                            Supports: Images, PDF, DOC (Max 10MB each, up to 5 files)
+                            Supports: Images, PDF, DOC (Max 10MB each, up to 5
+                            files)
                           </p>
                         </div>
                       </div>
@@ -541,7 +594,8 @@ export default function SupportPage() {
                           className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
                         >
                           <span className="text-sm text-gray-700 truncate">
-                            {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                            {file.name} ({(file.size / 1024 / 1024).toFixed(2)}{" "}
+                            MB)
                           </span>
                           <button
                             type="button"
@@ -578,7 +632,8 @@ export default function SupportPage() {
                 </motion.button>
 
                 <p className="text-center text-sm text-gray-500">
-                  We'll respond to your support request within 24 hours via email. For urgent issues, call our support line.
+                  We'll respond to your support request within 24 hours via
+                  email. For urgent issues, call our support line.
                 </p>
               </form>
             </motion.div>
