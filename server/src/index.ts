@@ -31,15 +31,15 @@ app.get("/api/me",async (req:Request,res:Response)=>{
   })
   return res.json(session);
 })
-app.post("/pay", async (req, res) => {
+app.post("/api/pay", async (req, res) => {
   try {
-    const {email,pack,evidence } = req.body;
+    const {email,pack } = req.body;
 
     const user = await prisma.payment.create({
       data: {
         email,
         pack,
-        evidence
+       
       },
     });
 

@@ -5710,7 +5710,7 @@ export namespace Prisma {
   export type PaymentMinAggregateOutputType = {
     id: number | null
     email: string | null
-    pack: $Enums.UserRole | null
+    pack: string | null
     evidence: string | null
     paidAt: Date | null
     updatedAt: Date | null
@@ -5719,7 +5719,7 @@ export namespace Prisma {
   export type PaymentMaxAggregateOutputType = {
     id: number | null
     email: string | null
-    pack: $Enums.UserRole | null
+    pack: string | null
     evidence: string | null
     paidAt: Date | null
     updatedAt: Date | null
@@ -5861,8 +5861,8 @@ export namespace Prisma {
   export type PaymentGroupByOutputType = {
     id: number
     email: string
-    pack: $Enums.UserRole
-    evidence: string
+    pack: string
+    evidence: string | null
     paidAt: Date
     updatedAt: Date
     _count: PaymentCountAggregateOutputType | null
@@ -5930,8 +5930,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       email: string
-      pack: $Enums.UserRole
-      evidence: string
+      pack: string
+      evidence: string | null
       paidAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["payment"]>
@@ -6359,7 +6359,7 @@ export namespace Prisma {
   interface PaymentFieldRefs {
     readonly id: FieldRef<"Payment", 'Int'>
     readonly email: FieldRef<"Payment", 'String'>
-    readonly pack: FieldRef<"Payment", 'UserRole'>
+    readonly pack: FieldRef<"Payment", 'String'>
     readonly evidence: FieldRef<"Payment", 'String'>
     readonly paidAt: FieldRef<"Payment", 'DateTime'>
     readonly updatedAt: FieldRef<"Payment", 'DateTime'>
@@ -7224,8 +7224,8 @@ export namespace Prisma {
     NOT?: PaymentWhereInput | PaymentWhereInput[]
     id?: IntFilter<"Payment"> | number
     email?: StringFilter<"Payment"> | string
-    pack?: EnumUserRoleFilter<"Payment"> | $Enums.UserRole
-    evidence?: StringFilter<"Payment"> | string
+    pack?: StringFilter<"Payment"> | string
+    evidence?: StringNullableFilter<"Payment"> | string | null
     paidAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
   }
@@ -7234,7 +7234,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     pack?: SortOrder
-    evidence?: SortOrder
+    evidence?: SortOrderInput | SortOrder
     paidAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -7245,8 +7245,8 @@ export namespace Prisma {
     OR?: PaymentWhereInput[]
     NOT?: PaymentWhereInput | PaymentWhereInput[]
     email?: StringFilter<"Payment"> | string
-    pack?: EnumUserRoleFilter<"Payment"> | $Enums.UserRole
-    evidence?: StringFilter<"Payment"> | string
+    pack?: StringFilter<"Payment"> | string
+    evidence?: StringNullableFilter<"Payment"> | string | null
     paidAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
   }, "id">
@@ -7255,7 +7255,7 @@ export namespace Prisma {
     id?: SortOrder
     email?: SortOrder
     pack?: SortOrder
-    evidence?: SortOrder
+    evidence?: SortOrderInput | SortOrder
     paidAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PaymentCountOrderByAggregateInput
@@ -7271,8 +7271,8 @@ export namespace Prisma {
     NOT?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Payment"> | number
     email?: StringWithAggregatesFilter<"Payment"> | string
-    pack?: EnumUserRoleWithAggregatesFilter<"Payment"> | $Enums.UserRole
-    evidence?: StringWithAggregatesFilter<"Payment"> | string
+    pack?: StringWithAggregatesFilter<"Payment"> | string
+    evidence?: StringNullableWithAggregatesFilter<"Payment"> | string | null
     paidAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
   }
@@ -7614,8 +7614,8 @@ export namespace Prisma {
 
   export type PaymentCreateInput = {
     email: string
-    pack: $Enums.UserRole
-    evidence: string
+    pack: string
+    evidence?: string | null
     paidAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7623,16 +7623,16 @@ export namespace Prisma {
   export type PaymentUncheckedCreateInput = {
     id?: number
     email: string
-    pack: $Enums.UserRole
-    evidence: string
+    pack: string
+    evidence?: string | null
     paidAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type PaymentUpdateInput = {
     email?: StringFieldUpdateOperationsInput | string
-    pack?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    evidence?: StringFieldUpdateOperationsInput | string
+    pack?: StringFieldUpdateOperationsInput | string
+    evidence?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7640,8 +7640,8 @@ export namespace Prisma {
   export type PaymentUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    pack?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    evidence?: StringFieldUpdateOperationsInput | string
+    pack?: StringFieldUpdateOperationsInput | string
+    evidence?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7649,16 +7649,16 @@ export namespace Prisma {
   export type PaymentCreateManyInput = {
     id?: number
     email: string
-    pack: $Enums.UserRole
-    evidence: string
+    pack: string
+    evidence?: string | null
     paidAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type PaymentUpdateManyMutationInput = {
     email?: StringFieldUpdateOperationsInput | string
-    pack?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    evidence?: StringFieldUpdateOperationsInput | string
+    pack?: StringFieldUpdateOperationsInput | string
+    evidence?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7666,8 +7666,8 @@ export namespace Prisma {
   export type PaymentUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
-    pack?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    evidence?: StringFieldUpdateOperationsInput | string
+    pack?: StringFieldUpdateOperationsInput | string
+    evidence?: NullableStringFieldUpdateOperationsInput | string | null
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

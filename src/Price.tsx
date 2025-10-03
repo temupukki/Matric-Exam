@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   CheckCircle,
   Star,
@@ -18,6 +18,7 @@ import {
   Camera,
   FileText,
   Loader2,
+  User,
 } from "lucide-react";
 
 interface PricingPlan {
@@ -43,19 +44,85 @@ interface PaymentOption {
   accountInfo: string;
 }
 
+interface UserSession {
+  user?: {
+    id: string;
+    email: string;
+    name?: string;
+    image?: string;
+  };
+}
+
 export default function CombinedPricingPayment() {
-  const [selectedPackage, setSelectedPackage] = useState<PricingPlan | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<PricingPlan | null>(
+    null
+  );
   const [selectedMethod, setSelectedMethod] = useState<string>("tele-birr");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [currentStep, setCurrentStep] = useState<"pricing" | "payment">("pricing");
+  const [currentStep, setCurrentStep] = useState<"pricing" | "payment">(
+    "pricing"
+  );
+  const [userSession, setUserSession] = useState<UserSession | null>(null);
+  const [isLoadingSession, setIsLoadingSession] = useState(true);
+  const [userEmail, setUserEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch user session on component mount
+  useEffect(() => {
+    fetchUserSession();
+  }, []);
+
+  const fetchUserSession = async () => {
+    try {
+      console.log("🔄 Fetching user session...");
+      setIsLoadingSession(true);
+      setError(null);
+
+      const res = await fetch("http://localhost:3000/api/me", {
+        credentials: "include",
+      });
+
+      console.log("📡 Session API Response Status:", res.status);
+      console.log("📡 Session API Response Headers:", res.headers);
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("❌ Session API Error Response:", errorText);
+        throw new Error(
+          `Failed to fetch session: ${res.status} - ${errorText}`
+        );
+      }
+
+      const sessionData = await res.json();
+      console.log("✅ Session data received:", sessionData);
+
+      setUserSession(sessionData);
+
+      // Pre-fill email if available in session
+      if (sessionData?.user?.email) {
+        console.log(
+          "📧 Pre-filling email from session:",
+          sessionData.user.email
+        );
+        setUserEmail(sessionData.user.email);
+      }
+    } catch (error: any) {
+      console.error("❌ Failed to fetch user session:", error);
+      setError(`Session error: ${error.message}`);
+      setUserSession(null);
+    } finally {
+      setIsLoadingSession(false);
+    }
+  };
 
   const pricingPlans: PricingPlan[] = [
     {
       name: "Natural Science",
-      description: "Practice Natural Science for university entry anytime, anywhere.",
+      description:
+        "Practice Natural Science for university entry anytime, anywhere.",
       price: "99 ETB",
       amount: 99,
       period: "one time payment",
@@ -75,7 +142,8 @@ export default function CombinedPricingPayment() {
     },
     {
       name: "Social Science",
-      description: "Practice Social Science for university entry anytime, anywhere.",
+      description:
+        "Practice Social Science for university entry anytime, anywhere.",
       price: "99 ETB",
       amount: 99,
       period: "one time payment",
@@ -95,7 +163,8 @@ export default function CombinedPricingPayment() {
     },
     {
       name: "Family Package",
-      description: "Practice Both Social Science and Natural Science for university entry anytime, anywhere.",
+      description:
+        "Practice Both Social Science and Natural Science for university entry anytime, anywhere.",
       price: "170 ETB",
       amount: 170,
       period: "one time payment",
@@ -156,53 +225,84 @@ export default function CombinedPricingPayment() {
   const faqs = [
     {
       question: "Can I change plans later?",
-      answer: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
+      answer:
+        "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
     },
     {
       question: "Is there a free trial?",
-      answer: "Yes! All paid plans come with a 7-day free trial. No credit card required for the Starter plan.",
+      answer:
+        "Yes! All paid plans come with a 7-day free trial. No credit card required for the Starter plan.",
     },
     {
       question: "What payment methods do you accept?",
-      answer: "We accept all major Ethiopian payment methods including CBE Birr, Tele Birr, and bank transfers.",
+      answer:
+        "We accept all major Ethiopian payment methods including CBE Birr, Tele Birr, and bank transfers.",
     },
     {
       question: "Can I cancel anytime?",
-      answer: "Absolutely! You can cancel your subscription anytime without any cancellation fees.",
+      answer:
+        "Absolutely! You can cancel your subscription anytime without any cancellation fees.",
     },
   ];
 
-  const selectedPayment = paymentMethods.find((method) => method.id === selectedMethod);
+  const selectedPayment = paymentMethods.find(
+    (method) => method.id === selectedMethod
+  );
 
   const handlePackageSelect = (plan: PricingPlan) => {
+    console.log("📦 Package selected:", plan.name);
+
+    // Check if user is logged in before proceeding to payment
+    if (!userSession?.user) {
+      console.warn("⚠️ User not logged in, preventing package selection");
+      alert("Please log in to proceed with payment.");
+      return;
+    }
+
     setSelectedPackage(plan);
     setCurrentStep("payment");
     // Update payment steps with selected amount
     paymentMethods[0].steps[4] = `Enter amount: ${plan.amount} ETB`;
+    console.log("➡️ Moving to payment step");
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    console.log("📁 File selected:", file);
+
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
+        console.warn("⚠️ File too large:", file.size);
         alert("File size too large. Please select an image under 5MB.");
         return;
       }
 
       if (!file.type.startsWith("image/")) {
+        console.warn("⚠️ Invalid file type:", file.type);
         alert("Please select an image file.");
         return;
       }
 
       const reader = new FileReader();
       reader.onload = (e) => {
+        console.log(
+          "✅ File loaded successfully, size:",
+          e.target?.result?.toString().length
+        );
         setUploadedImage(e.target?.result as string);
       };
+
+      reader.onerror = (error) => {
+        console.error("❌ File reading error:", error);
+        alert("Failed to read the file. Please try again.");
+      };
+
       reader.readAsDataURL(file);
     }
   };
 
   const handleRemoveImage = () => {
+    console.log("🗑️ Removing uploaded image");
     setUploadedImage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -211,21 +311,177 @@ export default function CombinedPricingPayment() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("🚀 Starting payment submission...");
+
+    // Enhanced validation
     if (!uploadedImage) {
+      console.warn("⚠️ Validation failed: No image uploaded");
       alert("Please upload your payment receipt screenshot.");
       return;
     }
 
+    if (!selectedPackage) {
+      console.warn("⚠️ Validation failed: No package selected");
+      alert("Please select a package.");
+      return;
+    }
+
+    if (!userEmail || !/\S+@\S+\.\S+/.test(userEmail)) {
+      console.warn("⚠️ Validation failed: Invalid email", userEmail);
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // Verify user session is still valid
+    if (!userSession?.user) {
+      console.warn("⚠️ Validation failed: No user session");
+      alert("Your session has expired. Please log in again.");
+      return;
+    }
+
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    setError(null);
+
+    try {
+      const paymentData = {
+        email: userEmail,
+        pack: selectedPackage.name,
+        amount: selectedPackage.amount,
+      };
+
+      console.log("📦 Payment data to send:", paymentData);
+      console.log("📡 Sending request to /api/pay...");
+
+      const response = await fetch("http://localhost:3000/api/pay", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(paymentData),
+      });
+
+      console.log("📡 Payment API Response Status:", response.status);
+      console.log("📡 Payment API Response Headers:", response.headers);
+
+      // Clone the response to read it as text first for debugging
+      const responseClone = response.clone();
+
+      if (!response.ok) {
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          // Try to read as JSON first
+          const errorData = await response.json();
+          console.error("❌ Payment API Error Response (JSON):", errorData);
+          errorMessage = errorData.error || errorData.message || errorMessage;
+        } catch (jsonError) {
+          console.log("📄 Response is not JSON, trying as text...");
+          try {
+            // If JSON fails, read as text using the cloned response
+            const errorText = await responseClone.text();
+            console.error("❌ Payment API Error Response (Text):", errorText);
+            errorMessage = errorText || errorMessage;
+          } catch (textError) {
+            console.error("❌ Could not read response body:", textError);
+            errorMessage = `Server error: ${response.status}`;
+          }
+        }
+        throw new Error(errorMessage);
+      }
+
+      // If response is OK, parse the successful response
+      const data = await response.json();
+      console.log("✅ Payment successful! Response:", data);
+
+      // Success
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+    } catch (error: any) {
+      console.error("❌ Payment submission error:", {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+      });
+
+      setIsSubmitting(false);
+      setError(error.message);
+
+      // More specific error messages
+      if (error.message.includes("Failed to fetch")) {
+        alert(
+          "Network error: Cannot connect to server. Please check your connection and try again."
+        );
+      } else if (error.message.includes("PayloadTooLargeError")) {
+        alert(
+          "Request too large. Please try with a smaller image or contact support."
+        );
+      } else {
+        alert(`Payment failed: ${error.message}`);
+      }
+    }
   };
 
   const goBackToPricing = () => {
+    console.log("↩️ Going back to pricing");
     setCurrentStep("pricing");
     setSelectedPackage(null);
     setUploadedImage(null);
+    setError(null);
+  };
+
+  // User session display component
+  const UserInfo = () => {
+    if (isLoadingSession) {
+      return (
+        <div className="flex items-center gap-2 bg-blue-50 rounded-full px-4 py-2">
+          <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+          <span className="text-blue-600 text-sm">Loading...</span>
+        </div>
+      );
+    }
+
+    if (userSession?.user) {
+      return (
+        <div className="flex items-center gap-3 bg-green-50 rounded-full px-4 py-2">
+          <User className="w-4 h-4 text-green-600" />
+          <span className="text-green-700 text-sm font-medium">
+            {userSession.user.email}
+          </span>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center gap-2 bg-yellow-50 rounded-full px-4 py-2">
+        <AlertCircle className="w-4 h-4 text-yellow-600" />
+        <span className="text-yellow-700 text-sm">Not logged in</span>
+      </div>
+    );
+  };
+
+  // Error display component
+  const ErrorDisplay = () => {
+    if (!error) return null;
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl"
+      >
+        <div className="flex items-center gap-2">
+          <AlertCircle className="w-5 h-5 text-red-600" />
+          <h4 className="font-semibold text-red-800">Error</h4>
+        </div>
+        <p className="text-red-700 text-sm mt-1">{error}</p>
+        <button
+          onClick={() => setError(null)}
+          className="text-red-600 text-xs mt-2 hover:text-red-800"
+        >
+          Dismiss
+        </button>
+      </motion.div>
+    );
   };
 
   if (isSubmitted) {
@@ -250,14 +506,17 @@ export default function CombinedPricingPayment() {
           </h2>
 
           <p className="text-gray-600 mb-6">
-            Thank you for your {selectedPackage?.name} package payment. We've received your receipt and will activate your account within 24 hours.
+            Thank you for your {selectedPackage?.name} package payment. We've
+            received your receipt and will activate your account within 24
+            hours.
           </p>
 
           <div className="bg-blue-50 rounded-xl p-4 mb-6">
             <p className="text-sm text-blue-700">
               <strong>What's next?</strong>
               <br />
-              Check your account in 24 hours! If not activated yet, go to the Support page in the footer!
+              Check your account in 24 hours! If not activated yet, go to the
+              Support page in the footer!
             </p>
           </div>
 
@@ -278,22 +537,29 @@ export default function CombinedPricingPayment() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
         <div className="max-w-4xl mx-auto px-4 py-8">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
-          >
+          {/* Header with User Info */}
+          <div className="flex justify-between items-center mb-6">
             <motion.button
               onClick={goBackToPricing}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full mb-6 hover:bg-white transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full hover:bg-white transition-all duration-300"
             >
               <ArrowRight className="w-4 h-4 rotate-180" />
               Back to Plans
             </motion.button>
 
+            <UserInfo />
+          </div>
+
+          {/* Error Display */}
+          <ErrorDisplay />
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -301,7 +567,9 @@ export default function CombinedPricingPayment() {
               className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full mb-6"
             >
               <Shield className="w-6 h-6 text-green-600" />
-              <span className="font-semibold text-green-600">Secure Payment</span>
+              <span className="font-semibold text-green-600">
+                Secure Payment
+              </span>
             </motion.div>
 
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -313,7 +581,8 @@ export default function CombinedPricingPayment() {
             </h1>
 
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Complete your payment for the {selectedPackage.name} package and upload the receipt to activate your account.
+              Complete your payment for the {selectedPackage.name} package and
+              upload the receipt to activate your account.
             </p>
           </motion.div>
 
@@ -340,23 +609,33 @@ export default function CombinedPricingPayment() {
                       {selectedPackage.description}
                     </p>
                     <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-lg text-center">
-                      <div className="text-2xl font-bold">{selectedPackage.price}</div>
-                      <div className="text-blue-100 text-sm">{selectedPackage.period}</div>
+                      <div className="text-2xl font-bold">
+                        {selectedPackage.price}
+                      </div>
+                      <div className="text-blue-100 text-sm">
+                        {selectedPackage.period}
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-6">
-                  <h4 className="font-semibold text-gray-900 mb-3">Package Includes:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Package Includes:
+                  </h4>
                   <div className="space-y-2">
-                    {selectedPackage.features.map((feature, index) => (
-                      feature.included && (
-                        <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                          <span>{feature.text}</span>
-                        </div>
-                      )
-                    ))}
+                    {selectedPackage.features.map(
+                      (feature, index) =>
+                        feature.included && (
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 text-sm text-gray-600"
+                          >
+                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                            <span>{feature.text}</span>
+                          </div>
+                        )
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -398,7 +677,9 @@ export default function CombinedPricingPayment() {
                   <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
                     <div className="flex items-center gap-2 mb-2">
                       <AlertCircle className="w-5 h-5 text-yellow-600" />
-                      <h4 className="font-semibold text-yellow-800">Important</h4>
+                      <h4 className="font-semibold text-yellow-800">
+                        Important
+                      </h4>
                     </div>
                     <pre className="text-yellow-700 text-sm whitespace-pre-wrap font-sans">
                       {selectedPayment?.accountInfo}
@@ -410,10 +691,37 @@ export default function CombinedPricingPayment() {
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6">
                   <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                     <Upload className="w-6 h-6 text-purple-600" />
-                    Upload Payment Receipt
+                    Payment Confirmation
                   </h3>
 
                   <form onSubmit={handleSubmit}>
+                    {/* Email Input */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="mb-6"
+                    >
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        value={userEmail}
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        placeholder="Enter your email for payment confirmation"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                        required
+                      />
+                      <p className="text-sm text-gray-500 mt-1">
+                        We'll send payment confirmation to this email
+                      </p>
+                    </motion.div>
+
                     {/* Upload Area */}
                     {!uploadedImage ? (
                       <motion.div
@@ -438,16 +746,17 @@ export default function CombinedPricingPayment() {
 
                           <div>
                             <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                              Upload Screenshot
+                              Confirm Payment Receipt
                             </h4>
                             <p className="text-gray-600 mb-4">
-                              Take a screenshot of your payment confirmation and upload it here
+                              Upload a screenshot of your payment confirmation
+                              for your records
                             </p>
                           </div>
 
                           <div className="bg-blue-50 rounded-lg px-4 py-2">
                             <p className="text-blue-700 text-sm font-medium">
-                              Supports: JPG, PNG, WEBP (Max 5MB)
+                              This is for your reference only
                             </p>
                           </div>
                         </div>
@@ -477,7 +786,7 @@ export default function CombinedPricingPayment() {
                         <div className="flex items-center gap-2 mt-3 p-3 bg-green-50 rounded-xl">
                           <CheckCircle className="w-5 h-5 text-green-500" />
                           <span className="text-green-700 font-medium">
-                            Receipt uploaded successfully!
+                            Receipt confirmed!
                           </span>
                         </div>
                       </motion.div>
@@ -486,11 +795,17 @@ export default function CombinedPricingPayment() {
                     {/* Submit Button */}
                     <motion.button
                       type="submit"
-                      disabled={!uploadedImage || isSubmitting}
-                      whileHover={{ scale: uploadedImage ? 1.02 : 1 }}
-                      whileTap={{ scale: uploadedImage ? 0.98 : 1 }}
+                      disabled={
+                        !uploadedImage || isSubmitting || !userSession?.user
+                      }
+                      whileHover={{
+                        scale: uploadedImage && userSession?.user ? 1.02 : 1,
+                      }}
+                      whileTap={{
+                        scale: uploadedImage && userSession?.user ? 0.98 : 1,
+                      }}
                       className={`w-full mt-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
-                        uploadedImage && !isSubmitting
+                        uploadedImage && userSession?.user && !isSubmitting
                           ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-lg"
                           : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
@@ -500,6 +815,8 @@ export default function CombinedPricingPayment() {
                           <Loader2 className="w-5 h-5 animate-spin" />
                           Processing Payment...
                         </>
+                      ) : !userSession?.user ? (
+                        "Please Log In to Submit"
                       ) : (
                         <>
                           Submit Payment Verification
@@ -539,6 +856,16 @@ export default function CombinedPricingPayment() {
           className="absolute -bottom-20 -right-20 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl"
         />
       </div>
+
+      {/* User Info Bar */}
+      <div className="relative max-w-7xl mx-auto px-4 mb-8">
+        <div className="flex justify-end">
+          <UserInfo />
+        </div>
+      </div>
+
+      {/* Error Display */}
+      <ErrorDisplay />
 
       {/* Hero Section */}
       <section className="relative py-16 px-4">
@@ -688,13 +1015,16 @@ export default function CombinedPricingPayment() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handlePackageSelect(plan)}
+                    disabled={!userSession?.user}
                     className={`w-full py-4 rounded-xl font-semibold transition-all duration-300 ${
-                      plan.buttonVariant === "primary"
-                        ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg hover:shadow-xl"
-                        : "border-2 border-blue-500 text-blue-600 hover:bg-blue-50"
+                      userSession?.user
+                        ? plan.buttonVariant === "primary"
+                          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg hover:shadow-xl"
+                          : "border-2 border-blue-500 text-blue-600 hover:bg-blue-50"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                   >
-                    {plan.buttonText}
+                    {!userSession?.user ? "Please Log In" : plan.buttonText}
                   </motion.button>
                 </div>
               </motion.div>

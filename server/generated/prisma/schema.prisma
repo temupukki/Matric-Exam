@@ -86,8 +86,8 @@ model Verification {
 model Payment {
   id        Int      @id @default(autoincrement())
   email     String
-  pack      UserRole
-  evidence  String
+  pack      String
+  evidence  String?
   paidAt    DateTime @default(now())
   updatedAt DateTime @default(now())
 
