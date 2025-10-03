@@ -197,12 +197,7 @@ Check this page regularly for updates. Significant changes will be prominently n
   ];
 
   const keyPoints = [
-    {
-      icon: <UserCheck className="w-6 h-6" />,
-      title: "Age Requirement",
-      description: "Must be 13+ to use our platform",
-      type: "requirement",
-    },
+  
     {
       icon: <CreditCard className="w-6 h-6" />,
       title: "Transparent Pricing",
@@ -309,7 +304,7 @@ Check this page regularly for updates. Significant changes will be prominently n
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
           >
             {keyPoints.map((point, index) => (
               <motion.div
@@ -485,54 +480,7 @@ Check this page regularly for updates. Significant changes will be prominently n
             </motion.div>
           </motion.div>
 
-          {/* Quick Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8"
-          >
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-left group"
-            >
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-green-100 rounded-xl text-green-600 group-hover:scale-110 transition-transform">
-                  <FileText className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">
-                    Download Terms
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    PDF version for your records
-                  </p>
-                </div>
-              </div>
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-left group"
-            >
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-100 rounded-xl text-blue-600 group-hover:scale-110 transition-transform">
-                  <Mail className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">
-                    Contact Legal Team
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Questions about these terms?
-                  </p>
-                </div>
-              </div>
-            </motion.button>
-          </motion.div>
+        
         </div>
       </section>
     </div>

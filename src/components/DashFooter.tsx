@@ -1,10 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  BookOpen,
-  GraduationCap,
-  Award,
-  Users,
   Mail,
   Phone,
   MapPin,
@@ -13,61 +9,178 @@ import {
   Instagram,
   Linkedin,
   ArrowRight,
-  Star,
   Heart,
+  LayoutDashboard,
+  ClipboardList,
+  CreditCard,
+  Globe,
+  Atom,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 const MotionLink = motion(Link);
 
+// Type definitions
+interface User {
+  id: string;
+  name?: string;
+  email: string;
+  role: "ADMIN" | "NATURAL" | "SOCIAL" | "BOTH" | string;
+}
+
+interface Session {
+  user: User;
+}
+
+interface NavItem {
+  path: string;
+  label: string;
+  icon?: React.ReactNode;
+  name?: string;
+}
+
+interface SocialLink {
+  icon: React.ReactNode;
+  href: string;
+  name: string;
+}
+
+interface ContactInfo {
+  icon: React.ReactNode;
+  text: string;
+}
+const useSession = () => {
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchMe() {
+      try {
+        const res = await fetch("http://localhost:3000/api/me", {
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch /api/me");
+
+        const data = await res.json();
+        setSession(data);
+      } catch (err) {
+        console.error("Error fetching /api/me:", err);
+        setSession(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMe();
+  }, []);
+
+  return { session, loading };
+};
+
 export default function DashFooter() {
-  const [email, setEmail] = useState("");
+  const { session, loading } = useSession();
 
-  const quickLinks = [
-    { name: "Home", path: "/" },
-    { name: "Stream", path: "/stream" },
-    { name: "Features", path: "/feature" },
-    { name: "Contact", path: "/contact" },
-    { name: "Get Started", path: "/sign-in" },
+  const baseUserNavItems: NavItem[] = [
+    {
+      path: "/dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard className="w-4 h-4" />,
+    },
+    {
+      path: "/dashboard/demo",
+      label: "Demo Exams",
+      icon: <ClipboardList className="w-4 h-4" />,
+    },
+    {
+      path: "/dashboard/price",
+      label: "Pricing",
+      icon: <CreditCard className="w-4 h-4" />,
+    },
   ];
 
-  const resources = [
-    { name: "Study Materials", path: "/materials" },
-    { name: "Practice Tests", path: "/tests" },
-    { name: "Video Lessons", path: "/videos" },
-    { name: "Study Planner", path: "/planner" },
-    { name: "Progress Reports", path: "/reports" },
+  // Role-specific navigation items
+  const naturalNavItems: NavItem[] = [
+    {
+      path: "/dashboard/natural",
+      label: "Natural Exams",
+      icon: <Atom className="w-4 h-4" />,
+    },
   ];
 
-  const subjects = [
-    { name: "Mathematics", path: "/math" },
-    { name: "Science", path: "/science" },
-    { name: "English", path: "/english" },
-    { name: "Social Studies", path: "/social-studies" },
-    { name: "Languages", path: "/languages" },
+  const socialNavItems: NavItem[] = [
+    {
+      path: "/dashboard/social",
+      label: "Social Exams",
+      icon: <Globe className="w-4 h-4" />,
+    },
   ];
 
-  const socialLinks = [
+  // Get navigation items based on user role
+  const getUserNavItems = (): NavItem[] => {
+    if (!session) return [];
+
+    const userRole = session.user?.role;
+
+    // Start with base items
+    let navItems: NavItem[] = [...baseUserNavItems];
+
+    // Remove Pricing and Demo Exams for NATURAL, SOCIAL, and BOTH roles
+    if (
+      userRole === "NATURAL" ||
+      userRole === "SOCIAL" ||
+      userRole === "BOTH"
+    ) {
+      navItems = navItems.filter(
+        (item) =>
+          item.path !== "/dashboard/price" && item.path !== "/dashboard/demo"
+      );
+    }
+
+    // Add role-specific items
+    if (userRole === "ADMIN") {
+      // Admin gets both Natural and Social
+      navItems = [...navItems, ...naturalNavItems, ...socialNavItems];
+    } else if (userRole === "NATURAL") {
+      // Natural role gets only Natural exams
+      navItems = [...navItems, ...naturalNavItems];
+    } else if (userRole === "SOCIAL") {
+      // Social role gets only Social exams
+      navItems = [...navItems, ...socialNavItems];
+    }
+    // Add more roles here if needed
+
+    return navItems;
+  };
+
+  const userNavItems = getUserNavItems();
+
+  // Navigation items for non-signed in users
+  const guestNavItems: NavItem[] = [
+    { path: "/", label: "Home", name: "Home" },
+    { path: "/stream", label: "Stream", name: "Stream" },
+    { path: "/feature", label: "Features", name: "Features" },
+    { path: "/contact", label: "Contact", name: "Contact" },
+    { path: "/sign-in", label: "Get Started", name: "Get Started" },
+  ];
+
+  const socialLinks: SocialLink[] = [
     { icon: <Facebook className="w-5 h-5" />, href: "#", name: "Facebook" },
     { icon: <Twitter className="w-5 h-5" />, href: "#", name: "Twitter" },
     { icon: <Instagram className="w-5 h-5" />, href: "#", name: "Instagram" },
     { icon: <Linkedin className="w-5 h-5" />, href: "#", name: "LinkedIn" },
   ];
 
-  const contactInfo = [
+  const contactInfo: ContactInfo[] = [
     { icon: <Mail className="w-5 h-5" />, text: "support@exammaster.com" },
-    { icon: <Phone className="w-5 h-5" />, text: "+1 (555) 123-4567" },
+    { icon: <Phone className="w-5 h-5" />, text: "+251 9123456789" },
     {
       icon: <MapPin className="w-5 h-5" />,
-      text: "123 Education St, Learning City",
+      text: "Somewhere in Addis Ababa",
     },
   ];
 
-  const handleNewsletter = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle newsletter subscription
-    console.log("Subscribed with:", email);
-    setEmail("");
-  };
+  const quickLinks: NavItem[] = session ? userNavItems : guestNavItems;
 
   return (
     <footer className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 text-white relative overflow-hidden">
@@ -168,7 +281,7 @@ export default function DashFooter() {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Links - Dynamic based on session */}
           <div>
             <motion.h3
               initial={{ opacity: 0, x: -20 }}
@@ -177,12 +290,12 @@ export default function DashFooter() {
               className="text-lg font-bold mb-6 flex items-center gap-2"
             >
               <ArrowRight className="w-5 h-5 text-yellow-400" />
-              Quick Links
+              {session ? "Dashboard Links" : "Quick Links"}
             </motion.h3>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <motion.li
-                  key={link.name}
+                  key={link.path}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
@@ -197,84 +310,11 @@ export default function DashFooter() {
                     >
                       →
                     </motion.span>
-                    {link.name}
+                    {link.label}
                   </Link>
                 </motion.li>
               ))}
             </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <motion.h3
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-lg font-bold mb-6 flex items-center gap-2"
-            >
-              <BookOpen className="w-5 h-5 text-yellow-400" />
-              Resources
-            </motion.h3>
-            <ul className="space-y-3">
-              {resources.map((resource, index) => (
-                <motion.li
-                  key={resource.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                >
-                  <Link
-                    to={resource.path}
-                    className="text-blue-200 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <motion.span
-                      whileHover={{ x: 5 }}
-                      transition={{ type: "spring", stiffness: 400 }}
-                    >
-                      →
-                    </motion.span>
-                    {resource.name}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <motion.h3
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.7 }}
-              className="text-lg font-bold mb-6 flex items-center gap-2"
-            >
-              <Mail className="w-5 h-5 text-yellow-400" />
-              Newsletter
-            </motion.h3>
-            <p className="text-blue-200 mb-4">
-              Subscribe to get updates on new features and study tips.
-            </p>
-            <form onSubmit={handleNewsletter} className="space-y-3">
-              <motion.input
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full px-4 py-3 rounded-lg bg-blue-800/50 border border-blue-600 focus:border-yellow-400 focus:outline-none transition-colors"
-                required
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                type="submit"
-                className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                Subscribe <ArrowRight className="w-4 h-4" />
-              </motion.button>
-            </form>
           </div>
         </motion.div>
 
@@ -321,7 +361,8 @@ export default function DashFooter() {
             className="text-blue-300 text-center md:text-left"
           >
             © {new Date().getFullYear()} ExamMaster. Made with{" "}
-            <Heart className="inline w-4 h-4 text-red-400" /> for students
+            <Heart className="inline w-4 h-4 text-red-400" /> for students by
+            @temupukki
           </motion.p>
 
           <motion.div
