@@ -15,6 +15,7 @@ import {
   CreditCard,
   Globe,
   Atom,
+  BookOpen,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -49,6 +50,7 @@ interface ContactInfo {
   icon: React.ReactNode;
   text: string;
 }
+
 const useSession = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -213,20 +215,20 @@ export default function DashFooter() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 lg:py-16">
-        {/* Top Section */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-16">
+        {/* Top Section - 3 Columns */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16"
         >
-          {/* Company Info */}
-          <div className="lg:col-span-1">
+          {/* Brand Section */}
+          <div className="space-y-6">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-3 mb-6"
+              className="flex items-center gap-4"
             >
               <motion.div
                 whileHover={{ rotate: 360 }}
@@ -236,7 +238,7 @@ export default function DashFooter() {
                 <img
                   src="exam-logo.png"
                   alt="Exam Master"
-                  className="h-12 w-12 rounded-full border-2 border-yellow-400 shadow-lg"
+                  className="h-16 w-16 rounded-full border-2 border-yellow-400 shadow-lg"
                 />
                 <motion.div
                   animate={{ rotate: 360 }}
@@ -244,22 +246,26 @@ export default function DashFooter() {
                   className="absolute -inset-2 border-2 border-yellow-400/30 rounded-full"
                 />
               </motion.div>
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent"
-              >
-                ExamMaster
-              </motion.span>
+              <div>
+                <motion.span
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent block"
+                >
+                  ExamMaster
+                </motion.span>
+                <p className="text-blue-300 text-lg mt-1 font-medium">Excel in Your Exams</p>
+              </div>
             </motion.div>
 
-            <p className="text-blue-200 mb-6 leading-relaxed">
-              Empowering students to excel in their matric exams through
+            <p className="text-blue-200 leading-relaxed text-base max-w-md">
+              Empowering Ethiopian students to excel in their matric exams through
               innovative learning tools, expert guidance, and personalized study
-              experiences.
+              experiences tailored for success.
             </p>
 
+            {/* Social Links */}
             <div className="flex gap-4">
               {socialLinks.map((social, index) => (
                 <motion.a
@@ -269,11 +275,12 @@ export default function DashFooter() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{
-                    scale: 1.2,
-                    y: -5,
-                    color: "#facc15",
+                    scale: 1.3,
+                    y: -2,
+                    backgroundColor: "#facc15",
                   }}
-                  className="p-2 bg-blue-700/50 rounded-lg  hover:text-blue-900 transition-all duration-300"
+                  className="p-3 bg-blue-700/50 rounded-xl hover:bg-yellow-400 hover:text-blue-900 transition-all duration-300 backdrop-blur-sm border border-blue-600/50"
+                  title={social.name}
                 >
                   {social.icon}
                 </motion.a>
@@ -281,70 +288,91 @@ export default function DashFooter() {
             </div>
           </div>
 
-          {/* Quick Links - Dynamic based on session */}
-          <div>
+          {/* Quick Links */}
+          <div className="space-y-6">
             <motion.h3
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-lg font-bold mb-6 flex items-center gap-2"
+              className="text-2xl font-bold flex items-center gap-3 mb-6"
             >
-              <ArrowRight className="w-5 h-5 text-yellow-400" />
-              {session ? "Dashboard Links" : "Quick Links"}
+              <div className="p-3 bg-yellow-400/20 rounded-xl">
+                <BookOpen className="w-6 h-6 text-yellow-400" />
+              </div>
+              {session ? "Dashboard" : "Navigation"}
             </motion.h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {quickLinks.map((link, index) => (
                 <motion.li
                   key={link.path}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + index * 0.1 }}
+                  whileHover={{ x: 5 }}
                 >
                   <Link
                     to={link.path}
-                    className="text-blue-200 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-200 hover:text-yellow-400 transition-all duration-300 flex items-center gap-4 group py-3 px-4 rounded-lg hover:bg-blue-800/30"
                   >
-                    <motion.span
-                      whileHover={{ x: 5 }}
-                      transition={{ type: "spring", stiffness: 400 }}
+                    <motion.div
+                      whileHover={{ scale: 1.2 }}
+                      className="p-2 bg-blue-600/30 rounded-lg group-hover:bg-yellow-400/20 transition-colors"
                     >
-                      →
-                    </motion.span>
-                    {link.label}
+                      <ArrowRight className="w-4 h-4" />
+                    </motion.div>
+                    <span className="font-medium text-lg group-hover:font-semibold transition-all">
+                      {link.label}
+                    </span>
                   </Link>
                 </motion.li>
               ))}
             </ul>
           </div>
-        </motion.div>
 
-        {/* Contact Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 py-8 border-t border-blue-700"
-        >
-          {contactInfo.map((contact, index) => (
-            <motion.div
-              key={contact.text}
+          {/* Contact Info */}
+          <div className="space-y-6">
+            <motion.h3
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 + index * 0.1 }}
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-4 p-4 bg-blue-800/30 rounded-xl backdrop-blur-sm"
+              transition={{ delay: 0.5 }}
+              className="text-2xl font-bold flex items-center gap-3 mb-6"
             >
-              <motion.div
-                whileHover={{ rotate: 360, scale: 1.1 }}
-                className="p-2 bg-yellow-400/20 rounded-full"
-              >
-                {contact.icon}
-              </motion.div>
-              <span className="text-blue-200">{contact.text}</span>
-            </motion.div>
-          ))}
+              <div className="p-3 bg-cyan-400/20 rounded-xl">
+                <Mail className="w-6 h-6 text-cyan-400" />
+              </div>
+              Get In Touch
+            </motion.h3>
+            <div className="space-y-4">
+              {contactInfo.map((contact, index) => (
+                <motion.div
+                  key={contact.text}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6 + index * 0.1 }}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  className="flex items-center gap-4 p-4 bg-blue-800/30 rounded-xl backdrop-blur-sm hover:bg-blue-700/40 transition-all duration-300 border border-blue-700/50"
+                >
+                  <motion.div
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    className="p-3 bg-yellow-400/20 rounded-full"
+                  >
+                    {contact.icon}
+                  </motion.div>
+                  <span className="text-blue-200 text-base font-medium">{contact.text}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </motion.div>
+
+        {/* Divider */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          viewport={{ once: true }}
+          className="border-t border-blue-700/50 mb-8"
+        />
 
         {/* Bottom Section */}
         <motion.div
@@ -352,38 +380,54 @@ export default function DashFooter() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
           viewport={{ once: true }}
-          className="border-t border-blue-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+          className="flex flex-col lg:flex-row justify-between items-center gap-6"
         >
-          <motion.p
+          {/* Copyright */}
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="text-blue-300 text-center md:text-left"
+            className="text-center lg:text-left"
           >
-            © {new Date().getFullYear()} ExamMaster. Made with{" "}
-            <Heart className="inline w-4 h-4 text-red-400" /> for students by
-            @temupukki
-          </motion.p>
+            <p className="text-blue-300 text-lg">
+              © {new Date().getFullYear()} ExamMaster. Made with{" "}
+              <motion.span
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <Heart className="inline w-5 h-5 text-red-400 mx-1" />
+              </motion.span>{" "}
+              for Ethiopian students by @temupukki
+            </p>
+          </motion.div>
 
+          {/* Legal Links */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
-            className="flex flex-wrap gap-6 text-sm text-blue-300"
+            className="flex flex-wrap gap-8 text-lg text-blue-300"
           >
             <MotionLink
-              whileHover={{ color: "#facc15", scale: 1.05 }}
+              whileHover={{ color: "#facc15", scale: 1.05, y: -2 }}
               to="/dashboard/privacy"
-              className="hover:text-yellow-400 transition-colors"
+              className="hover:text-yellow-400 transition-all duration-300 font-semibold"
             >
               Privacy Policy
             </MotionLink>
             <MotionLink
-              whileHover={{ color: "#facc15", scale: 1.05 }}
+              whileHover={{ color: "#facc15", scale: 1.05, y: -2 }}
               to="/dashboard/terms"
-              className="hover:text-yellow-400 transition-colors"
+              className="hover:text-yellow-400 transition-all duration-300 font-semibold"
             >
               Terms of Service
+            </MotionLink>
+            <MotionLink
+              whileHover={{ color: "#facc15", scale: 1.05, y: -2 }}
+              to="/dashboard/support"
+              className="hover:text-yellow-400 transition-all duration-300 font-semibold"
+            >
+              Support
             </MotionLink>
           </motion.div>
         </motion.div>
