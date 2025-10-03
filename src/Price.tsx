@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-
-import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
 import {
   CheckCircle,
   Star,
@@ -9,17 +8,56 @@ import {
   BarChart3,
   HelpCircle,
   TrendingUp,
+  Upload,
+  AlertCircle,
+  CreditCard,
+  Smartphone,
+  Receipt,
+  ArrowRight,
+  X,
+  Camera,
+  FileText,
+  Loader2,
 } from "lucide-react";
 
-export default function Price() {
-  const navigate = useNavigate();
+interface PricingPlan {
+  name: string;
+  description: string;
+  price: string;
+  amount: number;
+  period: string;
+  savings: string;
+  popular: boolean;
+  color: string;
+  features: { text: string; included: boolean }[];
+  buttonText: string;
+  buttonVariant: string;
+}
 
-  const pricingPlans = [
+interface PaymentOption {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ReactNode;
+  steps: string[];
+  accountInfo: string;
+}
+
+export default function CombinedPricingPayment() {
+  const [selectedPackage, setSelectedPackage] = useState<PricingPlan | null>(null);
+  const [selectedMethod, setSelectedMethod] = useState<string>("tele-birr");
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [currentStep, setCurrentStep] = useState<"pricing" | "payment">("pricing");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const pricingPlans: PricingPlan[] = [
     {
       name: "Natural Science",
-      description:
-        "Practice Natural Science for university entry anytime, anywhere.",
+      description: "Practice Natural Science for university entry anytime, anywhere.",
       price: "99 ETB",
+      amount: 99,
       period: "one time payment",
       savings: "Save 25%",
       popular: false,
@@ -32,15 +70,14 @@ export default function Price() {
         { text: "Unlimited exam attempts", included: true },
         { text: "Detailed analytics", included: true },
       ],
-      buttonText: "Proceed To Payment",
+      buttonText: "Choose Plan",
       buttonVariant: "primary",
-      
     },
     {
       name: "Social Science",
-      description:
-        "Practice Social Science for university entry anytime, anywhere.",
+      description: "Practice Social Science for university entry anytime, anywhere.",
       price: "99 ETB",
+      amount: 99,
       period: "one time payment",
       savings: "Save 25%",
       popular: false,
@@ -53,14 +90,14 @@ export default function Price() {
         { text: "Unlimited exam attempts", included: true },
         { text: "Detailed analytics", included: true },
       ],
-      buttonText: "Proceed To Payment",
+      buttonText: "Choose Plan",
       buttonVariant: "primary",
     },
     {
       name: "Family Package",
-      description:
-        "Practice Both Social Science and Natural Science for university entry anytime, anywhere.",
+      description: "Practice Both Social Science and Natural Science for university entry anytime, anywhere.",
       price: "170 ETB",
+      amount: 170,
       period: "one time payment",
       savings: "Save 30%",
       popular: true,
@@ -74,8 +111,27 @@ export default function Price() {
         { text: "Detailed analytics", included: true },
         { text: "Access Both Streams", included: true },
       ],
-      buttonText: "Proceed To Payment",
+      buttonText: "Choose Plan",
       buttonVariant: "primary",
+    },
+  ];
+
+  const paymentMethods: PaymentOption[] = [
+    {
+      id: "tele-birr",
+      name: "Tele Birr",
+      description: "Fast and secure mobile payment",
+      icon: <Smartphone className="w-8 h-8" />,
+      steps: [
+        "Open your Tele Birr app",
+        "Go to 'Send Money' section",
+        "Choose 'To individual'",
+        `Enter our account number: 251912345678`,
+        `Enter amount: ${selectedPackage?.amount || 99} ETB`,
+        "Enter your password",
+        "Complete the transaction",
+      ],
+      accountInfo: "Account: 251912345678\nName: TEMESGEN GASHAW",
     },
   ];
 
@@ -100,26 +156,368 @@ export default function Price() {
   const faqs = [
     {
       question: "Can I change plans later?",
-      answer:
-        "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
+      answer: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
     },
     {
       question: "Is there a free trial?",
-      answer:
-        "Yes! All paid plans come with a 7-day free trial. No credit card required for the Starter plan.",
+      answer: "Yes! All paid plans come with a 7-day free trial. No credit card required for the Starter plan.",
     },
     {
       question: "What payment methods do you accept?",
-      answer:
-        "We accept all major Ethiopian payment methods including CBE Birr, Tele Birr, and bank transfers.",
+      answer: "We accept all major Ethiopian payment methods including CBE Birr, Tele Birr, and bank transfers.",
     },
     {
       question: "Can I cancel anytime?",
-      answer:
-        "Absolutely! You can cancel your subscription anytime without any cancellation fees.",
+      answer: "Absolutely! You can cancel your subscription anytime without any cancellation fees.",
     },
   ];
 
+  const selectedPayment = paymentMethods.find((method) => method.id === selectedMethod);
+
+  const handlePackageSelect = (plan: PricingPlan) => {
+    setSelectedPackage(plan);
+    setCurrentStep("payment");
+    // Update payment steps with selected amount
+    paymentMethods[0].steps[4] = `Enter amount: ${plan.amount} ETB`;
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size too large. Please select an image under 5MB.");
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setUploadedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!uploadedImage) {
+      alert("Please upload your payment receipt screenshot.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+  };
+
+  const goBackToPricing = () => {
+    setCurrentStep("pricing");
+    setSelectedPackage(null);
+    setUploadedImage(null);
+  };
+
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20 flex items-center justify-center px-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring" }}
+            className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
+          >
+            <CheckCircle className="w-10 h-10 text-green-500" />
+          </motion.div>
+
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Payment Received!
+          </h2>
+
+          <p className="text-gray-600 mb-6">
+            Thank you for your {selectedPackage?.name} package payment. We've received your receipt and will activate your account within 24 hours.
+          </p>
+
+          <div className="bg-blue-50 rounded-xl p-4 mb-6">
+            <p className="text-sm text-blue-700">
+              <strong>What's next?</strong>
+              <br />
+              Check your account in 24 hours! If not activated yet, go to the Support page in the footer!
+            </p>
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => (window.location.href = "/dashboard")}
+            className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
+          >
+            Go to Dashboard
+          </motion.button>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (currentStep === "payment" && selectedPackage) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <motion.button
+              onClick={goBackToPricing}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full mb-6 hover:bg-white transition-all duration-300"
+            >
+              <ArrowRight className="w-4 h-4 rotate-180" />
+              Back to Plans
+            </motion.button>
+
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring" }}
+              className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full mb-6"
+            >
+              <Shield className="w-6 h-6 text-green-600" />
+              <span className="font-semibold text-green-600">Secure Payment</span>
+            </motion.div>
+
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Complete Your{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                {selectedPackage.name}
+              </span>{" "}
+              Payment
+            </h1>
+
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Complete your payment for the {selectedPackage.name} package and upload the receipt to activate your account.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Selected Package Info */}
+            <div className="lg:col-span-1">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 sticky top-8"
+              >
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <CreditCard className="w-6 h-6 text-blue-600" />
+                  Your Selection
+                </h3>
+
+                <div className="space-y-4">
+                  <div className="p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
+                    <h4 className="font-semibold text-gray-900 text-lg mb-2">
+                      {selectedPackage.name}
+                    </h4>
+                    <p className="text-gray-600 text-sm mb-3">
+                      {selectedPackage.description}
+                    </p>
+                    <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-lg text-center">
+                      <div className="text-2xl font-bold">{selectedPackage.price}</div>
+                      <div className="text-blue-100 text-sm">{selectedPackage.period}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <h4 className="font-semibold text-gray-900 mb-3">Package Includes:</h4>
+                  <div className="space-y-2">
+                    {selectedPackage.features.map((feature, index) => (
+                      feature.included && (
+                        <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
+                          <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                          <span>{feature.text}</span>
+                        </div>
+                      )
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Payment Steps & Upload */}
+            <div className="lg:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="space-y-8"
+              >
+                {/* Payment Steps */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <Receipt className="w-6 h-6 text-green-600" />
+                    How to Pay with Tele Birr
+                  </h3>
+
+                  <div className="space-y-4">
+                    {selectedPayment?.steps.map((step, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 + index * 0.1 }}
+                        className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                      >
+                        <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-sm">
+                          {index + 1}
+                        </div>
+                        <p className="text-gray-700 leading-relaxed">{step}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Account Information */}
+                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="w-5 h-5 text-yellow-600" />
+                      <h4 className="font-semibold text-yellow-800">Important</h4>
+                    </div>
+                    <pre className="text-yellow-700 text-sm whitespace-pre-wrap font-sans">
+                      {selectedPayment?.accountInfo}
+                    </pre>
+                  </div>
+                </div>
+
+                {/* Receipt Upload */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <Upload className="w-6 h-6 text-purple-600" />
+                    Upload Payment Receipt
+                  </h3>
+
+                  <form onSubmit={handleSubmit}>
+                    {/* Upload Area */}
+                    {!uploadedImage ? (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-blue-400 transition-colors cursor-pointer"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={handleImageUpload}
+                          accept="image/*"
+                          className="hidden"
+                        />
+
+                        <div className="flex flex-col items-center gap-4">
+                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                            <Camera className="w-8 h-8 text-blue-600" />
+                          </div>
+
+                          <div>
+                            <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                              Upload Screenshot
+                            </h4>
+                            <p className="text-gray-600 mb-4">
+                              Take a screenshot of your payment confirmation and upload it here
+                            </p>
+                          </div>
+
+                          <div className="bg-blue-50 rounded-lg px-4 py-2">
+                            <p className="text-blue-700 text-sm font-medium">
+                              Supports: JPG, PNG, WEBP (Max 5MB)
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="relative"
+                      >
+                        <img
+                          src={uploadedImage}
+                          alt="Uploaded receipt"
+                          className="w-full h-64 object-contain rounded-2xl border-2 border-green-200 bg-gray-50"
+                        />
+
+                        <motion.button
+                          type="button"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={handleRemoveImage}
+                          className="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg"
+                        >
+                          <X className="w-4 h-4" />
+                        </motion.button>
+
+                        <div className="flex items-center gap-2 mt-3 p-3 bg-green-50 rounded-xl">
+                          <CheckCircle className="w-5 h-5 text-green-500" />
+                          <span className="text-green-700 font-medium">
+                            Receipt uploaded successfully!
+                          </span>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {/* Submit Button */}
+                    <motion.button
+                      type="submit"
+                      disabled={!uploadedImage || isSubmitting}
+                      whileHover={{ scale: uploadedImage ? 1.02 : 1 }}
+                      whileTap={{ scale: uploadedImage ? 0.98 : 1 }}
+                      className={`w-full mt-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
+                        uploadedImage && !isSubmitting
+                          ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-lg"
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Processing Payment...
+                        </>
+                      ) : (
+                        <>
+                          Submit Payment Verification
+                          <ArrowRight className="w-5 h-5" />
+                        </>
+                      )}
+                    </motion.button>
+                  </form>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Pricing Page (Default View)
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
       {/* Animated Background */}
@@ -207,7 +605,6 @@ export default function Price() {
                     ? "ring-4 ring-purple-500/20 transform scale-105"
                     : ""
                 }`}
-                onClick={() => navigate(`/dashboard/payment`)}
               >
                 {/* Popular Badge */}
                 {plan.popular && (
@@ -232,7 +629,7 @@ export default function Price() {
                     </h3>
                     <p className="text-gray-600 mb-6">{plan.description}</p>
 
-                    {/* Price Display - Made more prominent */}
+                    {/* Price Display */}
                     <div className="mb-4">
                       <motion.div
                         initial={{ scale: 0.9 }}
@@ -290,7 +687,7 @@ export default function Price() {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate("/sign-in")}
+                    onClick={() => handlePackageSelect(plan)}
                     className={`w-full py-4 rounded-xl font-semibold transition-all duration-300 ${
                       plan.buttonVariant === "primary"
                         ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg hover:shadow-xl"
