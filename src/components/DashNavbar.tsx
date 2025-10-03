@@ -106,6 +106,10 @@ export default function Navbar() {
     if (userRole === 'ADMIN') {
       // Admin gets both Natural and Social
       navItems = [...navItems, ...naturalNavItems, ...socialNavItems];
+    }
+    else if (userRole === 'BOTH') {
+      // Natural role gets only Natural exams
+      navItems = [...navItems, ...naturalNavItems,...socialNavItems];
     } else if (userRole === 'NATURAL') {
       // Natural role gets only Natural exams
       navItems = [...navItems, ...naturalNavItems];
