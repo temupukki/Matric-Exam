@@ -77,30 +77,45 @@ export default function Navbar() {
     { path: "/sign-in", label: "Get Started", highlight: true },
   ];
 
-  // Base navigation items for signed in users
+  // Base navigation items for all signed in users
   const baseUserNavItems = [
     { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
     { path: "/dashboard/demo", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
     { path: "/dashboard/price", label: "Pricing", icon: <CreditCard className="w-4 h-4" /> },
   ];
 
-  // Admin-only navigation items
-  const adminNavItems = [
+  // Role-specific navigation items
+  const naturalNavItems = [
     { path: "/dashboard/natural", label: "Natural Exams", icon: <Atom className="w-4 h-4" /> },
+  ];
+
+  const socialNavItems = [
     { path: "/dashboard/social", label: "Social Exams", icon: <Globe className="w-4 h-4" /> },
   ];
 
- 
+  // Get navigation items based on user role
   const getUserNavItems = () => {
     if (!session) return guestNavItems;
     
-    const isAdmin = session.user?.role === 'ADMIN';
+    const userRole = session.user?.role;
     
-    if (isAdmin) {
-      return [...baseUserNavItems, ...adminNavItems];
+    // Start with base items
+    let navItems = [...baseUserNavItems];
+    
+    // Add role-specific items
+    if (userRole === 'ADMIN') {
+      // Admin gets both Natural and Social
+      navItems = [...navItems, ...naturalNavItems, ...socialNavItems];
+    } else if (userRole === 'NATURAL') {
+      // Natural role gets only Natural exams
+      navItems = [...navItems, ...naturalNavItems];
+    } else if (userRole === 'SOCIAL') {
+      // Social role gets only Social exams
+      navItems = [...navItems, ...socialNavItems];
     }
+    // Add more roles here if needed
     
-    return baseUserNavItems;
+    return navItems;
   };
 
   const navItems = getUserNavItems();
@@ -125,7 +140,22 @@ export default function Navbar() {
     return email.split('@')[0];
   };
 
-  const isAdmin = session?.user?.role === 'admin';
+  const getUserRoleDisplay = () => {
+    if (!session?.user?.role) return '';
+    
+    const role = session.user.role;
+    switch(role) {
+      case 'ADMIN': return 'Admin';
+      case 'NATURAL': return 'Natural Science';
+      case 'SOCIAL': return 'Social Science';
+      default: return role;
+    }
+  };
+
+  const isAdmin = session?.user?.role === 'ADMIN';
+  const isNatural = session?.user?.role === 'NATURAL';
+  const isSocial = session?.user?.role === 'SOCIAL';
+  const userRoleDisplay = getUserRoleDisplay();
 
   // Show loading state
   if (loading) {
@@ -249,7 +279,7 @@ export default function Navbar() {
                       </p>
                       <p className="text-xs text-white/70 leading-tight">
                         {getUsername(session.user?.email)}
-                        {isAdmin && " • Admin"}
+                        {userRoleDisplay && ` • ${userRoleDisplay}`}
                       </p>
                     </div>
                   </div>
@@ -286,8 +316,15 @@ export default function Navbar() {
                             </p>
                             <p className="text-sm text-white/80">
                               {session.user?.email}
-                              {isAdmin && (
-                                <span className="block text-yellow-300 text-xs">Administrator</span>
+                              {userRoleDisplay && (
+                                <span className={`block text-xs ${
+                                  isAdmin ? 'text-yellow-300' : 
+                                  isNatural ? 'text-green-300' : 
+                                  isSocial ? 'text-blue-300' : 
+                                  'text-white/80'
+                                }`}>
+                                  {userRoleDisplay}
+                                </span>
                               )}
                             </p>
                           </div>
@@ -324,18 +361,51 @@ export default function Navbar() {
                           </div>
                         </Link>
 
-                        {/* Admin badge in dropdown */}
-                        {isAdmin && (
-                          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-yellow-50 border border-yellow-200 mt-2">
-                            <div className="p-2 bg-yellow-100 rounded-lg">
-                              <Shield className="w-4 h-4 text-yellow-600" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-yellow-800">Admin Access</p>
-                              <p className="text-xs text-yellow-600">Full system permissions</p>
-                            </div>
+                        {/* Role badge in dropdown */}
+                        <div className={`flex items-center gap-3 px-3 py-2 rounded-lg border mt-2 ${
+                          isAdmin ? 'bg-yellow-50 border-yellow-200' :
+                          isNatural ? 'bg-green-50 border-green-200' :
+                          isSocial ? 'bg-blue-50 border-blue-200' :
+                          'bg-gray-50 border-gray-200'
+                        }`}>
+                          <div className={`p-2 rounded-lg ${
+                            isAdmin ? 'bg-yellow-100' :
+                            isNatural ? 'bg-green-100' :
+                            isSocial ? 'bg-blue-100' :
+                            'bg-gray-100'
+                          }`}>
+                            <Shield className={`w-4 h-4 ${
+                              isAdmin ? 'text-yellow-600' :
+                              isNatural ? 'text-green-600' :
+                              isSocial ? 'text-blue-600' :
+                              'text-gray-600'
+                            }`} />
                           </div>
-                        )}
+                          <div>
+                            <p className={`font-medium ${
+                              isAdmin ? 'text-yellow-800' :
+                              isNatural ? 'text-green-800' :
+                              isSocial ? 'text-blue-800' :
+                              'text-gray-800'
+                            }`}>
+                              {isAdmin ? 'Admin Access' : 
+                               isNatural ? 'Natural Science' :
+                               isSocial ? 'Social Science' : 
+                               'User Access'}
+                            </p>
+                            <p className={`text-xs ${
+                              isAdmin ? 'text-yellow-600' :
+                              isNatural ? 'text-green-600' :
+                              isSocial ? 'text-blue-600' :
+                              'text-gray-600'
+                            }`}>
+                              {isAdmin ? 'Full system permissions' :
+                               isNatural ? 'Natural science exams access' :
+                               isSocial ? 'Social science exams access' :
+                               'Basic user permissions'}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -454,8 +524,15 @@ export default function Navbar() {
                           </p>
                           <p className="text-sm text-white/70">
                             {session.user?.email}
-                            {isAdmin && (
-                              <span className="block text-yellow-300 text-xs">Administrator</span>
+                            {userRoleDisplay && (
+                              <span className={`block text-xs ${
+                                isAdmin ? 'text-yellow-300' : 
+                                isNatural ? 'text-green-300' : 
+                                isSocial ? 'text-blue-300' : 
+                                'text-white/80'
+                              }`}>
+                                {userRoleDisplay}
+                              </span>
                             )}
                           </p>
                         </div>
@@ -479,16 +556,44 @@ export default function Navbar() {
                         Dashboard
                       </Link>
 
-                      {/* Admin badge in mobile menu */}
-                      {isAdmin && (
-                        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-yellow-400/20 border border-yellow-400/30 mt-2">
-                          <Shield className="w-4 h-4 text-yellow-400" />
-                          <div>
-                            <p className="font-semibold text-yellow-300">Admin Access</p>
-                            <p className="text-xs text-yellow-200">Full system permissions</p>
-                          </div>
+                      {/* Role badge in mobile menu */}
+                      <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border mt-2 ${
+                        isAdmin ? 'bg-yellow-400/20 border-yellow-400/30' :
+                        isNatural ? 'bg-green-400/20 border-green-400/30' :
+                        isSocial ? 'bg-blue-400/20 border-blue-400/30' :
+                        'bg-gray-400/20 border-gray-400/30'
+                      }`}>
+                        <Shield className={`w-4 h-4 ${
+                          isAdmin ? 'text-yellow-400' :
+                          isNatural ? 'text-green-400' :
+                          isSocial ? 'text-blue-400' :
+                          'text-gray-400'
+                        }`} />
+                        <div>
+                          <p className={`font-semibold ${
+                            isAdmin ? 'text-yellow-300' :
+                            isNatural ? 'text-green-300' :
+                            isSocial ? 'text-blue-300' :
+                            'text-gray-300'
+                          }`}>
+                            {isAdmin ? 'Admin Access' : 
+                             isNatural ? 'Natural Science' :
+                             isSocial ? 'Social Science' : 
+                             'User Access'}
+                          </p>
+                          <p className={`text-xs ${
+                            isAdmin ? 'text-yellow-200' :
+                            isNatural ? 'text-green-200' :
+                            isSocial ? 'text-blue-200' :
+                            'text-gray-200'
+                          }`}>
+                            {isAdmin ? 'Full system permissions' :
+                             isNatural ? 'Natural science exams access' :
+                             isSocial ? 'Social science exams access' :
+                             'Basic user permissions'}
+                          </p>
                         </div>
-                      )}
+                      </div>
                     </div>
                   </>
                 ) : (
