@@ -129,8 +129,8 @@ export default function Payment() {
             <p className="text-sm text-blue-700">
               <strong>What's next?</strong>
               <br />
-              You'll receive a confirmation email once your payment is verified
-              and your account is activated.
+             Check your account in 24 hours! 
+             If not activated yet just goto your Support page in the footer!
             </p>
           </div>
 
