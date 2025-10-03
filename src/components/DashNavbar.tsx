@@ -179,6 +179,8 @@ export default function Navbar() {
         return "Natural Science";
       case "SOCIAL":
         return "Social Science";
+      case "BOTH":
+        return "Family Package"  
       default:
         return role;
     }
