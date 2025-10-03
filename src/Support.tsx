@@ -296,30 +296,6 @@ export default function SupportPage() {
                 </h3>
 
                 <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
-                    <div className="p-3 bg-blue-100 rounded-lg">
-                      <Mail className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">
-                        Email Support
-                      </h4>
-                      <p className="text-blue-600">support@exammaster.com</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4 p-4 bg-green-50 rounded-xl">
-                    <div className="p-3 bg-green-100 rounded-lg">
-                      <Phone className="w-6 h-6 text-green-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">
-                        Phone Support
-                      </h4>
-                      <p className="text-green-600">+251 912 345 678</p>
-                    </div>
-                  </div>
-
                   <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-xl">
                     <div className="p-3 bg-purple-100 rounded-lg">
                       <Clock className="w-6 h-6 text-purple-600" />
