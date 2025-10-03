@@ -68,7 +68,7 @@ app.get("/api/user", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch users" });
   }
 });
-app.patch("/api/users/:id/role", async (req: Request, res: Response) => {
+app.patch("/api/user/:id/role", async (req: Request, res: Response) => {
   try {
     const { id } = req.params; 
     const { role } = req.body; 

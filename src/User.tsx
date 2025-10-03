@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 type UserRole = "USER" | "ADMIN" | "NATURAL" | "SOCIAL" | "BOTH";
-MODERATOR
 
 interface User {
   id: string;
@@ -22,6 +22,10 @@ const Userpage: React.FC = () => {
   const [roleFilter, setRoleFilter] = useState<UserRole | "">("");
   const [dateFilter, setDateFilter] = useState("");
   const [timeFilter, setTimeFilter] = useState("");
+
+  // Role editing state
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [tempRole, setTempRole] = useState<UserRole | "">("");
 
   useEffect(() => {
     fetchUsers();
@@ -132,9 +136,9 @@ const Userpage: React.FC = () => {
       case "NATURAL":
         return "bg-purple-100 text-purple-800";
       case "SOCIAL":
-        return "bg-yellow-100 text-purple-800";
+        return "bg-yellow-100 text-yellow-800";
       case "BOTH":
-        return "bg-orange-100 text-purple-800";
+        return "bg-orange-100 text-orange-800";
       case "USER":
         return "bg-green-100 text-green-800";
       default:
@@ -142,9 +146,19 @@ const Userpage: React.FC = () => {
     }
   };
 
+  const startEditing = (user: User) => {
+    setEditingUserId(user.id);
+    setTempRole(user.role);
+  };
+
+  const cancelEditing = () => {
+    setEditingUserId(null);
+    setTempRole("");
+  };
+
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
-      const response = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`http://localhost:3000/api/user/${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -162,9 +176,20 @@ const Userpage: React.FC = () => {
           user.id === userId ? { ...user, role: newRole } : user
         )
       );
+      
+      // Reset editing state
+      setEditingUserId(null);
+      setTempRole("");
+      
     } catch (err) {
       console.error("Error updating user role:", err);
-      setError("Failed to update user role");
+      toast.error("Failed to update user role");
+    }
+  };
+
+  const submitRoleChange = () => {
+    if (editingUserId && tempRole) {
+      handleRoleChange(editingUserId, tempRole as UserRole);
     }
   };
 
@@ -174,7 +199,7 @@ const Userpage: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`http://localhost:3000/api/user/${userId}`, {
         method: "DELETE",
       });
 
@@ -322,17 +347,17 @@ const Userpage: React.FC = () => {
           <p className="text-gray-700 font-medium">
             Showing {filteredUsers.length} of {users.length} users
           </p>
-          <div className="flex gap-2 text-sm">
+          <div className="flex gap-2 text-sm flex-wrap">
             <span className="bg-green-100 text-green-800 px-2 py-1 rounded">
               User: {users.filter((u) => u.role === "USER").length}
             </span>
             <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
               Natural: {users.filter((u) => u.role === "NATURAL").length}
             </span>
-             <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
+            <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
               Social: {users.filter((u) => u.role === "SOCIAL").length}
             </span>
-               <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
+            <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded">
               Both: {users.filter((u) => u.role === "BOTH").length}
             </span>
             <span className="bg-red-100 text-red-800 px-2 py-1 rounded">
@@ -403,24 +428,49 @@ const Userpage: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <select
-                          value={user.role}
-                          onChange={(e) =>
-                            handleRoleChange(
-                              user.id,
-                              e.target.value as UserRole
-                            )
-                          }
-                          className={`text-xs font-medium px-2.5 py-0.5 rounded-full border-0 ${getRoleBadgeColor(
-                            user.role
-                          )} focus:ring-2 focus:ring-blue-500`}
-                        >
-                          <option value="USER">USER</option>
-                          <option value="NATURAL">NATURAL</option>
-                          <option value="SOCIAL">SOCIAL</option>
-                          <option value="BOTH">BOTH</option>
-                          <option value="ADMIN">ADMIN</option>
-                        </select>
+                        {editingUserId === user.id ? (
+                          <div className="flex items-center gap-2">
+                            <select
+                              value={tempRole}
+                              onChange={(e) => setTempRole(e.target.value as UserRole)}
+                              className="text-xs px-2.5 py-0.5 rounded border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                            >
+                              <option value="USER">USER</option>
+                              <option value="NATURAL">NATURAL</option>
+                              <option value="SOCIAL">SOCIAL</option>
+                              <option value="BOTH">BOTH</option>
+                              <option value="ADMIN">ADMIN</option>
+                            </select>
+                            <button
+                              onClick={submitRoleChange}
+                              className="bg-green-600 text-white px-2 py-1 rounded text-xs hover:bg-green-700 transition-colors"
+                            >
+                              ✓
+                            </button>
+                            <button
+                              onClick={cancelEditing}
+                              className="bg-gray-600 text-white px-2 py-1 rounded text-xs hover:bg-gray-700 transition-colors"
+                            >
+                              ✗
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getRoleBadgeColor(
+                                user.role
+                              )}`}
+                            >
+                              {user.role}
+                            </span>
+                            <button
+                              onClick={() => startEditing(user)}
+                              className="text-blue-600 hover:text-blue-800 text-xs transition-colors"
+                            >
+                              Edit
+                            </button>
+                          </div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {formatDate(user.createdAt)}
