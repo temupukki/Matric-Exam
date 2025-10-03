@@ -22,17 +22,17 @@ import Natural from "./Natural";
 import Social from "./Social";
 
 
-import Physics2017Exam from "../server/src/physics/PHY2017";
-import PhysicsExamsPage from "../server/src/physics/Physics";
-import BiologyExamsPage from "../server/src/biology/Biology"
-import ChemistryExamsPage from "../server/src/chemistry/Chemistry"
-import ApptitudeExamsPage from "../server/src/scholastic-apptitude/Apptitude"
-import EnglishExamsPage from "../server/src/english/English"
-import MathNaturalExamsPage from "../server/src/Math-natural/MathNatural"
-import HistoryExamsPage from "../server/src/history/History"
-import  GeographyExamsPage from "../server/src/geography/Geography"
-import EconomicsExamsPage from "../server/src/economics/Economics"
-import MathSocialExamsPage from "../server/src/Math-social/MathSocial"
+import Physics2017Exam from "./physics/PHY2017";
+import PhysicsExamsPage from "./physics/Physics";
+import BiologyExamsPage from "./biology/Biology"
+import ChemistryExamsPage from "./chemistry/Chemistry"
+import ApptitudeExamsPage from "./scholastic-apptitude/Apptitude"
+import EnglishExamsPage from "./english/English"
+import MathNaturalExamsPage from "./Math-natural/MathNatural"
+import HistoryExamsPage from "./history/History"
+import  GeographyExamsPage from "./geography/Geography"
+import EconomicsExamsPage from "./economics/Economics"
+import MathSocialExamsPage from "./Math-social/MathSocial"
 
 function App() {
   return (
