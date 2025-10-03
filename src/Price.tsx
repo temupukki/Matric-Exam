@@ -34,6 +34,7 @@ export default function Price() {
       ],
       buttonText: "Proceed To Payment",
       buttonVariant: "primary",
+      
     },
     {
       name: "Social Science",
@@ -206,6 +207,7 @@ export default function Price() {
                     ? "ring-4 ring-purple-500/20 transform scale-105"
                     : ""
                 }`}
+                onClick={() => navigate(`/dashboard/payment`)}
               >
                 {/* Popular Badge */}
                 {plan.popular && (
@@ -326,7 +328,7 @@ export default function Price() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
