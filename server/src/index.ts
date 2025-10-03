@@ -51,15 +51,14 @@ app.post("/api/pay", async (req, res) => {
 
 app.get("/api/paid", async (req: Request, res: Response) => {
   try {
-    
-    const paidUsers = await prisma.payment.findMany();
-
-    res.json(paidUsers);
+    const payments = await prisma.payment.findMany(); // 👈 match your schema
+    res.json(payments);
   } catch (error) {
-    console.error("Error fetching paid users:", error);
-    res.status(500).json({ error: "Something went wrong" });
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch payments" });
   }
 });
+
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
 });

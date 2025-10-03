@@ -21,8 +21,7 @@ interface Payment {
   id: string;
   email: string;
   pack: string;
-  amount: number;
-  status: string;
+
   createdAt: string;
 }
 
@@ -54,15 +53,15 @@ export default function Paid() {
       setLoading(true);
       setError(null);
       console.log("🔄 Fetching payments data...");
-      
+
       const response = await fetch("http://localhost:3000/api/paid", {
         credentials: "include",
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch payments: ${response.status}`);
       }
-      
+
       const data = await response.json();
       console.log("✅ Payments data received:", data);
       setPayments(data);
@@ -89,23 +88,23 @@ export default function Paid() {
       case "today":
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        result = result.filter(p => new Date(p.createdAt) >= today);
+        result = result.filter((p) => new Date(p.createdAt) >= today);
         break;
       case "hour":
         const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
-        result = result.filter(p => new Date(p.createdAt) >= oneHourAgo);
+        result = result.filter((p) => new Date(p.createdAt) >= oneHourAgo);
         break;
       case "24h":
         const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-        result = result.filter(p => new Date(p.createdAt) >= oneDayAgo);
+        result = result.filter((p) => new Date(p.createdAt) >= oneDayAgo);
         break;
       case "week":
         const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        result = result.filter(p => new Date(p.createdAt) >= oneWeekAgo);
+        result = result.filter((p) => new Date(p.createdAt) >= oneWeekAgo);
         break;
       case "month":
         const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        result = result.filter(p => new Date(p.createdAt) >= oneMonthAgo);
+        result = result.filter((p) => new Date(p.createdAt) >= oneMonthAgo);
         break;
       case "all":
       default:
@@ -114,27 +113,25 @@ export default function Paid() {
 
     // Apply email filter
     if (filters.email) {
-      result = result.filter(p => 
+      result = result.filter((p) =>
         p.email.toLowerCase().includes(filters.email.toLowerCase())
       );
     }
 
     // Apply package filter
     if (filters.pack) {
-      result = result.filter(p => p.pack === filters.pack);
+      result = result.filter((p) => p.pack === filters.pack);
     }
 
     // Apply status filter
-    if (filters.status !== "all") {
-      result = result.filter(p => p.status === filters.status);
-    }
 
     // Apply search term
     if (searchTerm) {
-      result = result.filter(p =>
-        p.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.pack.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.id.toLowerCase().includes(searchTerm.toLowerCase())
+      result = result.filter(
+        (p) =>
+          p.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.pack.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.id.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -142,15 +139,15 @@ export default function Paid() {
     result.sort((a, b) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
-      
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return sortDirection === 'asc' 
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortDirection === "asc"
           ? aValue.localeCompare(bValue)
           : bValue.localeCompare(aValue);
       }
-      
-      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+
+      if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
       return 0;
     });
 
@@ -160,43 +157,40 @@ export default function Paid() {
   // Handle sort
   const handleSort = (field: keyof Payment) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection('desc');
+      setSortDirection("desc");
     }
   };
 
   // Get unique packages for filter
-  const uniquePackages = [...new Set(payments.map(p => p.pack))];
-  const uniqueStatuses = [...new Set(payments.map(p => p.status))];
+  const uniquePackages = [...new Set(payments.map((p) => p.pack))];
 
   // Statistics
-  const totalRevenue = filteredPayments.reduce((sum, p) => sum + p.amount, 0);
+
   const totalCustomers = filteredPayments.length;
-  const averageRevenue = totalCustomers > 0 ? totalRevenue / totalCustomers : 0;
 
   // Export to CSV
   const exportToCSV = () => {
-    const headers = ['ID', 'Email', 'Package', 'Amount', 'Status', 'Date'];
-    const csvData = filteredPayments.map(p => [
+    const headers = ["ID", "Email", "Package", "Amount", "Status", "Date"];
+    const csvData = filteredPayments.map((p) => [
       p.id,
       p.email,
       p.pack,
-      p.amount,
-      p.status,
-      new Date(p.createdAt).toLocaleString()
+
+      new Date(p.createdAt).toLocaleString(),
     ]);
-    
+
     const csvContent = [headers, ...csvData]
-      .map(row => row.map(field => `"${field}"`).join(','))
-      .join('\n');
-    
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+      .map((row) => row.map((field) => `"${field}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `payments-${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `payments-${new Date().toISOString().split("T")[0]}.csv`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -204,18 +198,24 @@ export default function Paid() {
   // Format date
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   };
 
   // Get time range display
   const getTimeRangeDisplay = () => {
     switch (filters.timeRange) {
-      case 'hour': return 'Last Hour';
-      case '24h': return 'Last 24 Hours';
-      case 'today': return 'Today';
-      case 'week': return 'Last Week';
-      case 'month': return 'Last Month';
-      default: return 'All Time';
+      case "hour":
+        return "Last Hour";
+      case "24h":
+        return "Last 24 Hours";
+      case "today":
+        return "Today";
+      case "week":
+        return "Last Week";
+      case "month":
+        return "Last Month";
+      default:
+        return "All Time";
     }
   };
 
@@ -224,7 +224,9 @@ export default function Paid() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20 flex items-center justify-center">
         <div className="text-center">
           <RefreshCw className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-700">Loading payments data...</h2>
+          <h2 className="text-xl font-semibold text-gray-700">
+            Loading payments data...
+          </h2>
         </div>
       </div>
     );
@@ -298,7 +300,9 @@ export default function Paid() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Total Customers</p>
-                  <p className="text-2xl font-bold text-gray-900">{totalCustomers}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {totalCustomers}
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -312,10 +316,6 @@ export default function Paid() {
                 <div className="p-3 bg-green-100 rounded-xl">
                   <DollarSign className="w-6 h-6 text-green-600" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Total Revenue</p>
-                  <p className="text-2xl font-bold text-gray-900">{totalRevenue} ETB</p>
-                </div>
               </div>
             </motion.div>
 
@@ -327,10 +327,6 @@ export default function Paid() {
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-purple-100 rounded-xl">
                   <Package className="w-6 h-6 text-purple-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Average per Customer</p>
-                  <p className="text-2xl font-bold text-gray-900">{averageRevenue.toFixed(2)} ETB</p>
                 </div>
               </div>
             </motion.div>
@@ -353,7 +349,12 @@ export default function Paid() {
               </label>
               <select
                 value={filters.timeRange}
-                onChange={(e) => setFilters(prev => ({ ...prev, timeRange: e.target.value as any }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    timeRange: e.target.value as any,
+                  }))
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="all">All Time</option>
@@ -373,12 +374,16 @@ export default function Paid() {
               </label>
               <select
                 value={filters.pack}
-                onChange={(e) => setFilters(prev => ({ ...prev, pack: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, pack: e.target.value }))
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">All Packages</option>
-                {uniquePackages.map(pack => (
-                  <option key={pack} value={pack}>{pack}</option>
+                {uniquePackages.map((pack) => (
+                  <option key={pack} value={pack}>
+                    {pack}
+                  </option>
                 ))}
               </select>
             </div>
@@ -389,16 +394,6 @@ export default function Paid() {
                 <CheckCircle className="w-4 h-4 inline mr-1" />
                 Status
               </label>
-              <select
-                value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="all">All Status</option>
-                {uniqueStatuses.map(status => (
-                  <option key={status} value={status}>{status}</option>
-                ))}
-              </select>
             </div>
 
             {/* Email Filter */}
@@ -410,7 +405,9 @@ export default function Paid() {
               <input
                 type="text"
                 value={filters.email}
-                onChange={(e) => setFilters(prev => ({ ...prev, email: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, email: e.target.value }))
+                }
                 placeholder="Filter by email..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
@@ -436,7 +433,7 @@ export default function Paid() {
           <div className="flex flex-wrap gap-2">
             <span className="text-sm text-gray-600">
               Showing {filteredPayments.length} of {payments.length} payments
-              {filters.timeRange !== 'all' && ` • ${getTimeRangeDisplay()}`}
+              {filters.timeRange !== "all" && ` • ${getTimeRangeDisplay()}`}
             </span>
           </div>
         </motion.div>
@@ -452,70 +449,61 @@ export default function Paid() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th 
+                  <th
                     className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('id')}
+                    onClick={() => handleSort("id")}
                   >
                     <div className="flex items-center gap-1">
                       ID
-                      {sortField === 'id' && (
-                        sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                      )}
+                      {sortField === "id" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        ))}
                     </div>
                   </th>
-                  <th 
+                  <th
                     className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('email')}
+                    onClick={() => handleSort("email")}
                   >
                     <div className="flex items-center gap-1">
                       Email
-                      {sortField === 'email' && (
-                        sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                      )}
+                      {sortField === "email" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        ))}
                     </div>
                   </th>
-                  <th 
+                  <th
                     className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('pack')}
+                    onClick={() => handleSort("pack")}
                   >
                     <div className="flex items-center gap-1">
                       Package
-                      {sortField === 'pack' && (
-                        sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                      )}
+                      {sortField === "pack" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        ))}
                     </div>
                   </th>
-                  <th 
+
+                  <th
                     className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('amount')}
-                  >
-                    <div className="flex items-center gap-1">
-                      Amount
-                      {sortField === 'amount' && (
-                        sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                      )}
-                    </div>
-                  </th>
-                  <th 
-                    className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('status')}
-                  >
-                    <div className="flex items-center gap-1">
-                      Status
-                      {sortField === 'status' && (
-                        sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                      )}
-                    </div>
-                  </th>
-                  <th 
-                    className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('createdAt')}
+                    onClick={() => handleSort("createdAt")}
                   >
                     <div className="flex items-center gap-1">
                       Date & Time
-                      {sortField === 'createdAt' && (
-                        sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-                      )}
+                      {sortField === "createdAt" &&
+                        (sortDirection === "asc" ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        ))}
                     </div>
                   </th>
                 </tr>
@@ -523,10 +511,15 @@ export default function Paid() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredPayments.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    <td
+                      colSpan={6}
+                      className="px-6 py-8 text-center text-gray-500"
+                    >
                       <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                       <p className="text-lg">No payments found</p>
-                      <p className="text-sm">Try adjusting your filters or search terms</p>
+                      <p className="text-sm">
+                        Try adjusting your filters or search terms
+                      </p>
                     </td>
                   </tr>
                 ) : (
@@ -547,36 +540,20 @@ export default function Paid() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          payment.pack.includes('Family') 
-                            ? 'bg-purple-100 text-purple-800'
-                            : payment.pack.includes('Natural')
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            payment.pack.includes("Family")
+                              ? "bg-purple-100 text-purple-800"
+                              : payment.pack.includes("Natural")
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-green-100 text-green-800"
+                          }`}
+                        >
                           <Package className="w-3 h-3 mr-1" />
                           {payment.pack}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
-                        {payment.amount} ETB
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          payment.status === 'COMPLETED' || payment.status === 'SUCCESS'
-                            ? 'bg-green-100 text-green-800'
-                            : payment.status === 'PENDING'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {payment.status === 'COMPLETED' || payment.status === 'SUCCESS' ? (
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                          ) : (
-                            <Clock className="w-3 h-3 mr-1" />
-                          )}
-                          {payment.status}
-                        </span>
-                      </td>
+
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4 text-gray-400" />
