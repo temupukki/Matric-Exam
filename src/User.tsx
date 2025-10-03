@@ -189,7 +189,7 @@ const Userpage: React.FC = () => {
     } catch (err) {
       console.error("Error updating user role:", err);
       setError("Failed to update user role");
-      /
+      
       toast.error("Failed to update user role");
     }
   };
