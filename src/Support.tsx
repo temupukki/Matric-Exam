@@ -12,50 +12,140 @@ import {
   HelpCircle,
   ArrowRight,
   Loader2,
-  Shield
+  Shield,
+  BookOpen,
+  CreditCard,
+  Bug,
+  UserCheck,
+  Globe,
+  FileQuestion
 } from "lucide-react";
 
 interface SupportForm {
   name: string;
   email: string;
-  paymentMethod: string;
-  transactionId: string;
+  issueCategory: string;
   issueType: string;
+  subject: string;
   description: string;
   attachments: File[];
+  urgency: string;
 }
 
 export default function SupportPage() {
   const [formData, setFormData] = useState<SupportForm>({
     name: "",
     email: "",
-    paymentMethod: "",
-    transactionId: "",
+    issueCategory: "",
     issueType: "",
+    subject: "",
     description: "",
-    attachments: []
+    attachments: [],
+    urgency: "medium"
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const paymentMethods = [
-    "Tele Birr",
-    "CBE Birr",
-    "Bank Transfer",
-    "Other"
+  const issueCategories = [
+    {
+      id: "payment",
+      name: "Payment Issues",
+      icon: <CreditCard className="w-5 h-5" />,
+      description: "Problems with payments, receipts, or account activation"
+    },
+    {
+      id: "technical",
+      name: "Technical Issues",
+      icon: <Bug className="w-5 h-5" />,
+      description: "Website errors, bugs, or performance problems"
+    },
+    {
+      id: "account",
+      name: "Account Issues",
+      icon: <UserCheck className="w-5 h-5" />,
+      description: "Login problems, profile issues, or access denied"
+    },
+    {
+      id: "content",
+      name: "Content & Exams",
+      icon: <BookOpen className="w-5 h-5" />,
+      description: "Questions about study materials or exam problems"
+    },
+    {
+      id: "general",
+      name: "General Support",
+      icon: <HelpCircle className="w-5 h-5" />,
+      description: "Other questions or feedback"
+    }
   ];
 
-  const issueTypes = [
-    "Payment not verified",
-    "Receipt upload failed",
-    "Wrong amount paid",
-    "Account not activated",
-    "Transaction failed",
-    "Other payment issue"
+  const issueTypes: { [key: string]: string[] } = {
+    payment: [
+      "Payment not verified",
+      "Receipt upload failed",
+      "Wrong amount paid",
+      "Account not activated after payment",
+      "Transaction failed",
+      "Refund request",
+      "Payment method not working",
+      "Other payment issue"
+    ],
+    technical: [
+      "Website not loading",
+      "Page errors or crashes",
+      "Slow performance",
+      "Mobile app issues",
+      "Browser compatibility",
+      "Upload problems",
+      "Video playback issues",
+      "Other technical issue"
+    ],
+    account: [
+      "Can't login to account",
+      "Forgot password",
+      "Account locked",
+      "Profile update issues",
+      "Wrong user information",
+      "Account access denied",
+      "Need to change email",
+      "Other account issue"
+    ],
+    content: [
+      "Missing study materials",
+      "Wrong answers in exams",
+      "Can't access certain subjects",
+      "Video explanations not working",
+      "Practice tests not loading",
+      "Content quality issue",
+      "Request new subjects",
+      "Other content issue"
+    ],
+    general: [
+      "Feature request",
+      "Partnership inquiry",
+      "Feedback & suggestions",
+      "Report a user",
+      "Business inquiries",
+      "Career opportunities",
+      "Press & media",
+      "Other general inquiry"
+    ]
+  };
+
+  const urgencyLevels = [
+    { value: "low", label: "Low", description: "General question, no urgency" },
+    { value: "medium", label: "Medium", description: "Important but not critical" },
+    { value: "high", label: "High", description: "Need help within few hours" },
+    { value: "critical", label: "Critical", description: "System down or urgent issue" }
   ];
 
   const handleInputChange = (field: keyof SupportForm, value: string | File[]) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ 
+      ...prev, 
+      [field]: value,
+      // Reset issue type when category changes
+      ...(field === 'issueCategory' && { issueType: '' })
+    }));
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +153,7 @@ export default function SupportPage() {
     if (files.length > 0) {
       setFormData(prev => ({
         ...prev,
-        attachments: [...prev.attachments, ...files]
+        attachments: [...prev.attachments, ...files.slice(0, 5)] // Limit to 5 files
       }));
     }
   };
@@ -108,7 +198,7 @@ export default function SupportPage() {
           </h2>
           
           <p className="text-gray-600 mb-6">
-            We've received your support request and will get back to you within 24 hours at <strong>{formData.email}</strong>.
+            We've received your support request for <strong>"{formData.subject}"</strong> and will get back to you within 24 hours at <strong>{formData.email}</strong>.
           </p>
           
           <div className="bg-blue-50 rounded-xl p-4 mb-6 space-y-3">
@@ -121,8 +211,8 @@ export default function SupportPage() {
               <span className="text-blue-700 font-medium">Check your email regularly</span>
             </div>
             <div className="flex items-center gap-3">
-              <MessageSquare className="w-5 h-5 text-blue-600" />
-              <span className="text-blue-700 font-medium">Keep your transaction details handy</span>
+              <Shield className="w-5 h-5 text-blue-600" />
+              <span className="text-blue-700 font-medium">Ticket ID: #SM{Date.now().toString().slice(-6)}</span>
             </div>
           </div>
           
@@ -141,7 +231,7 @@ export default function SupportPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -154,23 +244,23 @@ export default function SupportPage() {
             transition={{ delay: 0.2, type: "spring" }}
             className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full mb-6"
           >
-            <HelpCircle className="w-6 h-6 text-orange-600" />
-            <span className="font-semibold text-orange-600">Payment Support</span>
+            <HelpCircle className="w-6 h-6 text-blue-600" />
+            <span className="font-semibold text-blue-600">Customer Support</span>
           </motion.div>
 
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Need Help with{" "}
-            <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              Payment?
+            How Can We{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              Help You?
             </span>
           </h1>
           
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            We're here to help! Describe your payment issue and we'll get back to you within 24 hours.
+            We're here to help with any issues you're facing. Describe your problem and we'll get back to you quickly.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Support Information */}
           <div className="lg:col-span-1">
             <motion.div
@@ -216,6 +306,16 @@ export default function SupportPage() {
                       <p className="text-purple-600">Within 24 hours</p>
                     </div>
                   </div>
+
+                  <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-xl">
+                    <div className="p-3 bg-orange-100 rounded-lg">
+                      <Globe className="w-6 h-6 text-orange-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Support Hours</h4>
+                      <p className="text-orange-600">Mon-Sun: 8AM - 8PM EAT</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -229,19 +329,19 @@ export default function SupportPage() {
                 <ul className="space-y-3 text-sm text-gray-600">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span>Have your transaction ID ready</span>
+                    <span>Be specific about your issue for faster resolution</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span>Include screenshots of payment confirmation</span>
+                    <span>Include relevant screenshots or error messages</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span>Check your spam folder for our response</span>
+                    <span>Check our FAQ page for common solutions</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span>Keep your payment receipt handy</span>
+                    <span>Keep your account information ready</span>
                   </li>
                 </ul>
               </div>
@@ -249,7 +349,7 @@ export default function SupportPage() {
           </div>
 
           {/* Support Form */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -257,8 +357,8 @@ export default function SupportPage() {
               className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6"
             >
               <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <AlertCircle className="w-6 h-6 text-orange-600" />
-                Describe Your Issue
+                <AlertCircle className="w-6 h-6 text-blue-600" />
+                Submit Support Request
               </h3>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -295,55 +395,92 @@ export default function SupportPage() {
                   </div>
                 </div>
 
-                {/* Payment Information */}
+                {/* Issue Category */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-4">
+                    What type of issue are you experiencing? *
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {issueCategories.map((category) => (
+                      <motion.button
+                        key={category.id}
+                        type="button"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => handleInputChange('issueCategory', category.id)}
+                        className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
+                          formData.issueCategory === category.id
+                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                            : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className={`p-2 rounded-lg ${
+                            formData.issueCategory === category.id 
+                              ? 'bg-blue-100 text-blue-600' 
+                              : 'bg-gray-100 text-gray-600'
+                          }`}>
+                            {category.icon}
+                          </div>
+                          <h4 className="font-semibold text-gray-900">{category.name}</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">{category.description}</p>
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Issue Type and Urgency */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Payment Method *
+                      Specific Issue *
                     </label>
                     <select
                       required
-                      value={formData.paymentMethod}
-                      onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
+                      value={formData.issueType}
+                      onChange={(e) => handleInputChange('issueType', e.target.value)}
+                      disabled={!formData.issueCategory}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
-                      <option value="">Select payment method</option>
-                      {paymentMethods.map(method => (
-                        <option key={method} value={method}>{method}</option>
+                      <option value="">Select issue type</option>
+                      {formData.issueCategory && issueTypes[formData.issueCategory]?.map(issue => (
+                        <option key={issue} value={issue}>{issue}</option>
                       ))}
                     </select>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Transaction ID
+                      Urgency Level
                     </label>
-                    <input
-                      type="text"
-                      value={formData.transactionId}
-                      onChange={(e) => handleInputChange('transactionId', e.target.value)}
+                    <select
+                      value={formData.urgency}
+                      onChange={(e) => handleInputChange('urgency', e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
-                      placeholder="Enter transaction ID if available"
-                    />
+                    >
+                      {urgencyLevels.map(level => (
+                        <option key={level.value} value={level.value}>
+                          {level.label} - {level.description}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 
-                {/* Issue Type */}
+                {/* Subject */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    What seems to be the issue? *
+                    Subject *
                   </label>
-                  <select
+                  <input
+                    type="text"
                     required
-                    value={formData.issueType}
-                    onChange={(e) => handleInputChange('issueType', e.target.value)}
+                    value={formData.subject}
+                    onChange={(e) => handleInputChange('subject', e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
-                  >
-                    <option value="">Select issue type</option>
-                    {issueTypes.map(issue => (
-                      <option key={issue} value={issue}>{issue}</option>
-                    ))}
-                  </select>
+                    placeholder="Brief description of your issue"
+                  />
                 </div>
 
                 {/* Description */}
@@ -357,20 +494,20 @@ export default function SupportPage() {
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     rows={6}
                     className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 resize-none"
-                    placeholder="Please describe your payment issue in detail. Include information like when you made the payment, amount paid, and any error messages you encountered..."
+                    placeholder="Please describe your issue in detail. Include steps to reproduce, error messages, and any other relevant information..."
                   />
                 </div>
 
                 {/* File Upload */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Attach Screenshots (Optional)
+                    Attach Files (Optional)
                   </label>
                   <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors">
                     <input
                       type="file"
                       multiple
-                      accept="image/*,.pdf"
+                      accept="image/*,.pdf,.doc,.docx"
                       onChange={handleFileUpload}
                       className="hidden"
                       id="file-upload"
@@ -381,14 +518,14 @@ export default function SupportPage() {
                     >
                       <div className="flex flex-col items-center gap-3">
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <MessageSquare className="w-6 h-6 text-blue-600" />
+                          <FileQuestion className="w-6 h-6 text-blue-600" />
                         </div>
                         <div>
                           <p className="text-gray-600 mb-2">
-                            Click to upload payment receipts or screenshots
+                            Click to upload screenshots or documents
                           </p>
                           <p className="text-sm text-gray-500">
-                            Supports: JPG, PNG, PDF (Max 10MB each)
+                            Supports: Images, PDF, DOC (Max 10MB each, up to 5 files)
                           </p>
                         </div>
                       </div>
@@ -404,12 +541,12 @@ export default function SupportPage() {
                           className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
                         >
                           <span className="text-sm text-gray-700 truncate">
-                            {file.name}
+                            {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
                           </span>
                           <button
                             type="button"
                             onClick={() => removeAttachment(index)}
-                            className="text-red-500 hover:text-red-700 transition-colors"
+                            className="text-red-500 hover:text-red-700 transition-colors text-lg font-bold"
                           >
                             ×
                           </button>
@@ -425,7 +562,7 @@ export default function SupportPage() {
                   disabled={isSubmitting}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
@@ -441,7 +578,7 @@ export default function SupportPage() {
                 </motion.button>
 
                 <p className="text-center text-sm text-gray-500">
-                  We'll respond to your support request within 24 hours via email.
+                  We'll respond to your support request within 24 hours via email. For urgent issues, call our support line.
                 </p>
               </form>
             </motion.div>
