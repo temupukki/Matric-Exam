@@ -173,6 +173,8 @@ export default function Navbar() {
 
     const role = session.user.role;
     switch (role) {
+      case "USER":
+        return "Regular";
       case "ADMIN":
         return "Admin";
       case "NATURAL":
