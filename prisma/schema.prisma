@@ -83,10 +83,10 @@ model Verification {
 model Payment{
   id  String @id
   email String 
-  package UserRole
+  pack UserRole
   evidence String
   paidAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
-
+@@map("payment")
 
 }

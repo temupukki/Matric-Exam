@@ -2,7 +2,8 @@ import express, { Request, Response } from "express";
 import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import cors from "cors";
-
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 const app = express();
 const port = 3000;
 app.use(
@@ -33,7 +34,22 @@ app.get("/api/me",async (req:Request,res:Response)=>{
   })
   return res.json(session);
 })
+app.post("/pay", async (req, res) => {
+  try {
+    const {email,pack,evidence } = req.body;
 
+    const user = await prisma.payment.create({
+      data: {
+        name,
+        email,
+      },
+    });
+
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({});
+  }
+});
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
 });
