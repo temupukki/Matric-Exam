@@ -158,13 +158,16 @@ const Userpage: React.FC = () => {
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/user/${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ role: newRole }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/user/${userId}/role`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role: newRole }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update user role");
@@ -176,13 +179,17 @@ const Userpage: React.FC = () => {
           user.id === userId ? { ...user, role: newRole } : user
         )
       );
+
+     
+      toast.success("User role updated successfully!");
+
       
-      // Reset editing state
       setEditingUserId(null);
       setTempRole("");
-      
     } catch (err) {
       console.error("Error updating user role:", err);
+      setError("Failed to update user role");
+      /
       toast.error("Failed to update user role");
     }
   };
@@ -432,7 +439,9 @@ const Userpage: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <select
                               value={tempRole}
-                              onChange={(e) => setTempRole(e.target.value as UserRole)}
+                              onChange={(e) =>
+                                setTempRole(e.target.value as UserRole)
+                              }
                               className="text-xs px-2.5 py-0.5 rounded border border-gray-300 focus:ring-2 focus:ring-blue-500"
                             >
                               <option value="USER">USER</option>

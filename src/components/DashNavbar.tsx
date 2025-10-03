@@ -116,7 +116,7 @@ export default function Navbar() {
   ];
   const adminNavItems = [
     {
-      path: "/dashboard/admin/paid",
+      path: "/dashboard/admin",
       label: "Admin",
       icon: <Shield className="w-4 h-4" />,
     },
