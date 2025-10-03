@@ -1,23 +1,22 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, type JSX } from "react";
-import { 
-  Menu, 
-  X, 
-  BookOpen, 
-  Star, 
-  GraduationCap, 
-  User, 
+import {
+  Menu,
+  X,
+  BookOpen,
+  Star,
+  GraduationCap,
+  User,
   LayoutDashboard,
   ChevronDown,
   ClipboardList,
   CreditCard,
   Globe,
   Atom,
-  Shield
+  Shield,
 } from "lucide-react";
 
-// User session hook with your actual API
 const useSession = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -54,7 +53,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { session, loading } = useSession();
 
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -63,105 +61,134 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Hide navbar on sign-in page
   if (location.pathname === "/sign-in") {
     return null;
   }
 
-  // Navigation items for non-signed in users
   const guestNavItems = [
     { path: "/", label: "Home", icon: <Star className="w-4 h-4" /> },
-    { path: "/stream", label: "Stream", icon: <BookOpen className="w-4 h-4" /> },
-    { path: "/feature", label: "Features", icon: <GraduationCap className="w-4 h-4" /> },
+    {
+      path: "/stream",
+      label: "Stream",
+      icon: <BookOpen className="w-4 h-4" />,
+    },
+    {
+      path: "/feature",
+      label: "Features",
+      icon: <GraduationCap className="w-4 h-4" />,
+    },
     { path: "/contact", label: "Contact us" },
     { path: "/sign-in", label: "Get Started", highlight: true },
   ];
 
-  // Base navigation items for all signed in users
   const baseUserNavItems = [
-    { path: "/dashboard", label: "Dashboard", icon: <LayoutDashboard className="w-4 h-4" /> },
-    { path: "/dashboard/demo", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
-    { path: "/dashboard/price", label: "Pricing", icon: <CreditCard className="w-4 h-4" /> },
+    {
+      path: "/dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard className="w-4 h-4" />,
+    },
+    {
+      path: "/dashboard/demo",
+      label: "Demo Exams",
+      icon: <ClipboardList className="w-4 h-4" />,
+    },
+    {
+      path: "/dashboard/price",
+      label: "Pricing",
+      icon: <CreditCard className="w-4 h-4" />,
+    },
   ];
 
-  // Role-specific navigation items
   const naturalNavItems = [
-    { path: "/dashboard/natural", label: "Natural Exams", icon: <Atom className="w-4 h-4" /> },
+    {
+      path: "/dashboard/natural",
+      label: "Natural Exams",
+      icon: <Atom className="w-4 h-4" />,
+    },
   ];
 
   const socialNavItems = [
-    { path: "/dashboard/social", label: "Social Exams", icon: <Globe className="w-4 h-4" /> },
+    {
+      path: "/dashboard/social",
+      label: "Social Exams",
+      icon: <Globe className="w-4 h-4" />,
+    },
   ];
 
-  // Get navigation items based on user role
   const getUserNavItems = () => {
     if (!session) return guestNavItems;
-    
+
     const userRole = session.user?.role;
-    
-    // Start with base items
+
     let navItems = [...baseUserNavItems];
-    
-    // Add role-specific items
-    if (userRole === 'ADMIN') {
-      // Admin gets both Natural and Social
-      navItems = [...navItems, ...naturalNavItems, ...socialNavItems];
+
+    if (
+      userRole === "NATURAL" ||
+      userRole === "SOCIAL" ||
+      userRole === "BOTH"
+    ) {
+      navItems = navItems.filter(
+        (item) =>
+          item.path !== "/dashboard/price" && item.path !== "/dashboard/demo"
+      );
     }
-    else if (userRole === 'BOTH') {
-      // Natural role gets only Natural exams
-      navItems = [...navItems, ...naturalNavItems,...socialNavItems];
-    } else if (userRole === 'NATURAL') {
-      // Natural role gets only Natural exams
+
+    if (userRole === "ADMIN") {
+      navItems = [...navItems, ...naturalNavItems, ...socialNavItems];
+    } else if (userRole === "BOTH") {
+      navItems = [...navItems, ...naturalNavItems, ...socialNavItems];
+    } else if (userRole === "NATURAL") {
       navItems = [...navItems, ...naturalNavItems];
-    } else if (userRole === 'SOCIAL') {
-      // Social role gets only Social exams
+    } else if (userRole === "SOCIAL") {
       navItems = [...navItems, ...socialNavItems];
     }
-    // Add more roles here if needed
-    
+
     return navItems;
   };
 
   const navItems = getUserNavItems();
 
   const getUserInitials = (name: string) => {
-    if (!name) return 'U';
+    if (!name) return "U";
     return name
-      .split(' ')
-      .map(part => part.charAt(0))
-      .join('')
+      .split(" ")
+      .map((part) => part.charAt(0))
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
 
   const getFirstName = (name: string) => {
-    if (!name) return 'User';
-    return name.split(' ')[0];
+    if (!name) return "User";
+    return name.split(" ")[0];
   };
 
   const getUsername = (email: string) => {
-    if (!email) return 'user';
-    return email.split('@')[0];
+    if (!email) return "user";
+    return email.split("@")[0];
   };
 
   const getUserRoleDisplay = () => {
-    if (!session?.user?.role) return '';
-    
+    if (!session?.user?.role) return "";
+
     const role = session.user.role;
-    switch(role) {
-      case 'ADMIN': return 'Admin';
-      case 'NATURAL': return 'Natural Science';
-      case 'SOCIAL': return 'Social Science';
-      default: return role;
+    switch (role) {
+      case "ADMIN":
+        return "Admin";
+      case "NATURAL":
+        return "Natural Science";
+      case "SOCIAL":
+        return "Social Science";
+      default:
+        return role;
     }
   };
 
-  const isAdmin = session?.user?.role === 'ADMIN';
-  const isNatural = session?.user?.role === 'NATURAL';
-  const isSocial = session?.user?.role === 'SOCIAL';
+  const isAdmin = session?.user?.role === "ADMIN";
+  const isNatural = session?.user?.role === "NATURAL";
+  const isSocial = session?.user?.role === "SOCIAL";
   const userRoleDisplay = getUserRoleDisplay();
 
-  // Show loading state
   if (loading) {
     return (
       <motion.nav
@@ -175,8 +202,11 @@ export default function Navbar() {
             <div className="h-6 w-32 bg-gray-300 rounded animate-pulse" />
           </div>
           <div className="hidden md:flex gap-2">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-10 w-20 bg-gray-300 rounded-full animate-pulse" />
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="h-10 w-20 bg-gray-300 rounded-full animate-pulse"
+              />
             ))}
           </div>
         </div>
@@ -199,14 +229,14 @@ export default function Navbar() {
           <motion.div
             animate={{
               x: [0, 100, 0],
-              transition: { duration: 15, repeat: Infinity, ease: "linear" }
+              transition: { duration: 15, repeat: Infinity, ease: "linear" },
             }}
             className="absolute -top-20 -left-20 w-40 h-40 bg-yellow-400/10 rounded-full blur-xl"
           />
           <motion.div
             animate={{
               x: [0, -100, 0],
-              transition: { duration: 20, repeat: Infinity, ease: "linear" }
+              transition: { duration: 20, repeat: Infinity, ease: "linear" },
             }}
             className="absolute -bottom-20 -right-20 w-60 h-60 bg-cyan-400/10 rounded-full blur-xl"
           />
@@ -225,9 +255,9 @@ export default function Navbar() {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <img 
-                src="exam-logo.png" 
-                alt="Exam Master" 
+              <img
+                src="exam-logo.png"
+                alt="Exam Master"
                 className="h-12 w-12 rounded-full border-2 border-yellow-400 shadow-lg"
               />
               <motion.div
@@ -256,7 +286,7 @@ export default function Navbar() {
                 isActive={location.pathname === item.path}
               />
             ))}
-            
+
             {/* User profile section for signed in users */}
             {session ? (
               <motion.div
@@ -272,11 +302,15 @@ export default function Navbar() {
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg">
-                      {getUserInitials(session.user?.name || session.user?.email)}
+                      {getUserInitials(
+                        session.user?.name || session.user?.email
+                      )}
                     </div>
                     <div className="text-left">
                       <p className="font-semibold text-sm leading-tight">
-                        {getFirstName(session.user?.name || session.user?.email)}
+                        {getFirstName(
+                          session.user?.name || session.user?.email
+                        )}
                         {isAdmin && (
                           <Shield className="w-3 h-3 text-yellow-400 inline ml-1" />
                         )}
@@ -294,7 +328,7 @@ export default function Navbar() {
                     <ChevronDown className="w-4 h-4" />
                   </motion.div>
                 </motion.button>
-                
+
                 {/* Dropdown menu */}
                 <AnimatePresence>
                   {isUserDropdownOpen && (
@@ -309,11 +343,13 @@ export default function Navbar() {
                       <div className="p-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white text-lg font-bold">
-                            {getUserInitials(session.user?.name || session.user?.email)}
+                            {getUserInitials(
+                              session.user?.name || session.user?.email
+                            )}
                           </div>
                           <div className="flex-1">
                             <p className="font-semibold flex items-center gap-2">
-                              {session.user?.name || 'User'}
+                              {session.user?.name || "User"}
                               {isAdmin && (
                                 <Shield className="w-4 h-4 text-yellow-400" />
                               )}
@@ -321,12 +357,17 @@ export default function Navbar() {
                             <p className="text-sm text-white/80">
                               {session.user?.email}
                               {userRoleDisplay && (
-                                <span className={`block text-xs ${
-                                  isAdmin ? 'text-yellow-300' : 
-                                  isNatural ? 'text-green-300' : 
-                                  isSocial ? 'text-blue-300' : 
-                                  'text-white/80'
-                                }`}>
+                                <span
+                                  className={`block text-xs ${
+                                    isAdmin
+                                      ? "text-yellow-300"
+                                      : isNatural
+                                      ? "text-green-300"
+                                      : isSocial
+                                      ? "text-blue-300"
+                                      : "text-white/80"
+                                  }`}
+                                >
                                   {userRoleDisplay}
                                 </span>
                               )}
@@ -347,7 +388,9 @@ export default function Navbar() {
                           </div>
                           <div>
                             <p className="font-medium">My Profile</p>
-                            <p className="text-xs text-gray-500">View and edit your profile</p>
+                            <p className="text-xs text-gray-500">
+                              View and edit your profile
+                            </p>
                           </div>
                         </Link>
 
@@ -361,52 +404,85 @@ export default function Navbar() {
                           </div>
                           <div>
                             <p className="font-medium">Dashboard</p>
-                            <p className="text-xs text-gray-500">Your learning dashboard</p>
+                            <p className="text-xs text-gray-500">
+                              Your learning dashboard
+                            </p>
                           </div>
                         </Link>
 
                         {/* Role badge in dropdown */}
-                        <div className={`flex items-center gap-3 px-3 py-2 rounded-lg border mt-2 ${
-                          isAdmin ? 'bg-yellow-50 border-yellow-200' :
-                          isNatural ? 'bg-green-50 border-green-200' :
-                          isSocial ? 'bg-blue-50 border-blue-200' :
-                          'bg-gray-50 border-gray-200'
-                        }`}>
-                          <div className={`p-2 rounded-lg ${
-                            isAdmin ? 'bg-yellow-100' :
-                            isNatural ? 'bg-green-100' :
-                            isSocial ? 'bg-blue-100' :
-                            'bg-gray-100'
-                          }`}>
-                            <Shield className={`w-4 h-4 ${
-                              isAdmin ? 'text-yellow-600' :
-                              isNatural ? 'text-green-600' :
-                              isSocial ? 'text-blue-600' :
-                              'text-gray-600'
-                            }`} />
+                        <div
+                          className={`flex items-center gap-3 px-3 py-2 rounded-lg border mt-2 ${
+                            isAdmin
+                              ? "bg-yellow-50 border-yellow-200"
+                              : isNatural
+                              ? "bg-green-50 border-green-200"
+                              : isSocial
+                              ? "bg-blue-50 border-blue-200"
+                              : "bg-gray-50 border-gray-200"
+                          }`}
+                        >
+                          <div
+                            className={`p-2 rounded-lg ${
+                              isAdmin
+                                ? "bg-yellow-100"
+                                : isNatural
+                                ? "bg-green-100"
+                                : isSocial
+                                ? "bg-blue-100"
+                                : "bg-gray-100"
+                            }`}
+                          >
+                            <Shield
+                              className={`w-4 h-4 ${
+                                isAdmin
+                                  ? "text-yellow-600"
+                                  : isNatural
+                                  ? "text-green-600"
+                                  : isSocial
+                                  ? "text-blue-600"
+                                  : "text-gray-600"
+                              }`}
+                            />
                           </div>
                           <div>
-                            <p className={`font-medium ${
-                              isAdmin ? 'text-yellow-800' :
-                              isNatural ? 'text-green-800' :
-                              isSocial ? 'text-blue-800' :
-                              'text-gray-800'
-                            }`}>
-                              {isAdmin ? 'Admin Access' : 
-                               isNatural ? 'Natural Science' :
-                               isSocial ? 'Social Science' : 
-                               'User Access'}
+                            <p
+                              className={`font-medium ${
+                                isAdmin
+                                  ? "text-yellow-800"
+                                  : isNatural
+                                  ? "text-green-800"
+                                  : isSocial
+                                  ? "text-blue-800"
+                                  : "text-gray-800"
+                              }`}
+                            >
+                              {isAdmin
+                                ? "Admin Access"
+                                : isNatural
+                                ? "Natural Science"
+                                : isSocial
+                                ? "Social Science"
+                                : "User Access"}
                             </p>
-                            <p className={`text-xs ${
-                              isAdmin ? 'text-yellow-600' :
-                              isNatural ? 'text-green-600' :
-                              isSocial ? 'text-blue-600' :
-                              'text-gray-600'
-                            }`}>
-                              {isAdmin ? 'Full system permissions' :
-                               isNatural ? 'Natural science exams access' :
-                               isSocial ? 'Social science exams access' :
-                               'Basic user permissions'}
+                            <p
+                              className={`text-xs ${
+                                isAdmin
+                                  ? "text-yellow-600"
+                                  : isNatural
+                                  ? "text-green-600"
+                                  : isSocial
+                                  ? "text-blue-600"
+                                  : "text-gray-600"
+                              }`}
+                            >
+                              {isAdmin
+                                ? "Full system permissions"
+                                : isNatural
+                                ? "Natural science exams access"
+                                : isSocial
+                                ? "Social science exams access"
+                                : "Basic user permissions"}
                             </p>
                           </div>
                         </div>
@@ -439,7 +515,10 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <motion.button
-            whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.1)" }}
+            whileHover={{
+              scale: 1.1,
+              backgroundColor: "rgba(255,255,255,0.1)",
+            }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-3 rounded-lg bg-white/10 backdrop-blur-sm"
@@ -481,7 +560,7 @@ export default function Navbar() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
             />
-            
+
             {/* Mobile Menu Content */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: -50 }}
@@ -494,11 +573,15 @@ export default function Navbar() {
               <div className="absolute inset-0 overflow-hidden">
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
                   className="absolute -top-32 -right-32 w-64 h-64 bg-yellow-400/10 rounded-full"
                 />
               </div>
-              
+
               <div className="relative z-10 p-4 flex flex-col gap-2">
                 {navItems.map((item, index) => (
                   <MobileNavLink
@@ -509,7 +592,7 @@ export default function Navbar() {
                     onClick={() => setIsMobileMenuOpen(false)}
                   />
                 ))}
-                
+
                 {/* User info and menu for mobile */}
                 {session ? (
                   <>
@@ -517,11 +600,13 @@ export default function Navbar() {
                       {/* User info */}
                       <div className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl mb-3">
                         <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                          {getUserInitials(session.user?.name || session.user?.email)}
+                          {getUserInitials(
+                            session.user?.name || session.user?.email
+                          )}
                         </div>
                         <div className="flex-1">
                           <p className="font-semibold text-white flex items-center gap-2">
-                            {session.user?.name || 'User'}
+                            {session.user?.name || "User"}
                             {isAdmin && (
                               <Shield className="w-3 h-3 text-yellow-400" />
                             )}
@@ -529,12 +614,17 @@ export default function Navbar() {
                           <p className="text-sm text-white/70">
                             {session.user?.email}
                             {userRoleDisplay && (
-                              <span className={`block text-xs ${
-                                isAdmin ? 'text-yellow-300' : 
-                                isNatural ? 'text-green-300' : 
-                                isSocial ? 'text-blue-300' : 
-                                'text-white/80'
-                              }`}>
+                              <span
+                                className={`block text-xs ${
+                                  isAdmin
+                                    ? "text-yellow-300"
+                                    : isNatural
+                                    ? "text-green-300"
+                                    : isSocial
+                                    ? "text-blue-300"
+                                    : "text-white/80"
+                                }`}
+                              >
                                 {userRoleDisplay}
                               </span>
                             )}
@@ -561,40 +651,66 @@ export default function Navbar() {
                       </Link>
 
                       {/* Role badge in mobile menu */}
-                      <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border mt-2 ${
-                        isAdmin ? 'bg-yellow-400/20 border-yellow-400/30' :
-                        isNatural ? 'bg-green-400/20 border-green-400/30' :
-                        isSocial ? 'bg-blue-400/20 border-blue-400/30' :
-                        'bg-gray-400/20 border-gray-400/30'
-                      }`}>
-                        <Shield className={`w-4 h-4 ${
-                          isAdmin ? 'text-yellow-400' :
-                          isNatural ? 'text-green-400' :
-                          isSocial ? 'text-blue-400' :
-                          'text-gray-400'
-                        }`} />
+                      <div
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl border mt-2 ${
+                          isAdmin
+                            ? "bg-yellow-400/20 border-yellow-400/30"
+                            : isNatural
+                            ? "bg-green-400/20 border-green-400/30"
+                            : isSocial
+                            ? "bg-blue-400/20 border-blue-400/30"
+                            : "bg-gray-400/20 border-gray-400/30"
+                        }`}
+                      >
+                        <Shield
+                          className={`w-4 h-4 ${
+                            isAdmin
+                              ? "text-yellow-400"
+                              : isNatural
+                              ? "text-green-400"
+                              : isSocial
+                              ? "text-blue-400"
+                              : "text-gray-400"
+                          }`}
+                        />
                         <div>
-                          <p className={`font-semibold ${
-                            isAdmin ? 'text-yellow-300' :
-                            isNatural ? 'text-green-300' :
-                            isSocial ? 'text-blue-300' :
-                            'text-gray-300'
-                          }`}>
-                            {isAdmin ? 'Admin Access' : 
-                             isNatural ? 'Natural Science' :
-                             isSocial ? 'Social Science' : 
-                             'User Access'}
+                          <p
+                            className={`font-semibold ${
+                              isAdmin
+                                ? "text-yellow-300"
+                                : isNatural
+                                ? "text-green-300"
+                                : isSocial
+                                ? "text-blue-300"
+                                : "text-gray-300"
+                            }`}
+                          >
+                            {isAdmin
+                              ? "Admin Access"
+                              : isNatural
+                              ? "Natural Science"
+                              : isSocial
+                              ? "Social Science"
+                              : "User Access"}
                           </p>
-                          <p className={`text-xs ${
-                            isAdmin ? 'text-yellow-200' :
-                            isNatural ? 'text-green-200' :
-                            isSocial ? 'text-blue-200' :
-                            'text-gray-200'
-                          }`}>
-                            {isAdmin ? 'Full system permissions' :
-                             isNatural ? 'Natural science exams access' :
-                             isSocial ? 'Social science exams access' :
-                             'Basic user permissions'}
+                          <p
+                            className={`text-xs ${
+                              isAdmin
+                                ? "text-yellow-200"
+                                : isNatural
+                                ? "text-green-200"
+                                : isSocial
+                                ? "text-blue-200"
+                                : "text-gray-200"
+                            }`}
+                          >
+                            {isAdmin
+                              ? "Full system permissions"
+                              : isNatural
+                              ? "Natural science exams access"
+                              : isSocial
+                              ? "Social science exams access"
+                              : "Basic user permissions"}
                           </p>
                         </div>
                       </div>
@@ -620,7 +736,12 @@ export default function Navbar() {
 }
 
 interface NavLinkProps {
-  item: { path: string; label: string; highlight?: boolean; icon?: JSX.Element };
+  item: {
+    path: string;
+    label: string;
+    highlight?: boolean;
+    icon?: JSX.Element;
+  };
   index: number;
   isActive: boolean;
   onClick?: () => void;
@@ -652,7 +773,7 @@ function NavLink({ item, index, isActive, onClick }: NavLinkProps) {
           </motion.span>
         )}
         {item.label}
-        
+
         {/* Hover effect */}
         {!isActive && (
           <motion.div
@@ -713,7 +834,7 @@ function MobileNavLink({ item, index, isActive, onClick }: NavLinkProps) {
           whileHover={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         />
-        
+
         {item.icon && (
           <motion.span
             animate={{ rotate: [0, 5, 0] }}
@@ -723,9 +844,9 @@ function MobileNavLink({ item, index, isActive, onClick }: NavLinkProps) {
             {item.icon}
           </motion.span>
         )}
-        
+
         <span className="relative z-10">{item.label}</span>
-        
+
         {/* Active pulse effect */}
         {isActive && (
           <motion.div
@@ -734,7 +855,7 @@ function MobileNavLink({ item, index, isActive, onClick }: NavLinkProps) {
             transition={{ duration: 2, repeat: Infinity }}
           />
         )}
-        
+
         {/* Hover arrow */}
         <motion.div
           className="absolute right-4 opacity-0 group-hover:opacity-100"
