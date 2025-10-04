@@ -123,8 +123,8 @@ export default function CombinedPricingPayment() {
       name: "Natural Science",
       description:
         "Practice Natural Science for university entry anytime, anywhere.",
-      price: "99 ETB",
-      amount: 99,
+      price: "89 ETB",
+      amount: 89,
       period: "one time payment",
       savings: "Save 25%",
       popular: false,
@@ -144,8 +144,8 @@ export default function CombinedPricingPayment() {
       name: "Social Science",
       description:
         "Practice Social Science for university entry anytime, anywhere.",
-      price: "99 ETB",
-      amount: 99,
+      price: "89 ETB",
+      amount: 89,
       period: "one time payment",
       savings: "Save 25%",
       popular: false,
@@ -165,8 +165,8 @@ export default function CombinedPricingPayment() {
       name: "Family Package",
       description:
         "Practice Both Social Science and Natural Science for university entry anytime, anywhere.",
-      price: "170 ETB",
-      amount: 170,
+      price: "169 ETB",
+      amount: 169,
       period: "one time payment",
       savings: "Save 30%",
       popular: true,

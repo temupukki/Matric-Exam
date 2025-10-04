@@ -119,7 +119,30 @@ app.patch("/api/user/:id/role", async (req, res) => {
     res.status(500).json({ error: "Failed to update role" });
   }
 });
+app.post("/api/support", async (req, res) => {
+  
+  try {
+    const {name,email,category,issueType,subject,description,urgency,status,attachments } = req.body;
 
+    const user = await prisma.supportTicket.create({
+      data: {
+        name,
+        email,
+        category,
+        issueType,
+        subject,
+        description,
+        urgency,
+        status,
+        attachments 
+      },
+    });
+
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({});
+  }
+});
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
 });

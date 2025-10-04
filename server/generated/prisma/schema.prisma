@@ -93,3 +93,21 @@ model Payment {
 
   @@map("payment")
 }
+
+model SupportTicket {
+  id          String  @id @default(cuid())
+  name        String
+  email       String
+  category    String
+  issueType   String
+  subject     String
+  description String
+  urgency     String
+  status      String  @default("open") // open, in_progress, resolved, closed
+  attachments String? // Store file metadata as JSON string
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("support_tickets")
+}
