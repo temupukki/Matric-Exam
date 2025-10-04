@@ -23,6 +23,10 @@ const Userpage: React.FC = () => {
   const [dateFilter, setDateFilter] = useState("");
   const [timeFilter, setTimeFilter] = useState("");
 
+  // Mobile states
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
   // Role editing state
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [tempRole, setTempRole] = useState<UserRole | "">("");
@@ -123,10 +127,15 @@ const Userpage: React.FC = () => {
     setRoleFilter("");
     setDateFilter("");
     setTimeFilter("");
+    setShowFilters(false);
   };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString();
+  };
+
+  const formatDateMobile = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
   };
 
   const getRoleBadgeColor = (role: UserRole) => {
@@ -180,16 +189,12 @@ const Userpage: React.FC = () => {
         )
       );
 
-     
       toast.success("User role updated successfully!");
-
-      
       setEditingUserId(null);
       setTempRole("");
     } catch (err) {
       console.error("Error updating user role:", err);
       setError("Failed to update user role");
-      
       toast.error("Failed to update user role");
     }
   };
@@ -216,6 +221,7 @@ const Userpage: React.FC = () => {
 
       // Remove from local state
       setUsers(users.filter((user) => user.id !== userId));
+      setSelectedUser(null);
     } catch (err) {
       console.error("Error deleting user:", err);
       setError("Failed to delete user");
@@ -224,43 +230,56 @@ const Userpage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="text-xl text-gray-600">Loading users...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 text-center">
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center">
             User Management
           </h1>
-          <p className="text-gray-600 text-center mt-2">
+          <p className="text-gray-600 text-center mt-2 text-sm sm:text-base">
             Manage system users and their roles
           </p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center justify-between">
-            <span className="text-red-800">{error}</span>
+          <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <span className="text-red-800 text-sm sm:text-base">{error}</span>
             <button
               onClick={fetchUsers}
-              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm"
+              className="bg-red-600 text-white px-3 py-2 rounded-md hover:bg-red-700 transition-colors text-sm w-full sm:w-auto"
             >
               Retry
             </button>
           </div>
         )}
 
-        {/* Filters Section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">Filters</h2>
+        {/* Mobile Filter Toggle */}
+        <div className="lg:hidden mb-4">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="w-full bg-white border border-gray-300 rounded-lg p-3 flex items-center justify-between shadow-sm"
+          >
+            <span className="font-medium text-gray-700">Filters</span>
+            <span className={`transform transition-transform ${showFilters ? 'rotate-180' : ''}`}>
+              ▼
+            </span>
+          </button>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        {/* Filters Section */}
+        <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4 ${showFilters ? 'block' : 'hidden lg:block'}`}>
+          <h2 className="text-lg font-semibold text-gray-800 mb-3">Filters</h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
             {/* Email Filter */}
             <div>
               <label
@@ -275,7 +294,7 @@ const Userpage: React.FC = () => {
                 placeholder="Filter by email..."
                 value={emailFilter}
                 onChange={(e) => setEmailFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
@@ -291,7 +310,7 @@ const Userpage: React.FC = () => {
                 id="role-filter"
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value as UserRole | "")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 <option value="">All roles</option>
                 <option value="USER">User</option>
@@ -315,7 +334,7 @@ const Userpage: React.FC = () => {
                 type="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
@@ -331,7 +350,7 @@ const Userpage: React.FC = () => {
                 id="time-filter"
                 value={timeFilter}
                 onChange={(e) => setTimeFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 <option value="">All time</option>
                 <option value="12hours">Last 12 hours</option>
@@ -341,60 +360,177 @@ const Userpage: React.FC = () => {
             </div>
           </div>
 
-          <button
-            onClick={clearFilters}
-            className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors text-sm"
-          >
-            Clear All Filters
-          </button>
-        </div>
-
-        {/* Results Summary */}
-        <div className="bg-gray-100 rounded-lg p-4 mb-4 flex justify-between items-center">
-          <p className="text-gray-700 font-medium">
-            Showing {filteredUsers.length} of {users.length} users
-          </p>
-          <div className="flex gap-2 text-sm flex-wrap">
-            <span className="bg-green-100 text-green-800 px-2 py-1 rounded">
-              User: {users.filter((u) => u.role === "USER").length}
-            </span>
-            <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
-              Natural: {users.filter((u) => u.role === "NATURAL").length}
-            </span>
-            <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-              Social: {users.filter((u) => u.role === "SOCIAL").length}
-            </span>
-            <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded">
-              Both: {users.filter((u) => u.role === "BOTH").length}
-            </span>
-            <span className="bg-red-100 text-red-800 px-2 py-1 rounded">
-              Admin: {users.filter((u) => u.role === "ADMIN").length}
-            </span>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <button
+              onClick={clearFilters}
+              className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors text-sm flex-1"
+            >
+              Clear All Filters
+            </button>
+            <button
+              onClick={() => setShowFilters(false)}
+              className="lg:hidden bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm flex-1"
+            >
+              Apply Filters
+            </button>
           </div>
         </div>
 
-        {/* Users Table */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        {/* Results Summary */}
+        <div className="bg-gray-100 rounded-lg p-3 mb-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+            <p className="text-gray-700 font-medium text-sm sm:text-base">
+              Showing {filteredUsers.length} of {users.length} users
+            </p>
+            <div className="flex gap-1 text-xs flex-wrap">
+              <span className="bg-green-100 text-green-800 px-2 py-1 rounded">
+                User: {users.filter((u) => u.role === "USER").length}
+              </span>
+              <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                Natural: {users.filter((u) => u.role === "NATURAL").length}
+              </span>
+              <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                Social: {users.filter((u) => u.role === "SOCIAL").length}
+              </span>
+              <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded">
+                Both: {users.filter((u) => u.role === "BOTH").length}
+              </span>
+              <span className="bg-red-100 text-red-800 px-2 py-1 rounded">
+                Admin: {users.filter((u) => u.role === "ADMIN").length}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile User Cards */}
+        <div className="lg:hidden space-y-3 mb-6">
+          {filteredUsers.length === 0 ? (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+              <p className="text-gray-500">No users found matching your filters</p>
+            </div>
+          ) : (
+            filteredUsers.map((user) => (
+              <div
+                key={user.id}
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center">
+                      <span className="text-white font-medium text-xs">
+                        {user.email[0].toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="ml-3">
+                      <div className="text-sm font-medium text-gray-900 break-all">
+                        {user.email}
+                      </div>
+                      <code className="text-xs text-gray-500 bg-gray-100 px-1 py-0.5 rounded">
+                        {user.id.slice(0, 8)}...
+                      </code>
+                    </div>
+                  </div>
+                  {editingUserId === user.id ? (
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={submitRoleChange}
+                        className="bg-green-600 text-white p-1 rounded text-xs hover:bg-green-700 transition-colors"
+                      >
+                        ✓
+                      </button>
+                      <button
+                        onClick={cancelEditing}
+                        className="bg-gray-600 text-white p-1 rounded text-xs hover:bg-gray-700 transition-colors"
+                      >
+                        ✗
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => startEditing(user)}
+                      className="text-blue-600 hover:text-blue-800 text-xs transition-colors"
+                    >
+                      Edit
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <label className="text-gray-500 text-xs">Role</label>
+                    {editingUserId === user.id ? (
+                      <select
+                        value={tempRole}
+                        onChange={(e) => setTempRole(e.target.value as UserRole)}
+                        className="w-full mt-1 text-xs px-2 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-blue-500"
+                      >
+                        <option value="USER">USER</option>
+                        <option value="NATURAL">NATURAL</option>
+                        <option value="SOCIAL">SOCIAL</option>
+                        <option value="BOTH">BOTH</option>
+                        <option value="ADMIN">ADMIN</option>
+                      </select>
+                    ) : (
+                      <div className="mt-1">
+                        <span
+                          className={`text-xs font-medium px-2 py-1 rounded-full ${getRoleBadgeColor(
+                            user.role
+                          )}`}
+                        >
+                          {user.role}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label className="text-gray-500 text-xs">Created</label>
+                    <p className="mt-1 text-gray-900 text-xs">
+                      {formatDateMobile(user.createdAt)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-3 pt-3 border-t border-gray-200 flex justify-between">
+                  <button
+                    onClick={() => setSelectedUser(user)}
+                    className="text-blue-600 hover:text-blue-800 text-xs transition-colors"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => deleteUser(user.id)}
+                    className="text-red-600 hover:text-red-800 text-xs transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Users Table */}
+        <div className="hidden lg:block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     ID
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Role
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Created At
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Updated At
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -404,7 +540,7 @@ const Userpage: React.FC = () => {
                   <tr>
                     <td
                       colSpan={6}
-                      className="px-6 py-8 text-center text-gray-500"
+                      className="px-4 py-8 text-center text-gray-500"
                     >
                       No users found matching your filters
                     </td>
@@ -415,26 +551,26 @@ const Userpage: React.FC = () => {
                       key={user.id}
                       className="hover:bg-gray-50 transition-colors"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <code className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <code className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
                           {user.id.slice(0, 8)}...
                         </code>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 bg-blue-500 rounded-full flex items-center justify-center">
-                            <span className="text-white font-medium text-sm">
+                          <div className="flex-shrink-0 h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center">
+                            <span className="text-white font-medium text-xs">
                               {user.email[0].toUpperCase()}
                             </span>
                           </div>
-                          <div className="ml-4">
+                          <div className="ml-3">
                             <div className="text-sm font-medium text-gray-900">
                               {user.email}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         {editingUserId === user.id ? (
                           <div className="flex items-center gap-2">
                             <select
@@ -442,7 +578,7 @@ const Userpage: React.FC = () => {
                               onChange={(e) =>
                                 setTempRole(e.target.value as UserRole)
                               }
-                              className="text-xs px-2.5 py-0.5 rounded border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                              className="text-xs px-2 py-1 rounded border border-gray-300 focus:ring-1 focus:ring-blue-500"
                             >
                               <option value="USER">USER</option>
                               <option value="NATURAL">NATURAL</option>
@@ -481,16 +617,16 @@ const Userpage: React.FC = () => {
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                         {formatDate(user.createdAt)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                         {formatDate(user.updatedAt)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
                         <button
                           onClick={() => deleteUser(user.id)}
-                          className="text-red-600 hover:text-red-900 transition-colors"
+                          className="text-red-600 hover:text-red-900 transition-colors text-xs"
                         >
                           Delete
                         </button>
@@ -507,11 +643,92 @@ const Userpage: React.FC = () => {
         <div className="mt-6 flex justify-center">
           <button
             onClick={fetchUsers}
-            className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+            className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium text-sm sm:text-base w-full sm:w-auto"
           >
             Refresh Data
           </button>
         </div>
+
+        {/* Mobile User Detail Modal */}
+        {selectedUser && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 lg:hidden">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-sm">
+              <div className="p-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    User Details
+                  </h3>
+                  <button
+                    onClick={() => setSelectedUser(null)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+              <div className="p-4 space-y-3">
+                <div>
+                  <label className="text-xs text-gray-500">Email</label>
+                  <p className="text-sm font-medium text-gray-900 break-all">
+                    {selectedUser.email}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500">User ID</label>
+                  <p className="text-sm text-gray-900 break-all">
+                    {selectedUser.id}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500">Role</label>
+                  <p className="text-sm">
+                    <span
+                      className={`font-medium px-2 py-1 rounded-full text-xs ${getRoleBadgeColor(
+                        selectedUser.role
+                      )}`}
+                    >
+                      {selectedUser.role}
+                    </span>
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs text-gray-500">Created</label>
+                    <p className="text-sm text-gray-900">
+                      {formatDate(selectedUser.createdAt)}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500">Updated</label>
+                    <p className="text-sm text-gray-900">
+                      {formatDate(selectedUser.updatedAt)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 border-t border-gray-200 flex justify-end gap-2">
+                <button
+                  onClick={() => {
+                    startEditing(selectedUser);
+                    setSelectedUser(null);
+                  }}
+                  className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition-colors"
+                >
+                  Edit Role
+                </button>
+                <button
+                  onClick={() => {
+                    deleteUser(selectedUser.id);
+                    setSelectedUser(null);
+                  }}
+                  className="px-3 py-2 bg-red-600 text-white rounded-md text-sm hover:bg-red-700 transition-colors"
+                >
+                  Delete User
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
