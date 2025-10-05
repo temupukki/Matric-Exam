@@ -13,7 +13,7 @@ app.use(
     credentials: true,
   })
 );
-app.all("/api/auth/*", toNodeHandler(auth)); 
+app.all("/api/auth/*", toNodeHandler(auth));
 app.use(express.json());
 app.use(
   cors({
@@ -26,21 +26,20 @@ app.get("/", (req: Request, res: Response) => {
   res.json({ message: "The backend is running in the online man !" });
 });
 
-app.get("/api/me",async (req:Request,res:Response)=>{
+app.get("/api/me", async (req: Request, res: Response) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
-  })
+  });
   return res.json(session);
-})
+});
 app.post("/api/pay", async (req, res) => {
   try {
-    const {email,pack } = req.body;
+    const { email, pack } = req.body;
 
     const user = await prisma.payment.create({
       data: {
         email,
         pack,
-       
       },
     });
 
@@ -70,8 +69,8 @@ app.get("/api/user", async (req: Request, res: Response) => {
 });
 app.patch("/api/user/:id/role", async (req, res) => {
   try {
-    const { id } = req.params; 
-    const { role } = req.body; 
+    const { id } = req.params;
+    const { role } = req.body;
 
     // Validate role exists
     if (!role) {
@@ -79,17 +78,17 @@ app.patch("/api/user/:id/role", async (req, res) => {
     }
 
     // Validate role value
-    const validRoles = ['USER', 'ADMIN', 'NATURAL', 'SOCIAL', 'BOTH'];
+    const validRoles = ["USER", "ADMIN", "NATURAL", "SOCIAL", "BOTH"];
     if (!validRoles.includes(role)) {
-      return res.status(400).json({ 
-        error: "Invalid role", 
-        validRoles: validRoles 
+      return res.status(400).json({
+        error: "Invalid role",
+        validRoles: validRoles,
       });
     }
 
     // Check if user exists first
     const existingUser = await prisma.user.findUnique({
-      where: { id: String(id) }
+      where: { id: String(id) },
     });
 
     if (!existingUser) {
@@ -99,30 +98,28 @@ app.patch("/api/user/:id/role", async (req, res) => {
     // Update role in DB
     const updatedUser = await prisma.user.update({
       where: { id: String(id) },
-      data: { 
+      data: {
         role,
-        updatedAt: new Date() // Ensure updatedAt is refreshed
+        updatedAt: new Date(), // Ensure updatedAt is refreshed
       },
     });
 
     res.json({
       message: "User role updated successfully",
-      user: updatedUser
+      user: updatedUser,
     });
-
   } catch (error) {
     console.error("❌ Error updating role:", error);
-    
+
     // Handle Prisma specific errors
-  
-    
+
     res.status(500).json({ error: "Failed to update role" });
   }
 });
 app.post("/api/support", async (req, res) => {
-  
   try {
-    const {name,email,category,issueType,subject,description,urgency } = req.body;
+    const { name, email, category, issueType, subject, description, urgency } =
+      req.body;
 
     const user = await prisma.supportTicket.create({
       data: {
@@ -133,7 +130,6 @@ app.post("/api/support", async (req, res) => {
         subject,
         description,
         urgency,
-      
       },
     });
 
@@ -154,8 +150,8 @@ app.get("/api/questions", async (req: Request, res: Response) => {
 
 app.patch("/api/user/:id/role", async (req, res) => {
   try {
-    const { id } = req.params; 
-    const { role } = req.body; 
+    const { id } = req.params;
+    const { role } = req.body;
 
     // Validate role exists
     if (!role) {
@@ -163,17 +159,17 @@ app.patch("/api/user/:id/role", async (req, res) => {
     }
 
     // Validate role value
-    const validRoles = ['USER', 'ADMIN', 'NATURAL', 'SOCIAL', 'BOTH'];
+    const validRoles = ["USER", "ADMIN", "NATURAL", "SOCIAL", "BOTH"];
     if (!validRoles.includes(role)) {
-      return res.status(400).json({ 
-        error: "Invalid role", 
-        validRoles: validRoles 
+      return res.status(400).json({
+        error: "Invalid role",
+        validRoles: validRoles,
       });
     }
 
     // Check if user exists first
     const existingUser = await prisma.user.findUnique({
-      where: { id: String(id) }
+      where: { id: String(id) },
     });
 
     if (!existingUser) {
@@ -183,30 +179,28 @@ app.patch("/api/user/:id/role", async (req, res) => {
     // Update role in DB
     const updatedUser = await prisma.user.update({
       where: { id: String(id) },
-      data: { 
+      data: {
         role,
-        updatedAt: new Date() // Ensure updatedAt is refreshed
+        updatedAt: new Date(), // Ensure updatedAt is refreshed
       },
     });
 
     res.json({
       message: "User role updated successfully",
-      user: updatedUser
+      user: updatedUser,
     });
-
   } catch (error) {
     console.error("❌ Error updating role:", error);
-    
+
     // Handle Prisma specific errors
-  
-    
+
     res.status(500).json({ error: "Failed to update role" });
   }
 });
 app.post("/api/support", async (req, res) => {
-  
   try {
-    const {name,email,category,issueType,subject,description,urgency } = req.body;
+    const { name, email, category, issueType, subject, description, urgency } =
+      req.body;
 
     const user = await prisma.supportTicket.create({
       data: {
@@ -217,7 +211,6 @@ app.post("/api/support", async (req, res) => {
         subject,
         description,
         urgency,
-      
       },
     });
 
@@ -226,6 +219,33 @@ app.post("/api/support", async (req, res) => {
     res.status(400).json({});
   }
 });
+
+app.patch("/api/support/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ["open", "in-progress", "resolved", "closed"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ error: "Invalid status value" });
+    }
+
+    const updatedTicket = await prisma.supportTicket.update({
+      where: { id },
+      data: {
+        status,
+        updatedAt: new Date(), 
+      },
+    });
+
+    res.json(updatedTicket);
+  } catch (err) {
+    console.error("Error updating ticket:", err);
+
+    res.status(500).json({ error: "Failed to update ticket" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
 });
