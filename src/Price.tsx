@@ -346,7 +346,7 @@ export default function CombinedPricingPayment() {
       const paymentData = {
         email: userEmail,
         pack: selectedPackage.name,
-        amount: selectedPackage.amount,
+      
       };
 
       console.log("📦 Payment data to send:", paymentData);
