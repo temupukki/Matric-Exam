@@ -34,12 +34,13 @@ app.get("/api/me", async (req: Request, res: Response) => {
 });
 app.post("/api/pay", async (req, res) => {
   try {
-    const { email, pack } = req.body;
+    const { email, pack,evidence } = req.body;
 
     const user = await prisma.payment.create({
       data: {
         email,
         pack,
+        evidence,
       },
     });
 
