@@ -151,6 +151,81 @@ app.get("/api/questions", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch Customer Questions" });
   }
 });
+
+app.patch("/api/user/:id/role", async (req, res) => {
+  try {
+    const { id } = req.params; 
+    const { role } = req.body; 
+
+    // Validate role exists
+    if (!role) {
+      return res.status(400).json({ error: "Role is required" });
+    }
+
+    // Validate role value
+    const validRoles = ['USER', 'ADMIN', 'NATURAL', 'SOCIAL', 'BOTH'];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ 
+        error: "Invalid role", 
+        validRoles: validRoles 
+      });
+    }
+
+    // Check if user exists first
+    const existingUser = await prisma.user.findUnique({
+      where: { id: String(id) }
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update role in DB
+    const updatedUser = await prisma.user.update({
+      where: { id: String(id) },
+      data: { 
+        role,
+        updatedAt: new Date() // Ensure updatedAt is refreshed
+      },
+    });
+
+    res.json({
+      message: "User role updated successfully",
+      user: updatedUser
+    });
+
+  } catch (error) {
+    console.error("❌ Error updating role:", error);
+    
+    // Handle Prisma specific errors
+  
+    
+    res.status(500).json({ error: "Failed to update role" });
+  }
+});
+app.post("/api/support", async (req, res) => {
+  
+  try {
+    const {name,email,category,issueType,subject,description,urgency } = req.body;
+
+    const user = await prisma.supportTicket.create({
+      data: {
+        name,
+        email,
+        category,
+        issueType,
+        subject,
+        description,
+        urgency,
+      
+      },
+    });
+
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({});
+  }
+});
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);
 });
