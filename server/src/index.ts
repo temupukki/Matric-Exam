@@ -3,7 +3,7 @@ import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import cors from "cors";
 import prisma from "./lib/prisma";
-import { string } from "zod";
+
 const app = express();
 const port = 3000;
 app.use(
