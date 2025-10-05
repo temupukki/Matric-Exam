@@ -612,7 +612,7 @@ export default function SupportDashboard() {
                       onClick={() => handleSort("subject")}
                     >
                       <div className="flex items-center gap-1">
-                        Ticket
+                        Subject and descrption 
                         {sortField === "subject" && (
                           sortDirection === "asc" ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
                         )}
@@ -791,14 +791,7 @@ export default function SupportDashboard() {
                             <Eye className="w-4 h-4" />
                           </motion.button>
                           
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                            title="Reply"
-                          >
-                            <Mail className="w-4 h-4" />
-                          </motion.button>
+                        
 
                           <motion.button
                             whileHover={{ scale: 1.05 }}
@@ -830,7 +823,7 @@ export default function SupportDashboard() {
               <div className="p-4 sm:p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900 pr-4">
-                    {selectedTicket.subject}
+                    Subject : {selectedTicket.subject}
                   </h2>
                   <button
                     onClick={() => setSelectedTicket(null)}
@@ -1001,9 +994,7 @@ export default function SupportDashboard() {
                 >
                   Close
                 </button>
-                <button className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors order-1 sm:order-2">
-                  Reply to Customer
-                </button>
+                
               </div>
             </motion.div>
           </div>
