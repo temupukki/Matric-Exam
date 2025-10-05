@@ -5,7 +5,7 @@ export default function AdminDashboard() {
   const links = [
     { name: "Manage Users", icon: <Users className="w-6 h-6" />, to: "/dashboard/admin/user" },
     { name: "Payments", icon: <DollarSign className="w-6 h-6" />, to: "/dashboard/admin/paid" },
-    { name: "Packages", icon: <HelpCircle className="w-6 h-6" />, to: "/dashboard/admin/request" },
+    { name: "Customer Requests", icon: <HelpCircle className="w-6 h-6" />, to: "/dashboard/admin/request" },
     { name: "Settings", icon: <Settings className="w-6 h-6" />, to: "/dashboard/admin/settings" },
   ];
 
