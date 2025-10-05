@@ -21,6 +21,8 @@ import {
   ChevronUp,
   X,
   Menu,
+  Edit3,
+  Save,
 } from "lucide-react";
 
 interface SupportTicket {
@@ -48,10 +50,13 @@ export default function SupportDashboard() {
   const [urgencyFilter, setUrgencyFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
+  const [editingTicket, setEditingTicket] = useState<SupportTicket | null>(null);
   const [sortField, setSortField] = useState<keyof SupportTicket>("createdAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
 
   // Check mobile view on resize and initial load
   useEffect(() => {
@@ -131,6 +136,51 @@ export default function SupportDashboard() {
 
     setFilteredTickets(result);
   }, [tickets, searchTerm, statusFilter, urgencyFilter, categoryFilter, sortField, sortDirection]);
+
+  // Update ticket status
+  const updateTicketStatus = async (ticketId: string, newStatus: string) => {
+    try {
+      setIsUpdating(true);
+      setUpdateError(null);
+
+      const response = await fetch(`http://localhost:3000/api/question/${ticketId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update ticket');
+      }
+
+      const updatedTicket = await response.json();
+
+      // Update local state
+      setTickets(prev => prev.map(ticket => 
+        ticket.id === ticketId ? updatedTicket : ticket
+      ));
+
+      // Update selected ticket if it's the one being edited
+      if (selectedTicket?.id === ticketId) {
+        setSelectedTicket(updatedTicket);
+      }
+
+      // Close editing mode
+      setEditingTicket(null);
+
+      // Show success message
+      console.log(`Ticket status updated to ${newStatus}`);
+      
+    } catch (err) {
+      console.error('Error updating ticket:', err);
+      setUpdateError(err instanceof Error ? err.message : 'Failed to update ticket status');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   const handleSort = (field: keyof SupportTicket) => {
     if (sortField === field) {
@@ -216,6 +266,13 @@ export default function SupportDashboard() {
     setCategoryFilter("all");
     setMobileFiltersOpen(false);
   };
+
+  const statusOptions = [
+    { value: "open", label: "Open", color: "red" },
+    { value: "in-progress", label: "In Progress", color: "yellow" },
+    { value: "resolved", label: "Resolved", color: "green" },
+    { value: "closed", label: "Closed", color: "gray" },
+  ];
 
   if (isLoading && tickets.length === 0) {
     return (
@@ -426,6 +483,28 @@ export default function SupportDashboard() {
           )}
         </motion.div>
 
+        {/* Update Error Message */}
+        {updateError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 sm:mb-6 bg-red-50 border border-red-200 rounded-xl p-4"
+          >
+            <div className="flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-red-800 font-medium text-sm sm:text-base">{updateError}</p>
+                <button
+                  onClick={() => setUpdateError(null)}
+                  className="text-red-600 hover:text-red-800 text-sm underline mt-1"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Tickets List/Table */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -533,7 +612,7 @@ export default function SupportDashboard() {
                       onClick={() => handleSort("subject")}
                     >
                       <div className="flex items-center gap-1">
-                        Subject and Description
+                        Ticket
                         {sortField === "subject" && (
                           sortDirection === "asc" ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
                         )}
@@ -644,10 +723,58 @@ export default function SupportDashboard() {
                         </span>
                       </td>
                       <td className="px-4 py-4">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(ticket.status)}`}>
-                          {getStatusIcon(ticket.status)}
-                          {ticket.status}
-                        </span>
+                        {editingTicket?.id === ticket.id ? (
+                          <div className="flex items-center gap-2">
+                            <select
+                              value={editingTicket.status}
+                              onChange={(e) => setEditingTicket({
+                                ...editingTicket,
+                                status: e.target.value
+                              })}
+                              className="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              disabled={isUpdating}
+                            >
+                              {statusOptions.map(option => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => updateTicketStatus(ticket.id, editingTicket.status)}
+                              disabled={isUpdating}
+                              className="p-1 text-green-600 hover:text-green-700 hover:bg-green-50 rounded transition-colors"
+                              title="Save"
+                            >
+                              {isUpdating ? (
+                                <RefreshCw className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Save className="w-3 h-3" />
+                              )}
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => setEditingTicket(null)}
+                              disabled={isUpdating}
+                              className="p-1 text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded transition-colors"
+                              title="Cancel"
+                            >
+                              <X className="w-3 h-3" />
+                            </motion.button>
+                          </div>
+                        ) : (
+                          <span 
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border cursor-pointer hover:opacity-80 transition-opacity ${getStatusColor(ticket.status)}`}
+                            onClick={() => setEditingTicket(ticket)}
+                            title="Click to edit status"
+                          >
+                            {getStatusIcon(ticket.status)}
+                            {ticket.status}
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500">
                         {formatDate(ticket.createdAt)}
@@ -671,6 +798,16 @@ export default function SupportDashboard() {
                             title="Reply"
                           >
                             <Mail className="w-4 h-4" />
+                          </motion.button>
+
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setEditingTicket(ticket)}
+                            className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                            title="Edit Status"
+                          >
+                            <Edit3 className="w-4 h-4" />
                           </motion.button>
                         </div>
                       </td>
@@ -704,14 +841,75 @@ export default function SupportDashboard() {
                 </div>
                 
                 <div className="flex flex-wrap gap-2 mt-4">
-                  <span className={`inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(selectedTicket.status)}`}>
-                    {getStatusIcon(selectedTicket.status)}
-                    {selectedTicket.status}
-                  </span>
-                  <span className={`inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${getUrgencyColor(selectedTicket.urgency)}`}>
+                  {/* Status with Edit Option */}
+                  {editingTicket?.id === selectedTicket.id ? (
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={editingTicket.status}
+                        onChange={(e) => setEditingTicket({
+                          ...editingTicket,
+                          status: e.target.value
+                        })}
+                        className="text-sm border border-gray-300 rounded px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        disabled={isUpdating}
+                      >
+                        {statusOptions.map(option => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => updateTicketStatus(selectedTicket.id, editingTicket.status)}
+                        disabled={isUpdating}
+                        className="p-1 text-green-600 hover:text-green-700 hover:bg-green-50 rounded transition-colors"
+                        title="Save"
+                      >
+                        {isUpdating ? (
+                          <RefreshCw className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Save className="w-4 h-4" />
+                        )}
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setEditingTicket(null)}
+                        disabled={isUpdating}
+                        className="p-1 text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded transition-colors"
+                        title="Cancel"
+                      >
+                        <X className="w-4 h-4" />
+                      </motion.button>
+                    </div>
+                  ) : (
+                    <>
+                      <span 
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border cursor-pointer hover:opacity-80 transition-opacity ${getStatusColor(selectedTicket.status)}`}
+                        onClick={() => setEditingTicket(selectedTicket)}
+                        title="Click to edit status"
+                      >
+                        {getStatusIcon(selectedTicket.status)}
+                        {selectedTicket.status}
+                      </span>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setEditingTicket(selectedTicket)}
+                        className="p-1 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded transition-colors"
+                        title="Edit Status"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </motion.button>
+                    </>
+                  )}
+                  
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getUrgencyColor(selectedTicket.urgency)}`}>
                     {selectedTicket.urgency} urgency
                   </span>
-                  <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
                     {selectedTicket.category}
                   </span>
                 </div>
@@ -795,7 +993,10 @@ export default function SupportDashboard() {
 
               <div className="p-4 sm:p-6 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-3">
                 <button
-                  onClick={() => setSelectedTicket(null)}
+                  onClick={() => {
+                    setSelectedTicket(null);
+                    setEditingTicket(null);
+                  }}
                   className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors order-2 sm:order-1"
                 >
                   Close
