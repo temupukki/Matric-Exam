@@ -15,6 +15,8 @@ import {
   CheckCircle,
   Shield,
   Lock,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { authClient } from "../lib/auth-client";
 
@@ -22,17 +24,28 @@ interface UserSession {
   user?: {
     name: string;
     email: string;
+    image?: string | null;
     createdAt: string;
   };
 }
 
-// Mock auth client - replace with your actual auth client
 export default function Profile() {
   const navigate = useNavigate();
   const [session, setSession] = useState<UserSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
+
+  // Password change states
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState("");
 
   useEffect(() => {
     async function fetchMe() {
@@ -71,6 +84,65 @@ export default function Profile() {
       setLogoutLoading(false);
     }
   };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError("");
+    setPasswordSuccess("");
+
+    // Validation
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New passwords don't match");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setPasswordError("Password must be at least 6 characters long");
+      return;
+    }
+
+    if (!currentPassword) {
+      setPasswordError("Current password is required");
+      return;
+    }
+
+    setPasswordLoading(true);
+
+    try {
+      const { data, error } = await authClient.changePassword({
+        newPassword: newPassword,
+        currentPassword: currentPassword,
+        revokeOtherSessions: true,
+      });
+
+      if (error) {
+        setPasswordError(error.message || "Failed to change password");
+        return;
+      }
+
+      setPasswordSuccess("Password changed successfully!");
+      
+      // Clear form
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setPasswordSuccess("");
+      }, 5000);
+
+    } catch (err: any) {
+      console.error("Password change error:", err);
+      setPasswordError(err.message || "Failed to change password");
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
+  // Check if user has an image (social login) or not (email/password)
+  const hasImage = session?.user?.image;
+  const canChangePassword = !hasImage; // Only allow password change if no image (email/password user)
 
   // Mock user stats
   const userStats = [
@@ -123,7 +195,7 @@ export default function Profile() {
 
   const tabs = [
     { id: "profile", label: "Profile", icon: <User className="w-4 h-4" /> },
-    { id: "security", label: "Security", icon: <Shield className="w-4 h-4" /> },
+    ...(canChangePassword ? [{ id: "security", label: "Security", icon: <Shield className="w-4 h-4" /> }] : []),
   ];
 
   if (loading) {
@@ -209,9 +281,17 @@ export default function Profile() {
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 className="relative"
               >
-                <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg">
-                  {session.user?.name?.charAt(0).toUpperCase() || "U"}
-                </div>
+                {hasImage ? (
+                  <img
+                    src={hasImage}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-2xl object-cover shadow-lg"
+                  />
+                ) : (
+                  <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                    {session.user?.name?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                )}
                 <motion.div
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -237,6 +317,12 @@ export default function Profile() {
                       ).toLocaleDateString()}
                     </span>
                   </div>
+                  {hasImage && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm text-green-600">Social Login</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -396,35 +482,43 @@ export default function Profile() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Full Name
                       </label>
-                      <input
-                        type="text"
-                        defaultValue={session.user?.name}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                      />
+                      <div className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600">
+                        {session.user?.name || "Not provided"}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Name cannot be changed
+                      </p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Email Address
                       </label>
-                      <input
-                        type="email"
-                        defaultValue={session.user?.email}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                      />
+                      <div className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600">
+                        {session.user?.email}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Email cannot be changed
+                      </p>
                     </div>
                   </div>
 
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    Save Changes
-                  </motion.button>
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                    <div className="flex items-center gap-3">
+                      <Info className="w-5 h-5 text-blue-600" />
+                      <div>
+                        <p className="font-medium text-blue-800">
+                          Account Information
+                        </p>
+                        <p className="text-sm text-blue-600">
+                          Contact support if you need to update your name or email address
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
               )}
 
-              {activeTab === "security" && (
+              {activeTab === "security" && canChangePassword && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -434,25 +528,162 @@ export default function Profile() {
                     Security Settings
                   </h3>
 
-                  <div className="space-y-4">
-                    <div className="p-4 rounded-xl bg-blue-50 border border-blue-200">
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="font-semibold text-gray-900">
-                          Change Password
-                        </p>
-                        <Lock className="w-5 h-5 text-blue-600" />
+                  {/* Password Change Form */}
+                  <form onSubmit={handlePasswordChange} className="space-y-4">
+                    {/* Current Password */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Current Password
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showCurrentPassword ? "text" : "password"}
+                          value={currentPassword}
+                          onChange={(e) => setCurrentPassword(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 pr-12"
+                          placeholder="Enter current password"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                          {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">
-                        Update your password regularly for better security
-                      </p>
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold"
-                      >
-                        Change Password
-                      </motion.button>
                     </div>
+
+                    {/* New Password */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        New Password
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showNewPassword ? "text" : "password"}
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 pr-12"
+                          placeholder="Enter new password"
+                          required
+                          minLength={6}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                          {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Confirm Password */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Confirm New Password
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 pr-12"
+                          placeholder="Confirm new password"
+                          required
+                          minLength={6}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                          {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Error Message */}
+                    {passwordError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-red-50 border border-red-200 rounded-xl p-4"
+                      >
+                        <p className="text-red-700 text-sm">{passwordError}</p>
+                      </motion.div>
+                    )}
+
+                    {/* Success Message */}
+                    {passwordSuccess && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-green-50 border border-green-200 rounded-xl p-4"
+                      >
+                        <p className="text-green-700 text-sm">{passwordSuccess}</p>
+                      </motion.div>
+                    )}
+
+                    {/* Security Note */}
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                      <div className="flex items-start gap-3">
+                        <Shield className="w-5 h-5 text-yellow-600 mt-0.5" />
+                        <div>
+                          <p className="font-medium text-yellow-800">Security Notice</p>
+                          <p className="text-sm text-yellow-700 mt-1">
+                            Changing your password will log you out of all other devices and sessions for security reasons.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Submit Button */}
+                    <motion.button
+                      type="submit"
+                      disabled={passwordLoading}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {passwordLoading ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                          />
+                          Changing Password...
+                        </div>
+                      ) : (
+                        "Change Password"
+                      )}
+                    </motion.button>
+                  </form>
+                </motion.div>
+              )}
+
+              {/* Show message for social login users */}
+              {activeTab === "security" && !canChangePassword && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-12"
+                >
+                  <Shield className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    Password Management Not Available
+                  </h3>
+                  <p className="text-gray-600 mb-4 max-w-md mx-auto">
+                    Your account is managed through social authentication. 
+                    Password changes are not available for social login accounts.
+                  </p>
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 max-w-md mx-auto">
+                    <p className="text-sm text-blue-700">
+                      To manage your account security, please use the authentication provider 
+                      (Google, GitHub, etc.) you used to sign up.
+                    </p>
                   </div>
                 </motion.div>
               )}
@@ -463,3 +694,21 @@ export default function Profile() {
     </div>
   );
 }
+
+// Add the missing Info icon component
+const Info = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+);
