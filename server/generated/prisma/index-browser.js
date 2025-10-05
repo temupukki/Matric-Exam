@@ -172,6 +172,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
   email: 'email',
   pack: 'pack',
   evidence: 'evidence',
+  status: 'status',
   paidAt: 'paidAt',
   updatedAt: 'updatedAt'
 };
@@ -211,6 +212,11 @@ exports.UserRole = exports.$Enums.UserRole = {
   NATURAL: 'NATURAL',
   SOCIAL: 'SOCIAL',
   BOTH: 'BOTH'
+};
+
+exports.Planstatus = exports.$Enums.Planstatus = {
+  NO: 'NO',
+  YES: 'YES'
 };
 
 exports.Prisma.ModelName = {

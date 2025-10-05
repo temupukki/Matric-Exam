@@ -58,11 +58,23 @@ export namespace $Enums {
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
+
+export const Planstatus: {
+  NO: 'NO',
+  YES: 'YES'
+};
+
+export type Planstatus = (typeof Planstatus)[keyof typeof Planstatus]
+
 }
 
 export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
+
+export type Planstatus = $Enums.Planstatus
+
+export const Planstatus: typeof $Enums.Planstatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -5803,6 +5815,7 @@ export namespace Prisma {
     email: string | null
     pack: string | null
     evidence: string | null
+    status: $Enums.Planstatus | null
     paidAt: Date | null
     updatedAt: Date | null
   }
@@ -5812,6 +5825,7 @@ export namespace Prisma {
     email: string | null
     pack: string | null
     evidence: string | null
+    status: $Enums.Planstatus | null
     paidAt: Date | null
     updatedAt: Date | null
   }
@@ -5821,6 +5835,7 @@ export namespace Prisma {
     email: number
     pack: number
     evidence: number
+    status: number
     paidAt: number
     updatedAt: number
     _all: number
@@ -5840,6 +5855,7 @@ export namespace Prisma {
     email?: true
     pack?: true
     evidence?: true
+    status?: true
     paidAt?: true
     updatedAt?: true
   }
@@ -5849,6 +5865,7 @@ export namespace Prisma {
     email?: true
     pack?: true
     evidence?: true
+    status?: true
     paidAt?: true
     updatedAt?: true
   }
@@ -5858,6 +5875,7 @@ export namespace Prisma {
     email?: true
     pack?: true
     evidence?: true
+    status?: true
     paidAt?: true
     updatedAt?: true
     _all?: true
@@ -5954,6 +5972,7 @@ export namespace Prisma {
     email: string
     pack: string
     evidence: string | null
+    status: $Enums.Planstatus
     paidAt: Date
     updatedAt: Date
     _count: PaymentCountAggregateOutputType | null
@@ -5982,6 +6001,7 @@ export namespace Prisma {
     email?: boolean
     pack?: boolean
     evidence?: boolean
+    status?: boolean
     paidAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["payment"]>
@@ -5991,6 +6011,7 @@ export namespace Prisma {
     email?: boolean
     pack?: boolean
     evidence?: boolean
+    status?: boolean
     paidAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["payment"]>
@@ -6000,6 +6021,7 @@ export namespace Prisma {
     email?: boolean
     pack?: boolean
     evidence?: boolean
+    status?: boolean
     paidAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["payment"]>
@@ -6009,11 +6031,12 @@ export namespace Prisma {
     email?: boolean
     pack?: boolean
     evidence?: boolean
+    status?: boolean
     paidAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "pack" | "evidence" | "paidAt" | "updatedAt", ExtArgs["result"]["payment"]>
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "pack" | "evidence" | "status" | "paidAt" | "updatedAt", ExtArgs["result"]["payment"]>
 
   export type $PaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Payment"
@@ -6023,6 +6046,7 @@ export namespace Prisma {
       email: string
       pack: string
       evidence: string | null
+      status: $Enums.Planstatus
       paidAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["payment"]>
@@ -6452,6 +6476,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Payment", 'String'>
     readonly pack: FieldRef<"Payment", 'String'>
     readonly evidence: FieldRef<"Payment", 'String'>
+    readonly status: FieldRef<"Payment", 'Planstatus'>
     readonly paidAt: FieldRef<"Payment", 'DateTime'>
     readonly updatedAt: FieldRef<"Payment", 'DateTime'>
   }
@@ -7984,6 +8009,7 @@ export namespace Prisma {
     email: 'email',
     pack: 'pack',
     evidence: 'evidence',
+    status: 'status',
     paidAt: 'paidAt',
     updatedAt: 'updatedAt'
   };
@@ -8098,6 +8124,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Planstatus'
+   */
+  export type EnumPlanstatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Planstatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'Planstatus[]'
+   */
+  export type ListEnumPlanstatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Planstatus[]'>
     
 
 
@@ -8421,6 +8461,7 @@ export namespace Prisma {
     email?: StringFilter<"Payment"> | string
     pack?: StringFilter<"Payment"> | string
     evidence?: StringNullableFilter<"Payment"> | string | null
+    status?: EnumPlanstatusFilter<"Payment"> | $Enums.Planstatus
     paidAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
   }
@@ -8430,6 +8471,7 @@ export namespace Prisma {
     email?: SortOrder
     pack?: SortOrder
     evidence?: SortOrderInput | SortOrder
+    status?: SortOrder
     paidAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8442,6 +8484,7 @@ export namespace Prisma {
     email?: StringFilter<"Payment"> | string
     pack?: StringFilter<"Payment"> | string
     evidence?: StringNullableFilter<"Payment"> | string | null
+    status?: EnumPlanstatusFilter<"Payment"> | $Enums.Planstatus
     paidAt?: DateTimeFilter<"Payment"> | Date | string
     updatedAt?: DateTimeFilter<"Payment"> | Date | string
   }, "id">
@@ -8451,6 +8494,7 @@ export namespace Prisma {
     email?: SortOrder
     pack?: SortOrder
     evidence?: SortOrderInput | SortOrder
+    status?: SortOrder
     paidAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PaymentCountOrderByAggregateInput
@@ -8468,6 +8512,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Payment"> | string
     pack?: StringWithAggregatesFilter<"Payment"> | string
     evidence?: StringNullableWithAggregatesFilter<"Payment"> | string | null
+    status?: EnumPlanstatusWithAggregatesFilter<"Payment"> | $Enums.Planstatus
     paidAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
   }
@@ -8898,6 +8943,7 @@ export namespace Prisma {
     email: string
     pack: string
     evidence?: string | null
+    status?: $Enums.Planstatus
     paidAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8907,6 +8953,7 @@ export namespace Prisma {
     email: string
     pack: string
     evidence?: string | null
+    status?: $Enums.Planstatus
     paidAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8915,6 +8962,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     pack?: StringFieldUpdateOperationsInput | string
     evidence?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPlanstatusFieldUpdateOperationsInput | $Enums.Planstatus
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8924,6 +8972,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     pack?: StringFieldUpdateOperationsInput | string
     evidence?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPlanstatusFieldUpdateOperationsInput | $Enums.Planstatus
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8933,6 +8982,7 @@ export namespace Prisma {
     email: string
     pack: string
     evidence?: string | null
+    status?: $Enums.Planstatus
     paidAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8941,6 +8991,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     pack?: StringFieldUpdateOperationsInput | string
     evidence?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPlanstatusFieldUpdateOperationsInput | $Enums.Planstatus
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8950,6 +9001,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     pack?: StringFieldUpdateOperationsInput | string
     evidence?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumPlanstatusFieldUpdateOperationsInput | $Enums.Planstatus
     paidAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9387,11 +9439,19 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type EnumPlanstatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Planstatus | EnumPlanstatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Planstatus[] | ListEnumPlanstatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Planstatus[] | ListEnumPlanstatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanstatusFilter<$PrismaModel> | $Enums.Planstatus
+  }
+
   export type PaymentCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
     pack?: SortOrder
     evidence?: SortOrder
+    status?: SortOrder
     paidAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -9405,6 +9465,7 @@ export namespace Prisma {
     email?: SortOrder
     pack?: SortOrder
     evidence?: SortOrder
+    status?: SortOrder
     paidAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -9414,6 +9475,7 @@ export namespace Prisma {
     email?: SortOrder
     pack?: SortOrder
     evidence?: SortOrder
+    status?: SortOrder
     paidAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -9436,6 +9498,16 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumPlanstatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Planstatus | EnumPlanstatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Planstatus[] | ListEnumPlanstatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Planstatus[] | ListEnumPlanstatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanstatusWithAggregatesFilter<$PrismaModel> | $Enums.Planstatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlanstatusFilter<$PrismaModel>
+    _max?: NestedEnumPlanstatusFilter<$PrismaModel>
   }
 
   export type SupportTicketCountOrderByAggregateInput = {
@@ -9619,6 +9691,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountsInput, UserUpdateWithoutAccountsInput>, UserUncheckedUpdateWithoutAccountsInput>
   }
 
+  export type EnumPlanstatusFieldUpdateOperationsInput = {
+    set?: $Enums.Planstatus
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -9791,6 +9867,13 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumPlanstatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Planstatus | EnumPlanstatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Planstatus[] | ListEnumPlanstatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Planstatus[] | ListEnumPlanstatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanstatusFilter<$PrismaModel> | $Enums.Planstatus
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -9816,6 +9899,16 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumPlanstatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Planstatus | EnumPlanstatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Planstatus[] | ListEnumPlanstatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Planstatus[] | ListEnumPlanstatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlanstatusWithAggregatesFilter<$PrismaModel> | $Enums.Planstatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlanstatusFilter<$PrismaModel>
+    _max?: NestedEnumPlanstatusFilter<$PrismaModel>
   }
 
   export type SessionCreateWithoutUserInput = {

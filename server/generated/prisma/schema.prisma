@@ -22,6 +22,11 @@ enum UserRole {
   BOTH
 }
 
+enum Planstatus {
+  NO
+  YES
+}
+
 model User {
   id            String    @id
   name          String
@@ -84,12 +89,13 @@ model Verification {
 }
 
 model Payment {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   email     String
   pack      String
   evidence  String?
-  paidAt    DateTime @default(now())
-  updatedAt DateTime @default(now())
+  status    Planstatus @default(NO)
+  paidAt    DateTime   @default(now())
+  updatedAt DateTime   @default(now())
 
   @@map("payment")
 }

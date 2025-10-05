@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-type PaymentPack = "Natural Science" | "Social Science" | "BOTH"; // Adjust based on your actual pack types
+type PaymentPack = "Natural Science" | "Social Science" | "BOTH";
+type PaymentStatus = "NO" | "YES";
 
 interface Payment {
   id: number;
   email: string;
   pack: PaymentPack;
   evidence: string | null;
+  status: PaymentStatus;
   paidAt: string;
   updatedAt: string;
 }
@@ -23,6 +25,7 @@ const Paid: React.FC = () => {
   const [packFilter, setPackFilter] = useState<PaymentPack | "">("");
   const [dateFilter, setDateFilter] = useState("");
   const [timeFilter, setTimeFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState<PaymentStatus | "">("");
 
   // Mobile states
   const [showFilters, setShowFilters] = useState(false);
@@ -33,13 +36,18 @@ const Paid: React.FC = () => {
   const [selectedPaymentForEvidence, setSelectedPaymentForEvidence] = useState<Payment | null>(null);
   const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
 
+  // Status edit state
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [selectedPaymentForStatus, setSelectedPaymentForStatus] = useState<Payment | null>(null);
+  const [newStatus, setNewStatus] = useState<PaymentStatus>("YES");
+
   useEffect(() => {
     fetchPayments();
   }, []);
 
   useEffect(() => {
     applyFilters();
-  }, [payments, emailFilter, packFilter, dateFilter, timeFilter]);
+  }, [payments, emailFilter, packFilter, dateFilter, timeFilter, statusFilter]);
 
   const fetchPayments = async () => {
     try {
@@ -74,6 +82,11 @@ const Paid: React.FC = () => {
     // Pack filter
     if (packFilter) {
       filtered = filtered.filter((payment) => payment.pack === packFilter);
+    }
+
+    // Status filter
+    if (statusFilter) {
+      filtered = filtered.filter((payment) => payment.status === statusFilter);
     }
 
     // Date filter
@@ -127,6 +140,7 @@ const Paid: React.FC = () => {
   const clearFilters = () => {
     setEmailFilter("");
     setPackFilter("");
+    setStatusFilter("");
     setDateFilter("");
     setTimeFilter("");
     setShowFilters(false);
@@ -150,6 +164,17 @@ const Paid: React.FC = () => {
         return "bg-purple-100 text-purple-800";
       default:
         return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getStatusBadgeColor = (status: PaymentStatus) => {
+    switch (status) {
+      case "YES":
+        return "bg-green-100 text-green-800 border border-green-200";
+      case "NO":
+        return "bg-red-100 text-red-800 border border-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 border border-gray-200";
     }
   };
 
@@ -230,6 +255,55 @@ const Paid: React.FC = () => {
       console.error("Error uploading evidence:", err);
       toast.error("Failed to upload evidence");
     }
+  };
+
+  const handleStatusUpdate = async () => {
+    if (!selectedPaymentForStatus) {
+      toast.error("No payment selected");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/payments/${selectedPaymentForStatus.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: newStatus,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update status");
+      }
+
+      const updatedPayment = await response.json();
+      
+      // Update local state
+      setPayments(
+        payments.map((payment) =>
+          payment.id === selectedPaymentForStatus.id ? updatedPayment : payment
+        )
+      );
+
+      toast.success(`Status updated to ${newStatus === "YES" ? "Approved" : "Rejected"}!`);
+      setShowStatusModal(false);
+      setSelectedPaymentForStatus(null);
+      setNewStatus("YES");
+    } catch (err) {
+      console.error("Error updating status:", err);
+      toast.error("Failed to update status");
+    }
+  };
+
+  const openStatusModal = (payment: Payment) => {
+    setSelectedPaymentForStatus(payment);
+    setNewStatus(payment.status);
+    setShowStatusModal(true);
   };
 
   const downloadEvidence = (evidenceUrl: string, fileName: string) => {
@@ -357,7 +431,7 @@ const Paid: React.FC = () => {
         <div className={`bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4 ${showFilters ? 'block' : 'hidden lg:block'}`}>
           <h2 className="text-lg font-semibold text-gray-800 mb-3">Filters</h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
             {/* Email Filter */}
             <div>
               <label
@@ -394,6 +468,26 @@ const Paid: React.FC = () => {
                 <option value="Natural Science">Natural Science</option>
                 <option value="Social Science">Social Science</option>
                 <option value="BOTH">Family Plans</option>
+              </select>
+            </div>
+
+            {/* Status Filter */}
+            <div>
+              <label
+                htmlFor="status-filter"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Status
+              </label>
+              <select
+                id="status-filter"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as PaymentStatus | "")}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              >
+                <option value="">All status</option>
+                <option value="YES">Approved</option>
+                <option value="NO">Rejected</option>
               </select>
             </div>
 
@@ -468,6 +562,12 @@ const Paid: React.FC = () => {
               <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
                Family: {payments.filter((p) => p.pack === "BOTH").length}
               </span>
+              <span className="bg-green-200 text-green-800 px-2 py-1 rounded">
+                Approved: {payments.filter((p) => p.status === "YES").length}
+              </span>
+              <span className="bg-red-200 text-red-800 px-2 py-1 rounded">
+                Rejected: {payments.filter((p) => p.status === "NO").length}
+              </span>
             </div>
           </div>
         </div>
@@ -521,6 +621,18 @@ const Paid: React.FC = () => {
                     </div>
                   </div>
                   <div>
+                    <label className="text-gray-500 text-xs">Status</label>
+                    <div className="mt-1">
+                      <span
+                        className={`text-xs font-medium px-2 py-1 rounded-full ${getStatusBadgeColor(
+                          payment.status
+                        )}`}
+                      >
+                        {payment.status === "YES" ? "Approved" : "Rejected"}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
                     <label className="text-gray-500 text-xs">Paid At</label>
                     <p className="mt-1 text-gray-900 text-xs">
                       {formatDateMobile(payment.paidAt)}
@@ -528,12 +640,18 @@ const Paid: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-gray-200 flex justify-between">
+                <div className="pt-3 border-t border-gray-200 flex justify-between flex-wrap gap-2">
                   <button
                     onClick={() => setSelectedPayment(payment)}
                     className="text-blue-600 hover:text-blue-800 text-xs transition-colors"
                   >
                     View Details
+                  </button>
+                  <button
+                    onClick={() => openStatusModal(payment)}
+                    className="text-indigo-600 hover:text-indigo-800 text-xs transition-colors"
+                  >
+                    Edit Status
                   </button>
                   {payment.evidence ? (
                     <button
@@ -590,6 +708,9 @@ const Paid: React.FC = () => {
                     Evidence
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -598,7 +719,7 @@ const Paid: React.FC = () => {
                 {filteredPayments.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={7}
+                      colSpan={8}
                       className="px-4 py-8 text-center text-gray-500"
                     >
                       No payments found matching your filters
@@ -663,6 +784,24 @@ const Paid: React.FC = () => {
                             Upload
                           </button>
                         )}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusBadgeColor(
+                              payment.status
+                            )}`}
+                          >
+                            {payment.status === "YES" ? "Approved" : "Rejected"}
+                          </span>
+                          <button
+                            onClick={() => openStatusModal(payment)}
+                            className="text-indigo-600 hover:text-indigo-800 transition-colors text-xs"
+                            title="Edit Status"
+                          >
+                            ✏️
+                          </button>
+                        </div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
                         <button
@@ -752,6 +891,18 @@ const Paid: React.FC = () => {
                     </p>
                   </div>
                   <div>
+                    <label className="text-xs text-gray-500">Status</label>
+                    <p className="text-sm">
+                      <span
+                        className={`font-medium px-2 py-1 rounded-full text-xs ${getStatusBadgeColor(
+                          selectedPayment.status
+                        )}`}
+                      >
+                        {selectedPayment.status === "YES" ? "Approved" : "Rejected"}
+                      </span>
+                    </p>
+                  </div>
+                  <div>
                     <label className="text-xs text-gray-500">Updated</label>
                     <p className="text-sm text-gray-900">
                       {formatDate(selectedPayment.updatedAt)}
@@ -765,7 +916,13 @@ const Paid: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="p-4 border-t border-gray-200 flex justify-end gap-2">
+              <div className="p-4 border-t border-gray-200 flex justify-end gap-2 flex-wrap">
+                <button
+                  onClick={() => openStatusModal(selectedPayment)}
+                  className="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700 transition-colors"
+                >
+                  Edit Status
+                </button>
                 {selectedPayment.evidence ? (
                   <button
                     onClick={() => downloadEvidence(selectedPayment.evidence!, `evidence-${selectedPayment.id}.jpg`)}
@@ -844,6 +1001,70 @@ const Paid: React.FC = () => {
                   className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                   Upload Evidence
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Status Edit Modal */}
+        {showStatusModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Update Payment Status
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  For: {selectedPaymentForStatus?.email}
+                </p>
+              </div>
+              <div className="p-4">
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Current Status
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`text-sm font-medium px-3 py-1 rounded-full ${getStatusBadgeColor(
+                        selectedPaymentForStatus?.status || "NO"
+                      )}`}
+                    >
+                      {selectedPaymentForStatus?.status === "YES" ? "Approved" : "Not Approved yet"}
+                    </span>
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    New Status
+                  </label>
+                  <select
+                    value={newStatus}
+                    onChange={(e) => setNewStatus(e.target.value as PaymentStatus)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  >
+                    <option value="YES">Approved</option>
+                    <option value="NO">Not Approved Yet</option>
+                  </select>
+                </div>
+                
+              </div>
+              <div className="p-4 border-t border-gray-200 flex justify-end gap-2">
+                <button
+                  onClick={() => {
+                    setShowStatusModal(false);
+                    setSelectedPaymentForStatus(null);
+                    setNewStatus("YES");
+                  }}
+                  className="px-3 py-2 bg-gray-600 text-white rounded-md text-sm hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleStatusUpdate}
+                  className="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700 transition-colors"
+                >
+                  Update Status
                 </button>
               </div>
             </div>

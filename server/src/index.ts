@@ -34,7 +34,7 @@ app.get("/api/me", async (req: Request, res: Response) => {
 });
 app.post("/api/pay", async (req, res) => {
   try {
-    const { email, pack,evidence } = req.body;
+    const { email, pack, evidence } = req.body;
 
     const user = await prisma.payment.create({
       data: {
@@ -149,7 +149,6 @@ app.get("/api/questions", async (req: Request, res: Response) => {
   }
 });
 
-
 app.post("/api/support", async (req, res) => {
   try {
     const { name, email, category, issueType, subject, description, urgency } =
@@ -187,7 +186,38 @@ app.patch("/api/question/:id", async (req: Request, res: Response) => {
       where: { id },
       data: {
         status,
-        updatedAt: new Date(), 
+        updatedAt: new Date(),
+      },
+    });
+
+    res.json(updatedTicket);
+  } catch (err) {
+    console.error("Error updating ticket:", err);
+
+    res.status(500).json({ error: "Failed to update ticket" });
+  }
+});
+app.patch("/api/payments/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Convert id to number and validate
+    const paymentId = parseInt(id, 10);
+    if (isNaN(paymentId)) {
+      return res.status(400).json({ error: "Invalid payment ID" });
+    }
+
+    const validStatuses = ["NO", "YES"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ error: "Invalid status value" });
+    }
+
+    const updatedTicket = await prisma.payment.update({
+      where: { id: paymentId }, // Use the converted number here
+      data: {
+        status,
+        updatedAt: new Date(),
       },
     });
 

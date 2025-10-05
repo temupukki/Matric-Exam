@@ -20,6 +20,10 @@ enum UserRole{
   SOCIAL
   BOTH
 }
+enum Planstatus{
+  NO
+  YES
+}
 model User {
   id            String    @id
   name          String
@@ -85,6 +89,7 @@ model Payment{
   email String 
   pack String
   evidence String?
+  status Planstatus @default(NO)
   paidAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
 @@map("payment")

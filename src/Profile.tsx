@@ -363,14 +363,7 @@ export default function Profile() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
-                    <textarea
-                      rows={4}
-                      placeholder="Tell us about yourself..."
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
-                    />
-                  </div>
+                 
 
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -382,45 +375,7 @@ export default function Profile() {
                 </motion.div>
               )}
 
-              {activeTab === "preferences" && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="space-y-6"
-                >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Study Preferences</h3>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
-                      <div>
-                        <p className="font-semibold text-gray-900">Dark Mode</p>
-                        <p className="text-sm text-gray-600">Switch to dark theme</p>
-                      </div>
-                      <div className="w-12 h-6 bg-gray-300 rounded-full relative">
-                        <div className="w-6 h-6 bg-white rounded-full absolute left-0 top-0 shadow-md transform transition-transform" />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
-                      <div>
-                        <p className="font-semibold text-gray-900">Study Reminders</p>
-                        <p className="text-sm text-gray-600">Daily study notifications</p>
-                      </div>
-                      <div className="w-12 h-6 bg-blue-500 rounded-full relative">
-                        <div className="w-6 h-6 bg-white rounded-full absolute right-0 top-0 shadow-md transform transition-transform" />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50">
-                      <div>
-                        <p className="font-semibold text-gray-900">Language</p>
-                        <p className="text-sm text-gray-600">English</p>
-                      </div>
-                      <Globe className="w-5 h-5 text-gray-400" />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
+       
 
               {activeTab === "security" && (
                 <motion.div
@@ -446,20 +401,7 @@ export default function Profile() {
                       </motion.button>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-green-50 border border-green-200">
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="font-semibold text-gray-900">Two-Factor Authentication</p>
-                        <Shield className="w-5 h-5 text-green-600" />
-                      </div>
-                      <p className="text-sm text-gray-600 mb-3">Add an extra layer of security to your account</p>
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold"
-                      >
-                        Enable 2FA
-                      </motion.button>
-                    </div>
+                  
                   </div>
                 </motion.div>
               )}
