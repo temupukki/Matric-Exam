@@ -6,7 +6,6 @@ import {
   Mail,
   Calendar,
   Edit3,
-  Settings,
   LogOut,
   BookOpen,
   Award,
@@ -15,8 +14,6 @@ import {
   Star,
   CheckCircle,
   Shield,
-  Bell,
-  Globe,
   Lock,
 } from "lucide-react";
 import { authClient } from "../lib/auth-client";
@@ -245,16 +242,6 @@ export default function Profile() {
             </div>
 
             <div className="flex gap-3">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-6 py-3 bg-blue-100 text-blue-700 rounded-xl font-semibold hover:bg-blue-200 transition-colors"
-              >
-                <Edit3 className="w-4 h-4" />
-                Edit Profile
-              </motion.button>
-
-              {/* Logout Button with your logic */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
