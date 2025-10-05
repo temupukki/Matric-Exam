@@ -39,6 +39,7 @@ import Paid from "./Paid";
 
 import Userpage from "./User";
 import Admin from "./Admin";
+import Questions from "./Questions";
 
 function App() {
   return (
@@ -316,6 +317,14 @@ function App() {
           element={
             <DashLayout>
               <Admin/>
+            </DashLayout>
+          }
+        />
+           <Route
+          path="/dashboard/admin/request"
+          element={
+            <DashLayout>
+              <Questions/>
             </DashLayout>
           }
         />
