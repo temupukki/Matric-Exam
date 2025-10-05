@@ -24,5 +24,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "server/src/lib", "lib/auth-client.ts"]
+  "include": ["src", "server/src/lib", "lib/auth-client.ts", "vite-env.d.ts"]
 }

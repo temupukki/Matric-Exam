@@ -20,6 +20,7 @@ import {
   Loader2,
   User,
 } from "lucide-react";
+import { supabase } from "../lib/supabase";
 
 interface PricingPlan {
   name: string;
@@ -59,6 +60,7 @@ export default function CombinedPricingPayment() {
   );
   const [selectedMethod, setSelectedMethod] = useState<string>("tele-birr");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [currentStep, setCurrentStep] = useState<"pricing" | "payment">(
@@ -68,6 +70,7 @@ export default function CombinedPricingPayment() {
   const [isLoadingSession, setIsLoadingSession] = useState(true);
   const [userEmail, setUserEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [uploadMessage, setUploadMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch user session on component mount
@@ -85,15 +88,8 @@ export default function CombinedPricingPayment() {
         credentials: "include",
       });
 
-      console.log("📡 Session API Response Status:", res.status);
-      console.log("📡 Session API Response Headers:", res.headers);
-
       if (!res.ok) {
-        const errorText = await res.text();
-        console.error("❌ Session API Error Response:", errorText);
-        throw new Error(
-          `Failed to fetch session: ${res.status} - ${errorText}`
-        );
+        throw new Error(`Failed to fetch session: ${res.status}`);
       }
 
       const sessionData = await res.json();
@@ -101,12 +97,7 @@ export default function CombinedPricingPayment() {
 
       setUserSession(sessionData);
 
-      // Pre-fill email if available in session
       if (sessionData?.user?.email) {
-        console.log(
-          "📧 Pre-filling email from session:",
-          sessionData.user.email
-        );
         setUserEmail(sessionData.user.email);
       }
     } catch (error: any) {
@@ -252,7 +243,6 @@ export default function CombinedPricingPayment() {
   const handlePackageSelect = (plan: PricingPlan) => {
     console.log("📦 Package selected:", plan.name);
 
-    // Check if user is logged in before proceeding to payment
     if (!userSession?.user) {
       console.warn("⚠️ User not logged in, preventing package selection");
       alert("Please log in to proceed with payment.");
@@ -261,7 +251,6 @@ export default function CombinedPricingPayment() {
 
     setSelectedPackage(plan);
     setCurrentStep("payment");
-    // Update payment steps with selected amount
     paymentMethods[0].steps[4] = `Enter amount: ${plan.amount} ETB`;
     console.log("➡️ Moving to payment step");
   };
@@ -285,11 +274,9 @@ export default function CombinedPricingPayment() {
 
       const reader = new FileReader();
       reader.onload = (e) => {
-        console.log(
-          "✅ File loaded successfully, size:",
-          e.target?.result?.toString().length
-        );
+        console.log("✅ File loaded successfully");
         setUploadedImage(e.target?.result as string);
+        setUploadedFile(file);
       };
 
       reader.onerror = (error) => {
@@ -304,8 +291,65 @@ export default function CombinedPricingPayment() {
   const handleRemoveImage = () => {
     console.log("🗑️ Removing uploaded image");
     setUploadedImage(null);
+    setUploadedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  };
+
+  const uploadFileToSupabase = async (file: File): Promise<string> => {
+    try {
+      console.log("📤 Starting Supabase file upload...");
+
+      if (!file) {
+        throw new Error("No file provided for upload");
+      }
+
+      // Check if Supabase is configured
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      if (!supabaseUrl || supabaseUrl.includes("placeholder")) {
+        throw new Error(
+          "Supabase is not configured. Please check your environment variables."
+        );
+      }
+
+      const bucketName = "Matric";
+      const filePath = `${Date.now()}-${file.name}`;
+
+      console.log("📁 Uploading file:", {
+        bucketName,
+        filePath,
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
+      });
+
+      // Upload file to Supabase storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from(bucketName)
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (uploadError) {
+        console.error("❌ Supabase upload error:", uploadError);
+        throw new Error(`Upload failed: ${uploadError.message}`);
+      }
+
+      console.log("✅ File uploaded successfully:", uploadData);
+
+      // Get public URL
+      const { data: publicUrlData } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(filePath);
+
+      console.log("🔗 Public URL generated:", publicUrlData.publicUrl);
+
+      return publicUrlData.publicUrl;
+    } catch (error: any) {
+      console.error("❌ Supabase upload failed:", error);
+      throw new Error(`File upload failed: ${error.message}`);
     }
   };
 
@@ -313,8 +357,7 @@ export default function CombinedPricingPayment() {
     e.preventDefault();
     console.log("🚀 Starting payment submission...");
 
-    // Enhanced validation
-    if (!uploadedImage) {
+    if (!uploadedImage || !uploadedFile) {
       console.warn("⚠️ Validation failed: No image uploaded");
       alert("Please upload your payment receipt screenshot.");
       return;
@@ -332,7 +375,6 @@ export default function CombinedPricingPayment() {
       return;
     }
 
-    // Verify user session is still valid
     if (!userSession?.user) {
       console.warn("⚠️ Validation failed: No user session");
       alert("Your session has expired. Please log in again.");
@@ -341,12 +383,24 @@ export default function CombinedPricingPayment() {
 
     setIsSubmitting(true);
     setError(null);
+    setUploadMessage("Uploading receipt to secure storage...");
 
     try {
+      // First upload the file to Supabase
+      let fileUrl = "";
+      try {
+        fileUrl = await uploadFileToSupabase(uploadedFile);
+        setUploadMessage("Receipt uploaded! Finalizing payment...");
+      } catch (uploadError: any) {
+        console.error("❌ File upload failed:", uploadError);
+        throw new Error(`Failed to upload receipt: ${uploadError.message}`);
+      }
+
       const paymentData = {
         email: userEmail,
         pack: selectedPackage.name,
-      
+
+        evidence: fileUrl,
       };
 
       console.log("📦 Payment data to send:", paymentData);
@@ -361,63 +415,30 @@ export default function CombinedPricingPayment() {
         body: JSON.stringify(paymentData),
       });
 
-      console.log("📡 Payment API Response Status:", response.status);
-      console.log("📡 Payment API Response Headers:", response.headers);
-
-      // Clone the response to read it as text first for debugging
-      const responseClone = response.clone();
-
       if (!response.ok) {
         let errorMessage = `HTTP error! status: ${response.status}`;
         try {
-          // Try to read as JSON first
           const errorData = await response.json();
-          console.error("❌ Payment API Error Response (JSON):", errorData);
           errorMessage = errorData.error || errorData.message || errorMessage;
         } catch (jsonError) {
-          console.log("📄 Response is not JSON, trying as text...");
-          try {
-            // If JSON fails, read as text using the cloned response
-            const errorText = await responseClone.text();
-            console.error("❌ Payment API Error Response (Text):", errorText);
-            errorMessage = errorText || errorMessage;
-          } catch (textError) {
-            console.error("❌ Could not read response body:", textError);
-            errorMessage = `Server error: ${response.status}`;
-          }
+          const errorText = await response.text();
+          errorMessage = errorText || errorMessage;
         }
         throw new Error(errorMessage);
       }
 
-      // If response is OK, parse the successful response
       const data = await response.json();
       console.log("✅ Payment successful! Response:", data);
 
-      // Success
       setIsSubmitting(false);
       setIsSubmitted(true);
+      setUploadMessage("");
     } catch (error: any) {
-      console.error("❌ Payment submission error:", {
-        message: error.message,
-        stack: error.stack,
-        name: error.name,
-      });
-
+      console.error("❌ Payment submission error:", error);
       setIsSubmitting(false);
       setError(error.message);
-
-      // More specific error messages
-      if (error.message.includes("Failed to fetch")) {
-        alert(
-          "Network error: Cannot connect to server. Please check your connection and try again."
-        );
-      } else if (error.message.includes("PayloadTooLargeError")) {
-        alert(
-          "Request too large. Please try with a smaller image or contact support."
-        );
-      } else {
-        alert(`Payment failed: ${error.message}`);
-      }
+      setUploadMessage("");
+      alert(`Payment failed: ${error.message}`);
     }
   };
 
@@ -426,10 +447,11 @@ export default function CombinedPricingPayment() {
     setCurrentStep("pricing");
     setSelectedPackage(null);
     setUploadedImage(null);
+    setUploadedFile(null);
     setError(null);
+    setUploadMessage("");
   };
 
-  // User session display component
   const UserInfo = () => {
     if (isLoadingSession) {
       return (
@@ -459,7 +481,6 @@ export default function CombinedPricingPayment() {
     );
   };
 
-  // Error display component
   const ErrorDisplay = () => {
     if (!error) return null;
 
@@ -480,6 +501,24 @@ export default function CombinedPricingPayment() {
         >
           Dismiss
         </button>
+      </motion.div>
+    );
+  };
+
+  const UploadMessageDisplay = () => {
+    if (!uploadMessage) return null;
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl"
+      >
+        <div className="flex items-center gap-2">
+          <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+          <h4 className="font-semibold text-blue-800">Uploading</h4>
+        </div>
+        <p className="text-blue-700 text-sm mt-1">{uploadMessage}</p>
       </motion.div>
     );
   };
@@ -537,7 +576,6 @@ export default function CombinedPricingPayment() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
         <div className="max-w-4xl mx-auto px-4 py-8">
-          {/* Header with User Info */}
           <div className="flex justify-between items-center mb-6">
             <motion.button
               onClick={goBackToPricing}
@@ -548,12 +586,11 @@ export default function CombinedPricingPayment() {
               <ArrowRight className="w-4 h-4 rotate-180" />
               Back to Plans
             </motion.button>
-
             <UserInfo />
           </div>
 
-          {/* Error Display */}
           <ErrorDisplay />
+          <UploadMessageDisplay />
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -587,7 +624,6 @@ export default function CombinedPricingPayment() {
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Selected Package Info */}
             <div className="lg:col-span-1">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -641,7 +677,6 @@ export default function CombinedPricingPayment() {
               </motion.div>
             </div>
 
-            {/* Payment Steps & Upload */}
             <div className="lg:col-span-2">
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
@@ -649,7 +684,6 @@ export default function CombinedPricingPayment() {
                 transition={{ delay: 0.4 }}
                 className="space-y-8"
               >
-                {/* Payment Steps */}
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6">
                   <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                     <Receipt className="w-6 h-6 text-green-600" />
@@ -673,7 +707,6 @@ export default function CombinedPricingPayment() {
                     ))}
                   </div>
 
-                  {/* Account Information */}
                   <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
                     <div className="flex items-center gap-2 mb-2">
                       <AlertCircle className="w-5 h-5 text-yellow-600" />
@@ -687,7 +720,6 @@ export default function CombinedPricingPayment() {
                   </div>
                 </div>
 
-                {/* Receipt Upload */}
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6">
                   <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                     <Upload className="w-6 h-6 text-purple-600" />
@@ -695,7 +727,6 @@ export default function CombinedPricingPayment() {
                   </h3>
 
                   <form onSubmit={handleSubmit}>
-                    {/* Email Input */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -722,7 +753,6 @@ export default function CombinedPricingPayment() {
                       </p>
                     </motion.div>
 
-                    {/* Upload Area */}
                     {!uploadedImage ? (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -786,13 +816,13 @@ export default function CombinedPricingPayment() {
                         <div className="flex items-center gap-2 mt-3 p-3 bg-green-50 rounded-xl">
                           <CheckCircle className="w-5 h-5 text-green-500" />
                           <span className="text-green-700 font-medium">
-                            Receipt confirmed!
+                            Receipt confirmed! Ready to upload to secure
+                            storage.
                           </span>
                         </div>
                       </motion.div>
                     )}
 
-                    {/* Submit Button */}
                     <motion.button
                       type="submit"
                       disabled={
@@ -834,10 +864,8 @@ export default function CombinedPricingPayment() {
     );
   }
 
-  // Pricing Page (Default View)
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20">
-      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           animate={{
@@ -857,17 +885,14 @@ export default function CombinedPricingPayment() {
         />
       </div>
 
-      {/* User Info Bar */}
       <div className="relative max-w-7xl mx-auto px-4 mb-8">
         <div className="flex justify-end">
           <UserInfo />
         </div>
       </div>
 
-      {/* Error Display */}
       <ErrorDisplay />
 
-      {/* Hero Section */}
       <section className="relative py-16 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
@@ -912,7 +937,6 @@ export default function CombinedPricingPayment() {
         </div>
       </section>
 
-      {/* Pricing Cards */}
       <section className="py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -933,7 +957,6 @@ export default function CombinedPricingPayment() {
                     : ""
                 }`}
               >
-                {/* Popular Badge */}
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <motion.div
@@ -949,14 +972,12 @@ export default function CombinedPricingPayment() {
                 )}
 
                 <div className="p-8">
-                  {/* Plan Header */}
                   <div className="text-center mb-8">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       {plan.name}
                     </h3>
                     <p className="text-gray-600 mb-6">{plan.description}</p>
 
-                    {/* Price Display */}
                     <div className="mb-4">
                       <motion.div
                         initial={{ scale: 0.9 }}
@@ -971,7 +992,6 @@ export default function CombinedPricingPayment() {
                       </motion.div>
                     </div>
 
-                    {/* Savings Badge */}
                     {plan.savings && (
                       <motion.div
                         initial={{ opacity: 0 }}
@@ -984,7 +1004,6 @@ export default function CombinedPricingPayment() {
                     )}
                   </div>
 
-                  {/* Features */}
                   <div className="space-y-4 mb-8">
                     {plan.features.map((feature, featureIndex) => (
                       <motion.div
@@ -1010,7 +1029,6 @@ export default function CombinedPricingPayment() {
                     ))}
                   </div>
 
-                  {/* CTA Button */}
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -1033,7 +1051,6 @@ export default function CombinedPricingPayment() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -1082,7 +1099,6 @@ export default function CombinedPricingPayment() {
         </div>
       </section>
 
-      {/* FAQ Section */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <motion.div
