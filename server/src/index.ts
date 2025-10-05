@@ -122,7 +122,7 @@ app.patch("/api/user/:id/role", async (req, res) => {
 app.post("/api/support", async (req, res) => {
   
   try {
-    const {name,email,category,issueType,subject,description,urgency,status,attachments } = req.body;
+    const {name,email,category,issueType,subject,description,urgency } = req.body;
 
     const user = await prisma.supportTicket.create({
       data: {
@@ -133,14 +133,22 @@ app.post("/api/support", async (req, res) => {
         subject,
         description,
         urgency,
-        status,
-        attachments 
+      
       },
     });
 
     res.status(201).json(user);
   } catch (err) {
     res.status(400).json({});
+  }
+});
+app.get("/api/questions", async (req: Request, res: Response) => {
+  try {
+    const questions = await prisma.supportTicket.findMany(); // 👈 match your schema
+    res.json(questions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch Customer Questions" });
   }
 });
 app.listen(port, () => {

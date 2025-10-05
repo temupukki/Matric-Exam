@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MessageCircle,
   Mail,
@@ -7,7 +7,6 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
-  Phone,
   HelpCircle,
   ArrowRight,
   Loader2,
@@ -31,6 +30,15 @@ interface SupportForm {
   urgency: string;
 }
 
+interface UserSession {
+  user?: {
+    email: string;
+    name?: string;
+  };
+  email?: string;
+  name?: string;
+}
+
 export default function SupportPage() {
   const [formData, setFormData] = useState<SupportForm>({
     name: "",
@@ -44,6 +52,70 @@ export default function SupportPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [userSession, setUserSession] = useState<UserSession | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionError, setSessionError] = useState<string | null>(null);
+
+  // Fetch user session on component mount
+  useEffect(() => {
+    fetchUserSession();
+  }, []);
+
+  const fetchUserSession = async () => {
+    try {
+      console.log('🔍 Fetching user session from /api/me...');
+      const response = await fetch('http://localhost:3000/api/me');
+      
+      console.log('📡 Response status:', response.status);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const sessionData = await response.json();
+      console.log('✅ Session data received:', sessionData);
+      
+      // Handle different session structures
+      let userEmail = '';
+      let userName = '';
+
+      if (sessionData.user) {
+        // Session has user object
+        userEmail = sessionData.user.email;
+        userName = sessionData.user.name || '';
+      } else if (sessionData.email) {
+        // Session has email directly
+        userEmail = sessionData.email;
+        userName = sessionData.name || '';
+      } else {
+        throw new Error('No user data found in session');
+      }
+
+      if (!userEmail) {
+        throw new Error('No email found in session data');
+      }
+      
+      const userSession = { email: userEmail, name: userName };
+      setUserSession(userSession);
+      setSessionError(null);
+      
+      // Pre-fill form with user data
+      setFormData(prev => ({
+        ...prev,
+        email: userEmail,
+        name: userName
+      }));
+      
+    } catch (error) {
+      console.error('❌ Failed to fetch user session:', error);
+      setSessionError('Could not load your account information. Please fill in your details manually.');
+      
+      // Set a default empty session so the form still works
+      setUserSession({ email: '', name: '' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const issueCategories = [
     {
@@ -85,7 +157,6 @@ export default function SupportPage() {
       "Wrong amount paid",
       "Account not activated after payment",
       "Transaction failed",
-
       "Payment method not working",
       "Other payment issue",
     ],
@@ -93,9 +164,7 @@ export default function SupportPage() {
       "Website not loading",
       "Page errors or crashes",
       "Slow performance",
-
       "Browser compatibility",
-
       "Other technical issue",
     ],
     account: [
@@ -111,7 +180,6 @@ export default function SupportPage() {
     content: [
       "Wrong answers in exams",
       "Can't access certain subjects",
-
       "Practice tests not loading",
       "Content quality issue",
       "Request new subjects",
@@ -177,12 +245,57 @@ export default function SupportPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Prepare form data for submission
+      const submissionData = {
+        name: formData.name,
+        email: formData.email, 
+        category: formData.issueCategory,
+        issueType: formData.issueType,
+        subject: formData.subject,
+        description: formData. description, 
+        urgency: formData.urgency,
+        
+        
+      };
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+      console.log('📤 Submitting support ticket:', submissionData);
+
+      const response = await fetch('http://localhost:3000/api/support', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
+      });
+     
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('✅ Support ticket created:', result);
+        setIsSubmitted(true);
+      } else {
+        const errorText = await response.text();
+        throw new Error(`Failed to submit support ticket: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('❌ Error submitting support ticket:', error);
+      alert('Failed to submit support ticket. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 pt-20 flex items-center justify-center">
+        <div className="flex items-center gap-3 bg-white rounded-2xl shadow-lg p-6">
+          <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+          <span className="text-gray-600">Loading your information...</span>
+        </div>
+      </div>
+    );
+  }
 
   if (isSubmitted) {
     return (
@@ -288,6 +401,33 @@ export default function SupportPage() {
               transition={{ delay: 0.3 }}
               className="space-y-6"
             >
+              {/* User Info Card */}
+              {userSession && userSession.email && (
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                  <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <User className="w-5 h-5 text-green-600" />
+                    Your Account
+                  </h3>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-600">
+                      <strong>Email:</strong> {userSession.email}
+                    </p>
+                    {userSession.name && (
+                      <p className="text-sm text-gray-600">
+                        <strong>Name:</strong> {userSession.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {sessionError && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
+                  <p className="text-sm text-yellow-800">{sessionError}</p>
+                </div>
+              )}
+
               {/* Contact Methods */}
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
@@ -395,15 +535,26 @@ export default function SupportPage() {
                       type="email"
                       required
                       value={formData.email}
+                      readOnly={!!userSession?.email}
                       onChange={(e) =>
                         handleInputChange("email", e.target.value)
                       }
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300"
+                      className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 ${
+                        userSession?.email ? 'bg-gray-50 cursor-not-allowed' : ''
+                      }`}
                       placeholder="your@email.com"
                     />
+                    {userSession?.email && (
+                      <p className="text-xs text-green-600 mt-1">
+                        Email loaded from your account
+                      </p>
+                    )}
                   </div>
                 </div>
 
+                {/* Rest of your form remains the same */}
+                {/* ... (issue category, issue type, urgency, subject, description, file upload) ... */}
+                
                 {/* Issue Category */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-4">
@@ -525,67 +676,6 @@ export default function SupportPage() {
                     placeholder="Please describe your issue in detail. Include steps to reproduce, error messages, and any other relevant information..."
                   />
                 </div>
-
-                {/* File Upload */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Attach Files (Optional)
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors">
-                    <input
-                      type="file"
-                      multiple
-                      accept="image/*,.pdf,.doc,.docx"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      id="file-upload"
-                    />
-                    <label
-                      htmlFor="file-upload"
-                      className="cursor-pointer block"
-                    >
-                      <div className="flex flex-col items-center gap-3">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <FileQuestion className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div>
-                          <p className="text-gray-600 mb-2">
-                            Click to upload screenshots or documents
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Supports: Images, PDF, DOC (Max 10MB each, up to 5
-                            files)
-                          </p>
-                        </div>
-                      </div>
-                    </label>
-                  </div>
-
-                  {/* Uploaded Files */}
-                  {formData.attachments.length > 0 && (
-                    <div className="mt-4 space-y-2">
-                      {formData.attachments.map((file, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                        >
-                          <span className="text-sm text-gray-700 truncate">
-                            {file.name} ({(file.size / 1024 / 1024).toFixed(2)}{" "}
-                            MB)
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => removeAttachment(index)}
-                            className="text-red-500 hover:text-red-700 transition-colors text-lg font-bold"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
                 {/* Submit Button */}
                 <motion.button
                   type="submit"
@@ -608,8 +698,7 @@ export default function SupportPage() {
                 </motion.button>
 
                 <p className="text-center text-sm text-gray-500">
-                  We'll respond to your support request within 24 hours via
-                  email. For urgent issues, call our support line.
+                  We'll respond to your support request within 24 hours via email.
                 </p>
               </form>
             </motion.div>
