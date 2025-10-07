@@ -4,6 +4,7 @@ import { PrismaClient } from "../../../generated/prisma";
 import * as dotenv from "dotenv";
 import {getVerificationEmailTemplate} from "../Email"
 import { sendEmail } from "./nodemailer";
+import { getPasswordResetEmailTemplate } from "../password-reset";
 
 dotenv.config();
 
@@ -16,7 +17,16 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    
+     requireEmailVerification: true,
+       sendResetPassword: async ({ user, url, token }, request) => {
+      const emailTemplate = getPasswordResetEmailTemplate({ user, url }); // Use the template
+      
+      await sendEmail({
+        to: user.email,
+        subject: emailTemplate.subject,
+        text: emailTemplate.text,
+        html: emailTemplate.html,
+      });}
   },
      emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
