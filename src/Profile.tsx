@@ -121,17 +121,16 @@ export default function Profile() {
       }
 
       setPasswordSuccess("Password changed successfully!");
-      
+
       // Clear form
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      
+
       // Clear success message after 5 seconds
       setTimeout(() => {
         setPasswordSuccess("");
       }, 5000);
-
     } catch (err: any) {
       console.error("Password change error:", err);
       setPasswordError(err.message || "Failed to change password");
@@ -195,7 +194,15 @@ export default function Profile() {
 
   const tabs = [
     { id: "profile", label: "Profile", icon: <User className="w-4 h-4" /> },
-    ...(canChangePassword ? [{ id: "security", label: "Security", icon: <Shield className="w-4 h-4" /> }] : []),
+    ...(canChangePassword
+      ? [
+          {
+            id: "security",
+            label: "Security",
+            icon: <Shield className="w-4 h-4" />,
+          },
+        ]
+      : []),
   ];
 
   if (loading) {
@@ -320,7 +327,9 @@ export default function Profile() {
                   {hasImage && (
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-green-600">Social Login</span>
+                      <span className="text-sm text-green-600">
+                        Social Login
+                      </span>
                     </div>
                   )}
                 </div>
@@ -485,9 +494,6 @@ export default function Profile() {
                       <div className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600">
                         {session.user?.name || "Not provided"}
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Name cannot be changed
-                      </p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -495,23 +501,6 @@ export default function Profile() {
                       </label>
                       <div className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600">
                         {session.user?.email}
-                      </div>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Email cannot be changed
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                    <div className="flex items-center gap-3">
-                      <Info className="w-5 h-5 text-blue-600" />
-                      <div>
-                        <p className="font-medium text-blue-800">
-                          Account Information
-                        </p>
-                        <p className="text-sm text-blue-600">
-                          Contact support if you need to update your name or email address
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -546,10 +535,16 @@ export default function Profile() {
                         />
                         <button
                           type="button"
-                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                          onClick={() =>
+                            setShowCurrentPassword(!showCurrentPassword)
+                          }
                           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
-                          {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showCurrentPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -574,7 +569,11 @@ export default function Profile() {
                           onClick={() => setShowNewPassword(!showNewPassword)}
                           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
-                          {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showNewPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -596,10 +595,16 @@ export default function Profile() {
                         />
                         <button
                           type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
                           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
-                          {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          {showConfirmPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -622,7 +627,9 @@ export default function Profile() {
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-green-50 border border-green-200 rounded-xl p-4"
                       >
-                        <p className="text-green-700 text-sm">{passwordSuccess}</p>
+                        <p className="text-green-700 text-sm">
+                          {passwordSuccess}
+                        </p>
                       </motion.div>
                     )}
 
@@ -631,9 +638,12 @@ export default function Profile() {
                       <div className="flex items-start gap-3">
                         <Shield className="w-5 h-5 text-yellow-600 mt-0.5" />
                         <div>
-                          <p className="font-medium text-yellow-800">Security Notice</p>
+                          <p className="font-medium text-yellow-800">
+                            Security Notice
+                          </p>
                           <p className="text-sm text-yellow-700 mt-1">
-                            Changing your password will log you out of all other devices and sessions for security reasons.
+                            Changing your password will log you out of all other
+                            devices and sessions for security reasons.
                           </p>
                         </div>
                       </div>
@@ -651,7 +661,11 @@ export default function Profile() {
                         <div className="flex items-center justify-center gap-2">
                           <motion.div
                             animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            transition={{
+                              duration: 1,
+                              repeat: Infinity,
+                              ease: "linear",
+                            }}
                             className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
                           />
                           Changing Password...
@@ -676,13 +690,15 @@ export default function Profile() {
                     Password Management Not Available
                   </h3>
                   <p className="text-gray-600 mb-4 max-w-md mx-auto">
-                    Your account is managed through social authentication. 
-                    Password changes are not available for social login accounts.
+                    Your account is managed through social authentication.
+                    Password changes are not available for social login
+                    accounts.
                   </p>
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 max-w-md mx-auto">
                     <p className="text-sm text-blue-700">
-                      To manage your account security, please use the authentication provider 
-                      (Google, GitHub, etc.) you used to sign up.
+                      To manage your account security, please use the
+                      authentication provider (Google, GitHub, etc.) you used to
+                      sign up.
                     </p>
                   </div>
                 </motion.div>

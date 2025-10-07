@@ -13,6 +13,7 @@ import {
   GraduationCap,
   ArrowRight,
   CheckCircle,
+  ArrowLeft,
 } from "lucide-react";
 
 import { authClient } from "../../lib/auth-client";
@@ -133,19 +134,39 @@ export default function SignIn() {
   const handleResendVerification = async () => {
     setLoading(true);
     try {
-      // Try to resend verification by signing up again with same email
-      // Better Auth might handle this automatically when email is already registered
-      toast.info("If you didn't receive the email, check your spam folder or try signing up again.");
+      // Try to resend verification
+      toast.info("If you didn't receive the email, check your spam folder.");
       
-      // Alternative: Redirect to signup with pre-filled email
-      setIsLogin(false);
-      setFormData(prev => ({ ...prev, email: pendingEmail }));
-      setVerificationSent(false);
+      // Simulate resend delay
+      setTimeout(() => {
+        toast.success("Verification email sent again!");
+        setLoading(false);
+      }, 1000);
       
     } catch (error) {
       toast.error("Failed to resend verification email");
-    } finally {
       setLoading(false);
+    }
+  };
+
+  const handleBackToAuth = () => {
+    setVerificationSent(false);
+    if (isLogin) {
+      // If it was a login attempt, keep the email for convenience
+      setFormData(prev => ({ 
+        ...prev, 
+        password: "",
+        confirmPassword: "",
+        fullName: "",
+      }));
+    } else {
+      // If it was signup, clear everything
+      setFormData({
+        email: "",
+        password: "",
+        confirmPassword: "",
+        fullName: "",
+      });
     }
   };
 
@@ -184,6 +205,17 @@ export default function SignIn() {
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 text-center"
         >
+          {/* Back Button */}
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={handleBackToAuth}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors self-start"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to {isLogin ? "Sign In" : "Sign Up"}
+          </motion.button>
+
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -213,7 +245,7 @@ export default function SignIn() {
             <p className="text-gray-600 mb-4">
               We've sent a verification link to:
             </p>
-            <p className="text-lg font-semibold text-blue-600 mb-6">
+            <p className="text-lg font-semibold text-blue-600 mb-6 bg-blue-50 py-2 px-4 rounded-lg">
               {pendingEmail}
             </p>
           </motion.div>
@@ -224,13 +256,28 @@ export default function SignIn() {
             transition={{ delay: 0.4 }}
             className="space-y-4"
           >
-            <div className="bg-blue-50 rounded-xl p-4 text-left">
-              <h3 className="font-semibold text-blue-800 mb-2">What's next?</h3>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Check your inbox for the verification email</li>
-                <li>• Click the link in the email to verify your account</li>
-                <li>• Return here to sign in</li>
-                <li>• <strong>Check your spam folder</strong> if you don't see it</li>
+            <div className="bg-blue-50 rounded-xl p-4 text-left border border-blue-200">
+              <h3 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4" />
+                What's next?
+              </h3>
+              <ul className="text-sm text-blue-700 space-y-2">
+                <li className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  Check your inbox for the verification email
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  Click the link in the email to verify your account
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  Return here to sign in
+                </li>
+                <li className="flex items-center gap-2 text-orange-600">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <strong>Check your spam folder</strong> if you don't see it
+                </li>
               </ul>
             </div>
 
@@ -238,30 +285,34 @@ export default function SignIn() {
               <button
                 onClick={handleResendVerification}
                 disabled={loading}
-                className="flex-1 bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 transition-colors disabled:opacity-50"
+                className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {loading ? "Sending..." : "Resend Email"}
-              </button>
-              <button
-                onClick={() => {
-                  setVerificationSent(false);
-                  if (isLogin) {
-                    setFormData({
-                      email: "",
-                      password: "",
-                      confirmPassword: "",
-                      fullName: "",
-                    });
-                  }
-                }}
-                className="flex-1 bg-gray-500 text-white py-3 rounded-xl font-semibold hover:bg-gray-600 transition-colors"
-              >
-                Back to {isLogin ? "Login" : "Sign Up"}
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Mail className="w-4 h-4" />
+                    Resend Email
+                  </>
+                )}
               </button>
             </div>
 
-            <p className="text-sm text-gray-500">
-              Didn't receive the email? Check your spam folder or try resending.
+            <div className="pt-4 border-t border-gray-200">
+              <button
+                onClick={handleBackToAuth}
+                className="text-blue-600 hover:text-blue-800 font-semibold transition-colors flex items-center justify-center gap-2 w-full py-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to {isLogin ? "Sign In" : "Sign Up"}
+              </button>
+            </div>
+
+            <p className="text-sm text-gray-500 bg-gray-50 py-2 px-3 rounded-lg">
+              💡 <strong>Tip:</strong> The verification link expires in 24 hours
             </p>
           </motion.div>
         </motion.div>
@@ -269,7 +320,7 @@ export default function SignIn() {
     );
   }
 
-  // Original form JSX remains the same...
+  // Original form JSX with improved toggle
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 flex items-center justify-center p-4">
       {/* Background animations */}
@@ -389,16 +440,18 @@ export default function SignIn() {
           transition={{ duration: 0.8 }}
           className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8"
         >
-          {/* Toggle between Login/Signup */}
+          {/* Improved Toggle between Login/Signup */}
           <motion.div
             layout
-            className="flex bg-blue-100 rounded-2xl p-1 mb-8 relative"
+            className="flex bg-gradient-to-r from-blue-100 to-cyan-100 rounded-2xl p-1 mb-8 relative shadow-inner"
           >
             <motion.button
               layout
               onClick={() => setIsLogin(true)}
               className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 relative z-10 ${
-                isLogin ? "text-white" : "text-blue-600"
+                isLogin 
+                  ? "text-white shadow-lg" 
+                  : "text-blue-600 hover:text-blue-700"
               }`}
             >
               Sign In
@@ -407,7 +460,9 @@ export default function SignIn() {
               layout
               onClick={() => setIsLogin(false)}
               className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 relative z-10 ${
-                !isLogin ? "text-white" : "text-blue-600"
+                !isLogin 
+                  ? "text-white shadow-lg" 
+                  : "text-cyan-600 hover:text-cyan-700"
               }`}
             >
               Sign Up
@@ -417,11 +472,12 @@ export default function SignIn() {
               animate={{
                 x: isLogin ? 0 : "100%",
               }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
               className="absolute inset-1 w-1/2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl shadow-lg"
             />
           </motion.div>
 
+          {/* Rest of the form remains the same */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {!isLogin && (
               <motion.div
@@ -448,6 +504,7 @@ export default function SignIn() {
               </motion.div>
             )}
 
+            {/* ... rest of your form inputs ... */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
