@@ -1,21 +1,35 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-// Adjust the path if your Prisma client is somewhere else
 import { PrismaClient } from "../../../generated/prisma";
 import * as dotenv from "dotenv";
+import {getVerificationEmailTemplate} from "../Email"
+import { sendEmail } from "./nodemailer";
 
-// Load environment variables from .env file
 dotenv.config();
 
 const prisma = new PrismaClient();
 
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "postgresql", // or "mysql", "postgresql", etc.
+    provider: "postgresql",
   }),
   emailAndPassword: {
     enabled: true,
     
+  },
+     emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      const emailTemplate = getVerificationEmailTemplate({ user, url });
+      
+      await sendEmail({
+        to: user.email,
+        subject: emailTemplate.subject,
+        text: emailTemplate.text,
+        html: emailTemplate.html,
+      });
+    },
+    sendOnSignUp: true
   },
 
   socialProviders: {
@@ -33,3 +47,5 @@ export const auth = betterAuth({
     },
   trustedOrigins:["http://localhost:5173"]
 });
+
+

@@ -228,6 +228,14 @@ app.patch("/api/payments/:id", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to update ticket" });
   }
 });
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: '✅ Server is running',
+    timestamp: new Date().toISOString(),
+    resendKey: process.env.MATRIC_APP ? '✅ Present' : '❌ Missing',
+    emailFrom: process.env.EMAIL_FROM || 'Not set'
+  });
+});
 
 app.listen(port, () => {
   console.log(`Backend  listening on port ${port}`);

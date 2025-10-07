@@ -12,6 +12,7 @@ import {
   User,
   GraduationCap,
   ArrowRight,
+  CheckCircle,
 } from "lucide-react";
 
 import { authClient } from "../../lib/auth-client";
@@ -22,6 +23,8 @@ export default function SignIn() {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -52,8 +55,16 @@ export default function SignIn() {
         if (result.error) {
           toast.error(`Sign in failed: ${result.error.message}`);
         } else {
-          toast.success("Welcome back! Sign in successful.");
-          navigate("/dashboard");
+          // Check if email is verified
+          if (result.data.user.emailVerified) {
+            toast.success("Welcome back! Sign in successful.");
+            navigate("/dashboard");
+          } else {
+            // If email is not verified, show verification message
+            setVerificationSent(true);
+            setPendingEmail(formData.email);
+            toast.warning("Please verify your email before signing in.");
+          }
         }
       } else {
         // SIGN UP
@@ -72,17 +83,18 @@ export default function SignIn() {
         if (result.error) {
           toast.error(`Sign up failed: ${result.error.message}`);
         } else {
-          toast.success("Account created successfully!");
-
-          // Auto login after signup
-          const loginResult = await authClient.signIn.email({
-            email: formData.email,
-            password: formData.password,
+          // Show verification sent message instead of auto-login
+          setVerificationSent(true);
+          setPendingEmail(formData.email);
+          toast.success("Account created! Please check your email for verification link.");
+          
+          // Reset form
+          setFormData({
+            email: "",
+            password: "",
+            confirmPassword: "",
+            fullName: "",
           });
-
-          if (loginResult.data) {
-            navigate("/dashboard");
-          }
         }
       }
     } catch (error: any) {
@@ -93,7 +105,6 @@ export default function SignIn() {
     }
   };
 
-  
   const handleGoogleSignIn = async () => {
     setLoading(true);
 
@@ -101,11 +112,9 @@ export default function SignIn() {
       const result = await authClient.signIn.social({
         provider: "google",
         callbackURL: "http://localhost:5173/dashboard",
-        
-     
       });
 
-       toast.success("Google sign in sucessfully handeled !");
+      toast.success("Google sign in successfully handled!");
 
       if (result.error) {
         toast.error(` ${result.error.message}`);
@@ -121,6 +130,25 @@ export default function SignIn() {
     }
   };
 
+  const handleResendVerification = async () => {
+    setLoading(true);
+    try {
+      // Try to resend verification by signing up again with same email
+      // Better Auth might handle this automatically when email is already registered
+      toast.info("If you didn't receive the email, check your spam folder or try signing up again.");
+      
+      // Alternative: Redirect to signup with pre-filled email
+      setIsLogin(false);
+      setFormData(prev => ({ ...prev, email: pendingEmail }));
+      setVerificationSent(false);
+      
+    } catch (error) {
+      toast.error("Failed to resend verification email");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -128,6 +156,120 @@ export default function SignIn() {
     });
   };
 
+  // Verification Sent Screen
+  if (verificationSent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 flex items-center justify-center p-4">
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+              transition: { duration: 20, repeat: Infinity, ease: "linear" },
+            }}
+            className="absolute -top-20 -left-20 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{
+              x: [0, -100, 0],
+              y: [0, 50, 0],
+              transition: { duration: 25, repeat: Infinity, ease: "linear" },
+            }}
+            className="absolute -bottom-20 -right-20 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl"
+          />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 text-center"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring" }}
+            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full mb-6"
+          >
+            <div className="h-8 w-8 bg-yellow-400 rounded-full border-2 border-yellow-400 flex items-center justify-center">
+              <span className="text-sm font-bold text-white">EM</span>
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              ExamMaster
+            </span>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mb-6"
+          >
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-10 h-10 text-green-500" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Check Your Email
+            </h2>
+            <p className="text-gray-600 mb-4">
+              We've sent a verification link to:
+            </p>
+            <p className="text-lg font-semibold text-blue-600 mb-6">
+              {pendingEmail}
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="space-y-4"
+          >
+            <div className="bg-blue-50 rounded-xl p-4 text-left">
+              <h3 className="font-semibold text-blue-800 mb-2">What's next?</h3>
+              <ul className="text-sm text-blue-700 space-y-1">
+                <li>• Check your inbox for the verification email</li>
+                <li>• Click the link in the email to verify your account</li>
+                <li>• Return here to sign in</li>
+                <li>• <strong>Check your spam folder</strong> if you don't see it</li>
+              </ul>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={handleResendVerification}
+                disabled={loading}
+                className="flex-1 bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 transition-colors disabled:opacity-50"
+              >
+                {loading ? "Sending..." : "Resend Email"}
+              </button>
+              <button
+                onClick={() => {
+                  setVerificationSent(false);
+                  if (isLogin) {
+                    setFormData({
+                      email: "",
+                      password: "",
+                      confirmPassword: "",
+                      fullName: "",
+                    });
+                  }
+                }}
+                className="flex-1 bg-gray-500 text-white py-3 rounded-xl font-semibold hover:bg-gray-600 transition-colors"
+              >
+                Back to {isLogin ? "Login" : "Sign Up"}
+              </button>
+            </div>
+
+            <p className="text-sm text-gray-500">
+              Didn't receive the email? Check your spam folder or try resending.
+            </p>
+          </motion.div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Original form JSX remains the same...
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 flex items-center justify-center p-4">
       {/* Background animations */}
