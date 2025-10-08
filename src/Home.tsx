@@ -20,7 +20,7 @@ export default function HomePage() {
     {
       icon: <BookOpen className="w-8 h-8" />,
       title: "Comprehensive Syllabus",
-      description: "Cover all subjects with detailed study materials and notes",
+      description: "Cover all subjects with detailed answer and explanation",
     },
     {
       icon: <Clock className="w-8 h-8" />,
@@ -31,21 +31,6 @@ export default function HomePage() {
       icon: <Award className="w-8 h-8" />,
       title: "Performance Analytics",
       description: "Track your progress with detailed analytics and insights",
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Expert Guidance",
-      description: "Learn from experienced teachers and subject matter experts",
-    },
-    {
-      icon: <Target className="w-8 h-8" />,
-      title: "Smart Revision",
-      description: "AI-powered revision schedules tailored to your needs",
-    },
-    {
-      icon: <BarChart3 className="w-8 h-8" />,
-      title: "Progress Tracking",
-      description: "Visualize your improvement with detailed progress reports",
     },
   ];
 

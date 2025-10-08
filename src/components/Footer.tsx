@@ -1,371 +1,202 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  BookOpen,
-  GraduationCap,
-  Award,
-  Users,
   Mail,
   Phone,
   MapPin,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  ArrowRight,
-  Star,
   Heart,
 } from "lucide-react";
-import { useState } from "react";
+
 const MotionLink = motion(Link);
 
-
 export default function Footer() {
-  const [email, setEmail] = useState("");
-
-  const quickLinks = [
-    { name: "Home", path: "/" },
-    { name: "Stream", path: "/stream" },
-    { name: "Features", path: "/feature" },
-    { name: "Contact", path: "/contact" },
-    { name: "Get Started", path: "/sign-in" },
-  ];
-
-  const resources = [
-    { name: "Study Materials", path: "/materials" },
-    { name: "Practice Tests", path: "/tests" },
-    { name: "Video Lessons", path: "/videos" },
-    { name: "Study Planner", path: "/planner" },
-    { name: "Progress Reports", path: "/reports" },
-  ];
-
-  const subjects = [
-    { name: "Mathematics", path: "/math" },
-    { name: "Science", path: "/science" },
-    { name: "English", path: "/english" },
-    { name: "Social Studies", path: "/social-studies" },
-    { name: "Languages", path: "/languages" },
-  ];
-
-  const socialLinks = [
-    { icon: <Facebook className="w-5 h-5" />, href: "#", name: "Facebook" },
-    { icon: <Twitter className="w-5 h-5" />, href: "#", name: "Twitter" },
-    { icon: <Instagram className="w-5 h-5" />, href: "#", name: "Instagram" },
-    { icon: <Linkedin className="w-5 h-5" />, href: "#", name: "LinkedIn" },
+  const dashboardLinks = [
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "Demo Exams", path: "/demo-exams" },
+    { name: "Pricing", path: "/pricing" },
   ];
 
   const contactInfo = [
-    { icon: <Mail className="w-5 h-5" />, text: "support@exammaster.com" },
-    { icon: <Phone className="w-5 h-5" />, text: "+1 (555) 123-4567" },
+    { 
+      icon: <Mail className="w-5 h-5" />, 
+      text: "support@exammaster.com",
+      href: "mailto:support@exammaster.com"
+    },
+    { 
+      icon: <Phone className="w-5 h-5" />, 
+      text: "+251 9123456789",
+      href: "tel:+2519123456789"
+    },
     {
       icon: <MapPin className="w-5 h-5" />,
-      text: "123 Education St, Learning City",
+      text: "Somewhere in Addis Ababa",
+      href: "#"
     },
   ];
 
-  const handleNewsletter = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle newsletter subscription
-    console.log("Subscribed with:", email);
-    setEmail("");
-  };
-
   return (
     <footer className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 text-white relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-            transition: { duration: 25, repeat: Infinity, ease: "linear" },
-          }}
-          className="absolute -top-32 -left-32 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, -100, 0],
-            y: [0, 50, 0],
-            transition: { duration: 30, repeat: Infinity, ease: "linear" },
-          }}
-          className="absolute -bottom-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.3, 1],
-            rotate: [0, 180, 360],
-            transition: { duration: 20, repeat: Infinity, ease: "linear" },
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-yellow-400/5 rounded-full blur-3xl"
-        />
-      </div>
-
-      {/* Main Footer Content */}
+    
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20"></div>
+    
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 lg:py-16">
-        {/* Top Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12"
-        >
-          {/* Company Info */}
-          <div className="lg:col-span-1">
+       
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+       
+          <div className="space-y-6">
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-3 mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="space-y-4"
             >
-              <motion.div
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.6 }}
-                className="relative"
-              >
-                <img
-                  src="exam-logo.png"
-                  alt="Exam Master"
-                  className="h-12 w-12 rounded-full border-2 border-yellow-400 shadow-lg"
-                />
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="absolute -inset-2 border-2 border-yellow-400/30 rounded-full"
-                />
-              </motion.div>
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-amber-400 bg-clip-text text-transparent"
-              >
-                ExamMaster
-              </motion.span>
+              <div className="flex items-center gap-3">
+                <div className="h-12 w-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full border-2 border-white shadow-lg flex items-center justify-center">
+                  <span className="text-sm font-bold text-white">
+                    <img src="exam-logo.png"
+                     alt="Exam-master-logo"
+                     className="rounded-full" 
+                    />
+                  </span>
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    ExamMaster
+                  </h1>
+                  <p className="text-lg text-gray-300 font-medium">
+                    Excel in Your Exams
+                  </p>
+                </div>
+              </div>
+              
+              <p className="text-gray-300 text-lg leading-relaxed max-w-2xl">
+                Empowering Ethiopian students to excel in their matric exams through 
+                innovative learning tools, expert guidance, and personalized study 
+                experiences tailored for success.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Links Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-xl font-bold mb-6 text-white border-b border-gray-700 pb-2">
+                Dashboard
+              </h3>
+              <ul className="space-y-3">
+                {dashboardLinks.map((link, index) => (
+                  <motion.li
+                    key={link.name}
+                    initial={{ opacity: 0, x: 10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                  >
+                    <Link
+                      to={link.path}
+                      className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center gap-2 group text-lg"
+                    >
+                      <span className="w-2 h-2 bg-blue-500 rounded-full group-hover:bg-blue-400 transition-colors"></span>
+                      {link.name}
+                    </Link>
+                  </motion.li>
+                ))}
+              </ul>
             </motion.div>
 
-            <p className="text-blue-200 mb-6 leading-relaxed">
-              Empowering students to excel in their matric exams through
-              innovative learning tools, expert guidance, and personalized study
-              experiences.
-            </p>
-
-            <div className="flex gap-4">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={social.name}
-                  href={social.href}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{
-                    scale: 1.2,
-                    y: -5,
-                    color: "#facc15",
-                  }}
-                  className="p-2 bg-blue-700/50 rounded-lg  hover:text-blue-900 transition-all duration-300"
-                >
-                  {social.icon}
-                </motion.a>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <motion.h3
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-lg font-bold mb-6 flex items-center gap-2"
-            >
-              <ArrowRight className="w-5 h-5 text-yellow-400" />
-              Quick Links
-            </motion.h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link, index) => (
-                <motion.li
-                  key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
-                >
-                  <Link
-                    to={link.path}
-                    className="text-blue-200 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <motion.span
-                      whileHover={{ x: 5 }}
-                      transition={{ type: "spring", stiffness: 400 }}
-                    >
-                      →
-                    </motion.span>
-                    {link.name}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <motion.h3
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-lg font-bold mb-6 flex items-center gap-2"
-            >
-              <BookOpen className="w-5 h-5 text-yellow-400" />
-              Resources
-            </motion.h3>
-            <ul className="space-y-3">
-              {resources.map((resource, index) => (
-                <motion.li
-                  key={resource.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                >
-                  <Link
-                    to={resource.path}
-                    className="text-blue-200 hover:text-yellow-400 transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <motion.span
-                      whileHover={{ x: 5 }}
-                      transition={{ type: "spring", stiffness: 400 }}
-                    >
-                      →
-                    </motion.span>
-                    {resource.name}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <motion.h3
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.7 }}
-              className="text-lg font-bold mb-6 flex items-center gap-2"
-            >
-              <Mail className="w-5 h-5 text-yellow-400" />
-              Newsletter
-            </motion.h3>
-            <p className="text-blue-200 mb-4">
-              Subscribe to get updates on new features and study tips.
-            </p>
-            <form onSubmit={handleNewsletter} className="space-y-3">
-              <motion.input
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full px-4 py-3 rounded-lg bg-blue-800/50 border border-blue-600 focus:border-yellow-400 focus:outline-none transition-colors"
-                required
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                type="submit"
-                className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                Subscribe <ArrowRight className="w-4 h-4" />
-              </motion.button>
-            </form>
-          </div>
-        </motion.div>
-
-        {/* Contact Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 py-8 border-t border-blue-700"
-        >
-          {contactInfo.map((contact, index) => (
+  
             <motion.div
-              key={contact.text}
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 + index * 0.1 }}
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-4 p-4 bg-blue-800/30 rounded-xl backdrop-blur-sm"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
             >
-              <motion.div
-                whileHover={{ rotate: 360, scale: 1.1 }}
-                className="p-2 bg-yellow-400/20 rounded-full"
-              >
-                {contact.icon}
-              </motion.div>
-              <span className="text-blue-200">{contact.text}</span>
+              <h3 className="text-xl font-bold mb-6 text-white border-b border-gray-700 pb-2">
+                Get In Touch
+              </h3>
+              <ul className="space-y-4">
+                {contactInfo.map((contact, index) => (
+                  <motion.li
+                    key={contact.text}
+                    initial={{ opacity: 0, x: 10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + index * 0.1 }}
+                  >
+                    <a
+                      href={contact.href}
+                      className="text-gray-300 hover:text-white transition-colors duration-300 flex items-center gap-3 group text-lg"
+                    >
+                      <div className="p-2 rounded-lg group-hover:bg-gray-700 transition-colors">
+                        {contact.icon}
+                      </div>
+                      {contact.text}
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
             </motion.div>
-          ))}
-        </motion.div>
+          </div>
+        </div>
 
         {/* Bottom Section */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
           viewport={{ once: true }}
-          className="border-t border-blue-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+          className="border-t border-gray-700 pt-8"
         >
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="text-blue-300 text-center md:text-left"
-          >
-            © {new Date().getFullYear()} ExamMaster. Made with{" "}
-            <Heart className="inline w-4 h-4 text-red-400" /> for students
-          </motion.p>
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
+            {/* Copyright */}
+            <div className="text-center lg:text-left">
+              <p className="text-gray-400 text-lg">
+                © {new Date().getFullYear()} ExamMaster. Made with{" "}
+                <Heart className="inline w-5 h-5 text-red-400 fill-current" />{" "}
+                for Ethiopian students by @temupukki
+              </p>
+            </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            className="flex flex-wrap gap-6 text-sm text-blue-300"
-          >
-            <MotionLink
-              whileHover={{ color: "#facc15", scale: 1.05 }}
-              to="/privacy"
-              className="hover:text-yellow-400 transition-colors"
-            >
-              Privacy Policy
-            </MotionLink>
-            <MotionLink
-              whileHover={{ color: "#facc15", scale: 1.05 }}
-              to="/terms"
-              className="hover:text-yellow-400 transition-colors"
-            >
-              Terms of Service
-            </MotionLink>
-          </motion.div>
+            {/* Legal Links */}
+            <div className="flex flex-wrap justify-center gap-6 text-lg">
+              <MotionLink
+                whileHover={{ color: "#60a5fa", scale: 1.05 }}
+                to="/privacy"
+                className="text-gray-400 hover:text-blue-400 transition-colors"
+              >
+                Privacy Policy
+              </MotionLink>
+              <MotionLink
+                whileHover={{ color: "#60a5fa", scale: 1.05 }}
+                to="/terms"
+                className="text-gray-400 hover:text-blue-400 transition-colors"
+              >
+                Terms of Service
+              </MotionLink>
+              <MotionLink
+                whileHover={{ color: "#60a5fa", scale: 1.05 }}
+                to="/support"
+                className="text-gray-400 hover:text-blue-400 transition-colors"
+              >
+                Support
+              </MotionLink>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Floating CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          viewport={{ once: true }}
-          className="mt-8 text-center"
-        >
-          <MotionLink
-            to="/sign-in" // change to the route you want
-            whileHover={{ scale: 1.02 }}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-6 py-3 rounded-full font-semibold shadow-lg"
-          >
-            <Star className="w-5 h-5" />
-            <span>Start Your Success Journey Today!</span>
-            <ArrowRight className="w-5 h-5" />
-          </MotionLink>
-        </motion.div>
+        {/* Ethiopian Flag Colors Accent */}
+        <div className="mt-8 flex justify-center">
+          <div className="flex h-2 rounded-full overflow-hidden max-w-md w-full">
+            <div className="flex-1 bg-green-600"></div>
+            <div className="flex-1 bg-yellow-500"></div>
+            <div className="flex-1 bg-red-600"></div>
+          </div>
+        </div>
       </div>
     </footer>
   );
