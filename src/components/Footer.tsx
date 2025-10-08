@@ -13,7 +13,7 @@ export default function Footer() {
   const dashboardLinks = [
     { name: "Dashboard", path: "/dashboard" },
     { name: "Demo Exams", path: "/demo-exams" },
-    { name: "Pricing", path: "/pricing" },
+    { name: "Pricing", path: "/sign-in" },
   ];
 
   const contactInfo = [

@@ -57,15 +57,11 @@ export default function HomePage() {
       icon: <Award className="w-6 h-6" />,
     },
     {
-      number: "500+",
-      label: "Practice Tests",
+      number: "10+",
+      label: "Subjects",
       icon: <BookOpen className="w-6 h-6" />,
     },
-    {
-      number: "50+",
-      label: "Expert Tutors",
-      icon: <GraduationCap className="w-6 h-6" />,
-    },
+  
   ];
 
   return (
@@ -180,7 +176,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.1, duration: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-2xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-12 max-w-2xl mx-auto"
           >
             {stats.map((stat, index) => (
               <motion.div
@@ -390,30 +386,6 @@ export default function HomePage() {
           >
             Get Started Today <ArrowRight className="inline ml-2 w-5 h-5" />
           </motion.button>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto"
-          >
-            {[
-              "Free trial available",
-              "No credit card required",
-              "Cancel anytime",
-            ].map((item, index) => (
-              <motion.div
-                key={item}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 + index * 0.1 }}
-                className="flex items-center justify-center gap-2 text-blue-200"
-              >
-                <CheckCircle className="w-5 h-5 text-yellow-400" />
-                <span>{item}</span>
-              </motion.div>
-            ))}
-          </motion.div>
         </motion.div>
       </section>
     </div>

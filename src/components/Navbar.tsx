@@ -27,7 +27,7 @@ export default function Navbar() {
     { path: "/stream", label: "Stream", icon: <BookOpen className="w-4 h-4" /> },
     { path: "/feature", label: "Features", icon: <GraduationCap className="w-4 h-4" /> },
      { path: "/demostart", label: "Demo Exams", icon: <ClipboardList className="w-4 h-4" /> },
-    { path: "/contact", label: "Contact us" },
+   
     { path: "/sign-in", label: "Get Started", highlight: true },
   ];
 
