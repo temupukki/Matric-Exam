@@ -1,11 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Heart,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Heart } from "lucide-react";
 
 const MotionLink = motion(Link);
 
@@ -13,36 +8,35 @@ export default function Footer() {
   const dashboardLinks = [
     { name: "Dashboard", path: "/dashboard" },
     { name: "Demo Exams", path: "/demo-exams" },
+    { name: "Stream", path: "/stream" },
+    { name: "Features", path: "/feature" },
     { name: "Pricing", path: "/sign-in" },
   ];
 
   const contactInfo = [
-    { 
-      icon: <Mail className="w-5 h-5" />, 
+    {
+      icon: <Mail className="w-5 h-5" />,
       text: "support@exammaster.com",
-      href: "mailto:support@exammaster.com"
+      href: "mailto:support@exammaster.com",
     },
-    { 
-      icon: <Phone className="w-5 h-5" />, 
+    {
+      icon: <Phone className="w-5 h-5" />,
       text: "+251 9123456789",
-      href: "tel:+2519123456789"
+      href: "tel:+2519123456789",
     },
     {
       icon: <MapPin className="w-5 h-5" />,
       text: "Somewhere in Addis Ababa",
-      href: "#"
+      href: "#",
     },
   ];
 
   return (
     <footer className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 text-white relative overflow-hidden">
-    
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20"></div>
-    
+
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 lg:py-16">
-       
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-       
           <div className="space-y-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -54,9 +48,10 @@ export default function Footer() {
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full border-2 border-white shadow-lg flex items-center justify-center">
                   <span className="text-sm font-bold text-white">
-                    <img src="exam-logo.png"
-                     alt="Exam-master-logo"
-                     className="rounded-full" 
+                    <img
+                      src="exam-logo.png"
+                      alt="Exam-master-logo"
+                      className="rounded-full"
                     />
                   </span>
                 </div>
@@ -69,18 +64,17 @@ export default function Footer() {
                   </p>
                 </div>
               </div>
-              
+
               <p className="text-gray-300 text-lg leading-relaxed max-w-2xl">
-                Empowering Ethiopian students to excel in their matric exams through 
-                innovative learning tools, expert guidance, and personalized study 
-                experiences tailored for success.
+                Empowering Ethiopian students to excel in their matric exams
+                through innovative learning tools, expert guidance, and
+                personalized study experiences tailored for success.
               </p>
             </motion.div>
           </div>
 
           {/* Links Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -110,7 +104,6 @@ export default function Footer() {
               </ul>
             </motion.div>
 
-  
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
