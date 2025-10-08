@@ -21,18 +21,17 @@ import DemoStart from "./DemoStart";
 import Natural from "./Natural";
 import Social from "./Social";
 
-
 import Physics2017Exam from "./physics/PHY2017";
 import PhysicsExamsPage from "./physics/Physics";
-import BiologyExamsPage from "./biology/Biology"
-import ChemistryExamsPage from "./chemistry/Chemistry"
-import ApptitudeExamsPage from "./scholastic-apptitude/Apptitude"
-import EnglishExamsPage from "./english/English"
-import MathNaturalExamsPage from "./Math-natural/MathNatural"
-import HistoryExamsPage from "./history/History"
-import  GeographyExamsPage from "./geography/Geography"
-import EconomicsExamsPage from "./economics/Economics"
-import MathSocialExamsPage from "./Math-social/MathSocial"
+import BiologyExamsPage from "./biology/Biology";
+import ChemistryExamsPage from "./chemistry/Chemistry";
+import ApptitudeExamsPage from "./scholastic-apptitude/Apptitude";
+import EnglishExamsPage from "./english/English";
+import MathNaturalExamsPage from "./Math-natural/MathNatural";
+import HistoryExamsPage from "./history/History";
+import GeographyExamsPage from "./geography/Geography";
+import EconomicsExamsPage from "./economics/Economics";
+import MathSocialExamsPage from "./Math-social/MathSocial";
 import Payment from "./Payment";
 import Support from "./Support";
 import Paid from "./Paid";
@@ -40,6 +39,7 @@ import Paid from "./Paid";
 import Userpage from "./User";
 import Admin from "./Admin";
 import Questions from "./Questions";
+import ResetPassword from "./ResetPassword";
 
 function App() {
   return (
@@ -112,7 +112,7 @@ function App() {
             </MainLayout>
           }
         />
-         <Route
+        <Route
           path="/demostart"
           element={
             <MainLayout>
@@ -160,7 +160,7 @@ function App() {
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/natural"
           element={
             <DashLayout>
@@ -168,7 +168,7 @@ function App() {
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/social"
           element={
             <DashLayout>
@@ -176,7 +176,7 @@ function App() {
             </DashLayout>
           }
         />
-         <Route
+        <Route
           path="/dashboard/natural/physics"
           element={
             <DashLayout>
@@ -184,7 +184,7 @@ function App() {
             </DashLayout>
           }
         />
-         <Route
+        <Route
           path="/dashboard/natural/phy2017"
           element={
             <DashLayout>
@@ -192,7 +192,7 @@ function App() {
             </DashLayout>
           }
         />
-            <Route
+        <Route
           path="/dashboard/natural/biology"
           element={
             <DashLayout>
@@ -200,7 +200,7 @@ function App() {
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/natural/chemistry"
           element={
             <DashLayout>
@@ -208,7 +208,7 @@ function App() {
             </DashLayout>
           }
         />
-          <Route
+        <Route
           path="/dashboard/apptitude"
           element={
             <DashLayout>
@@ -216,7 +216,7 @@ function App() {
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/english"
           element={
             <DashLayout>
@@ -224,7 +224,7 @@ function App() {
             </DashLayout>
           }
         />
-         <Route
+        <Route
           path="/dashboard/natural/mathmaticsnat"
           element={
             <DashLayout>
@@ -232,7 +232,7 @@ function App() {
             </DashLayout>
           }
         />
-             <Route
+        <Route
           path="/dashboard/social/history"
           element={
             <DashLayout>
@@ -240,7 +240,7 @@ function App() {
             </DashLayout>
           }
         />
-          <Route
+        <Route
           path="/dashboard/social/geography"
           element={
             <DashLayout>
@@ -248,7 +248,7 @@ function App() {
             </DashLayout>
           }
         />
-             <Route
+        <Route
           path="/dashboard/social/economics"
           element={
             <DashLayout>
@@ -256,7 +256,7 @@ function App() {
             </DashLayout>
           }
         />
-            <Route
+        <Route
           path="/dashboard/social/mathmaticssoc"
           element={
             <DashLayout>
@@ -264,7 +264,7 @@ function App() {
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/privacy"
           element={
             <DashLayout>
@@ -272,7 +272,7 @@ function App() {
             </DashLayout>
           }
         />
-            <Route
+        <Route
           path="/dashboard/terms"
           element={
             <DashLayout>
@@ -280,54 +280,55 @@ function App() {
             </DashLayout>
           }
         />
-         <Route
+        <Route
           path="/dashboard/payment"
           element={
             <DashLayout>
-              <Payment/>
+              <Payment />
             </DashLayout>
           }
         />
-         <Route
+        <Route
           path="/dashboard/support"
           element={
             <DashLayout>
-              <Support/>
+              <Support />
             </DashLayout>
           }
         />
-          <Route
+        <Route
           path="/dashboard/admin/paid"
           element={
             <DashLayout>
-              <Paid/>
+              <Paid />
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/admin/user"
           element={
             <DashLayout>
-              <Userpage/>
+              <Userpage />
             </DashLayout>
           }
         />
-          <Route
+        <Route
           path="/dashboard/admin"
           element={
             <DashLayout>
-              <Admin/>
+              <Admin />
             </DashLayout>
           }
         />
-           <Route
+        <Route
           path="/dashboard/admin/request"
           element={
             <DashLayout>
-              <Questions/>
+              <Questions />
             </DashLayout>
           }
         />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </Router>
   );

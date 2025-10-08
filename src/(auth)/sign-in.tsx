@@ -152,13 +152,15 @@ export default function SignIn() {
     }
   };
 
+  // Forgot Password Function
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const result = await authClient.forgetPassword({
+      const result = await authClient.requestPasswordReset({
         email: resetEmail,
+        redirectTo: "http://localhost:5173/reset-password",
       });
 
       if (result.error) {
@@ -263,7 +265,7 @@ export default function SignIn() {
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Sending...
+                  Sending Reset Link...
                 </>
               ) : (
                 <>
@@ -283,6 +285,16 @@ export default function SignIn() {
               </button>
             </div>
           </form>
+
+          {/* Additional Info */}
+          <div className="mt-6 p-4 bg-blue-50 rounded-xl">
+            <h3 className="text-sm font-medium text-blue-800 mb-2">What happens next?</h3>
+            <ul className="text-xs text-blue-700 space-y-1">
+              <li>• Check your email for a reset link</li>
+              <li>• Click the link to set a new password</li>
+              <li>• Return here to sign in with your new password</li>
+            </ul>
+          </div>
         </div>
       </motion.div>
     </div>
