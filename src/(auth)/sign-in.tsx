@@ -206,18 +206,15 @@ export default function SignIn() {
     });
   };
 
-  // Forgot Password Modal
+  // Forgot Password Modal - Completely fixed version
   const ForgotPasswordModal = () => (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-3xl shadow-2xl max-w-md w-full relative"
-      >
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full">
         {/* Close Button */}
         <button
           onClick={() => setShowForgotPassword(false)}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-50"
+          style={{ position: 'fixed', top: '1rem', right: '1rem' }}
         >
           <X className="w-6 h-6" />
         </button>
@@ -248,19 +245,18 @@ export default function SignIn() {
                   type="email"
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 bg-white"
                   placeholder="Enter your email"
                   required
+                  autoFocus
                 />
               </div>
             </div>
 
-            <motion.button
-              whileHover={{ scale: loading ? 1 : 1.02 }}
-              whileTap={{ scale: loading ? 1 : 0.98 }}
+            <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-semibold shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
@@ -273,7 +269,7 @@ export default function SignIn() {
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
-            </motion.button>
+            </button>
 
             <div className="text-center">
               <button
@@ -296,7 +292,7 @@ export default function SignIn() {
             </ul>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 

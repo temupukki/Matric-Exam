@@ -83,7 +83,7 @@ export default function ResetPassword() {
   };
 
   const handleBackToSignIn = () => {
-    navigate("/signin");
+    navigate("/sign-in");
   };
 
   if (resetSuccess) {
