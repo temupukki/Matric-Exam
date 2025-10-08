@@ -9,7 +9,7 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
-  
+
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -21,8 +21,10 @@ export default function ResetPassword() {
 
   useEffect(() => {
     if (!token) {
-      toast.error("Invalid or missing reset token. Please request a new password reset link.");
-      navigate("/signin");
+      toast.error(
+        "Invalid or missing reset token. Please request a new password reset link."
+      );
+      navigate("/sign-in");
     }
   }, [token, navigate]);
 
@@ -61,7 +63,9 @@ export default function ResetPassword() {
         console.error("Reset error:", result.error);
       } else {
         setResetSuccess(true);
-        toast.success("Password reset successfully! You can now sign in with your new password.");
+        toast.success(
+          "Password reset successfully! You can now sign in with your new password."
+        );
       }
     } catch (error: any) {
       toast.error("Something went wrong. Please try again.");
@@ -82,7 +86,6 @@ export default function ResetPassword() {
     navigate("/signin");
   };
 
-  // Success screen after password reset
   if (resetSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
@@ -113,13 +116,14 @@ export default function ResetPassword() {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-green-500" />
           </div>
-          
+
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
             Password Reset Successfully!
           </h2>
-          
+
           <p className="text-gray-600 mb-6">
-            Your password has been updated successfully. You can now sign in with your new password.
+            Your password has been updated successfully. You can now sign in
+            with your new password.
           </p>
 
           <div className="bg-green-50 rounded-xl p-4 border border-green-200 mb-6">
@@ -188,9 +192,7 @@ export default function ResetPassword() {
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
             Create New Password
           </h2>
-          <p className="text-gray-600">
-            Enter your new password below
-          </p>
+          <p className="text-gray-600">Enter your new password below</p>
         </div>
 
         {/* Form */}
@@ -281,7 +283,9 @@ export default function ResetPassword() {
 
         {/* Password Tips */}
         <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
-          <h3 className="text-sm font-medium text-blue-800 mb-2">Password Tips:</h3>
+          <h3 className="text-sm font-medium text-blue-800 mb-2">
+            Password Tips:
+          </h3>
           <ul className="text-xs text-blue-700 space-y-1">
             <li>• Use at least 6 characters</li>
             <li>• Include numbers and letters</li>
@@ -289,15 +293,6 @@ export default function ResetPassword() {
             <li>• Don't reuse old passwords</li>
           </ul>
         </div>
-
-        {/* Token info (for debugging) */}
-        {token && (
-          <div className="mt-4 p-3 bg-gray-50 rounded-lg border">
-            <p className="text-xs text-gray-500 break-all">
-              <strong>Token detected:</strong> {token.substring(0, 20)}...
-            </p>
-          </div>
-        )}
       </motion.div>
     </div>
   );
