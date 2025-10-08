@@ -38,7 +38,7 @@ export default function SignIn() {
 
   const features = [
     { icon: <BookOpen className="w-6 h-6" />, text: "Access to all subjects" },
-    { icon: <Award className="w-6 h-6" />, text: "Personalized learning path" },
+    { icon: <Award className="w-6 h-6" />, text: "Personalized exam preparation" },
     { icon: <Star className="w-6 h-6" />, text: "Expert-crafted content" },
     { icon: <GraduationCap className="w-6 h-6" />, text: "Progress tracking" },
   ];
@@ -548,8 +548,8 @@ export default function SignIn() {
               <div className="text-sm text-gray-600">Success Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">500+</div>
-              <div className="text-sm text-gray-600">Tests</div>
+              <div className="text-2xl font-bold text-blue-600">10+</div>
+              <div className="text-sm text-gray-600">Subjects</div>
             </div>
           </motion.div>
         </motion.div>
