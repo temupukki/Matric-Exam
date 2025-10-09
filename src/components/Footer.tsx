@@ -6,8 +6,8 @@ const MotionLink = motion(Link);
 
 export default function Footer() {
   const dashboardLinks = [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Demo Exams", path: "/demo-exams" },
+    { name: "Home", path: "/" },
+    { name: "Demo Exams", path: "/demostart" },
     { name: "Stream", path: "/stream" },
     { name: "Features", path: "/feature" },
     { name: "Pricing", path: "/sign-in" },
@@ -173,7 +173,7 @@ export default function Footer() {
               </MotionLink>
               <MotionLink
                 whileHover={{ color: "#60a5fa", scale: 1.05 }}
-                to="/support"
+                to="/sign-in"
                 className="text-gray-400 hover:text-blue-400 transition-colors"
               >
                 Support
