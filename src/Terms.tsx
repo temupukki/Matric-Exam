@@ -35,8 +35,6 @@ export default function TermsOfService() {
       icon: <CheckCircle className="w-5 h-5" />,
       content: `By accessing or using ExamMaster's educational platform, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, you may not access or use our services.
 
-• You must be at least 13 years old to use our platform
-• Parents or guardians must agree to these terms for users under 18
 • Educational institutions are responsible for obtaining necessary consents
 • Continued use constitutes acceptance of any modifications`,
     },
@@ -76,10 +74,8 @@ Educational content is for personal, non-commercial use only.`,
       content: `Certain features may require payment:
 
 • Fees are clearly displayed before purchase
-• Payments are processed through secure third-party providers
 • Subscription fees are billed in advance
-• You may cancel at any time, but no refunds for partial periods
-• We may change fees with 30 days' notice
+
 
 Free trial periods:
 • Automatically convert to paid subscriptions unless canceled
@@ -197,7 +193,6 @@ Check this page regularly for updates. Significant changes will be prominently n
   ];
 
   const keyPoints = [
-  
     {
       icon: <CreditCard className="w-6 h-6" />,
       title: "Transparent Pricing",
@@ -479,8 +474,6 @@ Check this page regularly for updates. Significant changes will be prominently n
               </div>
             </motion.div>
           </motion.div>
-
-        
         </div>
       </section>
     </div>

@@ -10,12 +10,9 @@ import {
   PlayCircle,
   Bookmark,
   Share2,
-  BarChart3,
   CheckCircle,
   ArrowRight,
   Zap,
-  Target,
-  Calendar,
   FileText,
 } from "lucide-react";
 
@@ -52,6 +49,9 @@ export default function DemoStart() {
       category: "natural",
       duration: 180,
       questions: 65,
+      color: "from-blue-500 to-cyan-500",
+      icon: "🧮",
+      premium: false,
     },
     {
       id: 2,
@@ -60,9 +60,9 @@ export default function DemoStart() {
       category: "social",
       duration: 120,
       questions: 100,
-
       color: "from-orange-500 to-red-500",
       icon: "📜",
+      premium: false,
     },
     {
       id: 3,
@@ -71,9 +71,9 @@ export default function DemoStart() {
       category: "natural",
       duration: 150,
       questions: 50,
-
       color: "from-purple-500 to-pink-500",
       icon: "⚛️",
+      premium: true,
     },
     {
       id: 4,
@@ -82,9 +82,9 @@ export default function DemoStart() {
       category: "social",
       duration: 135,
       questions: 80,
-
       color: "from-green-500 to-emerald-500",
       icon: "📈",
+      premium: false,
     },
     {
       id: 5,
@@ -93,9 +93,9 @@ export default function DemoStart() {
       category: "natural",
       duration: 165,
       questions: 80,
-
       color: "from-yellow-500 to-amber-500",
       icon: "🧪",
+      premium: true,
     },
     {
       id: 6,
@@ -104,9 +104,9 @@ export default function DemoStart() {
       category: "social",
       duration: 120,
       questions: 80,
-
       color: "from-teal-500 to-blue-500",
       icon: "🌍",
+      premium: false,
     },
     {
       id: 7,
@@ -115,9 +115,9 @@ export default function DemoStart() {
       category: "natural",
       duration: 150,
       questions: 100,
-
       color: "from-lime-500 to-green-500",
       icon: "🧬",
+      premium: false,
     },
     {
       id: 8,
@@ -126,9 +126,9 @@ export default function DemoStart() {
       category: "social",
       duration: 150,
       questions: 65,
-
       color: "from-indigo-500 to-purple-500",
       icon: "💼",
+      premium: true,
     },
     {
       id: 9,
@@ -137,9 +137,9 @@ export default function DemoStart() {
       category: "natural",
       duration: 150,
       questions: 65,
-
       color: "from-indigo-500 to-purple-500",
       icon: "💼",
+      premium: true,
     },
     {
       id: 10,
@@ -148,9 +148,9 @@ export default function DemoStart() {
       category: "social",
       duration: 180,
       questions: 65,
-
       color: "from-blue-500 to-cyan-500",
       icon: "🧮",
+      premium: false,
     },
     {
       id: 11,
@@ -159,9 +159,9 @@ export default function DemoStart() {
       category: "social",
       duration: 120,
       questions: 120,
-
       color: "from-red-500 to-pink-500",
       icon: "📝",
+      premium: false,
     },
     {
       id: 12,
@@ -170,9 +170,9 @@ export default function DemoStart() {
       category: "natural",
       duration: 120,
       questions: 120,
-
       color: "from-red-500 to-pink-500",
       icon: "📝",
+      premium: false,
     },
   ];
 
@@ -367,6 +367,22 @@ export default function DemoStart() {
                   <div className="absolute -top-10 -right-10 w-20 h-20 bg-white/10 rounded-full"></div>
                   <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/5 rounded-full"></div>
 
+                  <div className="relative z-10 flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="text-3xl">{exam.icon}</div>
+                      <div>
+                        <span className="text-sm bg-white/20 px-2 py-1 rounded-full">
+                          {exam.subject}
+                        </span>
+                        {exam.premium && (
+                          <span className="ml-2 text-sm bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full">
+                            Premium
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
                   <h3 className="text-xl font-bold mb-2 relative z-10">
                     {exam.title}
                   </h3>
@@ -403,23 +419,6 @@ export default function DemoStart() {
                       <PlayCircle className="w-4 h-4" />
                       Start Demo
                     </motion.button>
-
-                    <div className="flex gap-2">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
-                      >
-                        <Bookmark className="w-4 h-4" />
-                      </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
-                      >
-                        <Share2 className="w-4 h-4" />
-                      </motion.button>
-                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -474,7 +473,7 @@ export default function DemoStart() {
                     onClick={() => navigate("/sign-in")}
                     className="bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
                   >
-                    Start Free Trial <ArrowRight className="w-5 h-5" />
+                    Start Practicing <ArrowRight className="w-5 h-5" />
                   </motion.button>
 
                   <motion.button
