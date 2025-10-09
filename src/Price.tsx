@@ -121,8 +121,8 @@ export default function CombinedPricingPayment() {
       popular: false,
       color: "from-purple-500 to-pink-500",
       features: [
-        { text: "Access to all demo exams", included: true },
-        { text: "All subject materials", included: true },
+        
+        { text: "All subject  Exams", included: true },
         { text: "Priority support", included: true },
         { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
@@ -142,8 +142,8 @@ export default function CombinedPricingPayment() {
       popular: false,
       color: "from-purple-500 to-pink-500",
       features: [
-        { text: "Access to all demo exams", included: true },
-        { text: "All subject materials", included: true },
+      
+        { text: "All subject Exams", included: true },
         { text: "Priority support", included: true },
         { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
@@ -163,8 +163,8 @@ export default function CombinedPricingPayment() {
       popular: true,
       color: "from-orange-500 to-amber-500",
       features: [
-        { text: "Access to all demo exams", included: true },
-        { text: "All subject materials", included: true },
+    
+        { text: "All subject Exams", included: true },
         { text: "Priority support", included: true },
         { text: "Advanced progress tracking", included: true },
         { text: "Unlimited exam attempts", included: true },
@@ -217,23 +217,15 @@ export default function CombinedPricingPayment() {
     {
       question: "Can I change plans later?",
       answer:
-        "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.",
+        "Yes, you can upgrade  your plan at any time. Changes take effect immediately.",
     },
-    {
-      question: "Is there a free trial?",
-      answer:
-        "Yes! All paid plans come with a 7-day free trial. No credit card required for the Starter plan.",
-    },
+ 
     {
       question: "What payment methods do you accept?",
       answer:
-        "We accept all major Ethiopian payment methods including CBE Birr, Tele Birr, and bank transfers.",
+        "Unfortunately, we currently accept only TeleBirr as a payment method.",
     },
-    {
-      question: "Can I cancel anytime?",
-      answer:
-        "Absolutely! You can cancel your subscription anytime without any cancellation fees.",
-    },
+  
   ];
 
   const selectedPayment = paymentMethods.find(

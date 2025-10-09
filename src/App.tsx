@@ -81,7 +81,7 @@ function App() {
           }
         />
 
-        {/* Auth pages use AuthLayout (no Navbar, no Footer) */}
+        
         <Route
           path="/sign-in"
           element={
@@ -155,7 +155,7 @@ function App() {
           }
         />
         <Route
-          path="/dashboard/demo/math"
+          path="/dashboard/demo/mathematics"
           element={
             <DashLayout>
               <Mathmatics />
