@@ -40,6 +40,8 @@ import Userpage from "./User";
 import Admin from "./Admin";
 import Questions from "./Questions";
 import ResetPassword from "./ResetPassword";
+import Chemistry from "./Chemo";
+import Geography from "./Geo";
 
 function App() {
   return (
@@ -157,6 +159,22 @@ function App() {
           element={
             <DashLayout>
               <Mathmatics />
+            </DashLayout>
+          }
+        />
+          <Route
+          path="/dashboard/demo/chemistry"
+          element={
+            <DashLayout>
+              <Chemistry/>
+            </DashLayout>
+          }
+        />
+              <Route
+          path="/dashboard/demo/geography"
+          element={
+            <DashLayout>
+              <Geography/>
             </DashLayout>
           }
         />

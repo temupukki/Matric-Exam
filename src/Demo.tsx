@@ -10,181 +10,169 @@ import {
   PlayCircle,
   Bookmark,
   Share2,
-  BarChart3,
   CheckCircle,
   ArrowRight,
   Zap,
-  Target,
-  Calendar,
   FileText
 } from "lucide-react";
 
 export default function Demo() {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("all");
-  const [selectedExam, setSelectedExam] = useState(null);
 
   const examCategories = [
     { id: "all", label: "All Exams", icon: <BookOpen className="w-4 h-4" />, count: 12 },
     { id: "social", label: "Social Sciences", icon: <Users className="w-4 h-4" />, count: 6 },
     { id: "natural", label: "Natural Sciences", icon: <Zap className="w-4 h-4" />, count: 6 },
-    { id: "popular", label: "Most Popular", icon: <Star className="w-4 h-4" />, count: 4 }
   ];
 
   const demoExams = [
     {
       id: 1,
-      title: "Mathematics - Grade 10 Final",
+      title: "Mathematics Natural",
       subject: "Mathematics",
       category: "natural",
       duration: 180,
-      questions: 50,
-      difficulty: "Advanced",
-      popularity: 95,
-      description: "Comprehensive mathematics exam covering algebra, geometry, and calculus topics for grade 10 students.",
-      topics: ["Algebra", "Geometry", "Calculus", "Statistics"],
-      attempts: 1250,
-      averageScore: 72,
-      premium: false,
+      questions: 65,
       color: "from-blue-500 to-cyan-500",
-      icon: "🧮"
+      icon: "🧮",
+      premium: false,
     },
     {
       id: 2,
-      title: "History - World Wars & Modern Era",
+      title: "History",
       subject: "History",
       category: "social",
       duration: 120,
-      questions: 40,
-      difficulty: "Intermediate",
-      popularity: 88,
-      description: "Explore the major events of World Wars and their impact on modern global politics and society.",
-      topics: ["World War I", "World War II", "Cold War", "Modern History"],
-      attempts: 980,
-      averageScore: 68,
-      premium: false,
+      questions: 100,
       color: "from-orange-500 to-red-500",
-      icon: "📜"
+      icon: "📜",
+      premium: false,
     },
     {
       id: 3,
-      title: "Physics - Mechanics & Thermodynamics",
+      title: "Physics",
       subject: "Physics",
       category: "natural",
       duration: 150,
-      questions: 45,
-      difficulty: "Advanced",
-      popularity: 92,
-      description: "Test your understanding of mechanical systems, motion, and thermodynamic principles.",
-      topics: ["Kinematics", "Dynamics", "Thermodynamics", "Energy"],
-      attempts: 1100,
-      averageScore: 65,
-      premium: true,
+      questions: 50,
       color: "from-purple-500 to-pink-500",
-      icon: "⚛️"
+      icon: "⚛️",
+      premium: true,
     },
     {
       id: 4,
-      title: "Economics - Micro & Macro Economics",
+      title: "Economics",
       subject: "Economics",
       category: "social",
       duration: 135,
-      questions: 38,
-      difficulty: "Intermediate",
-      popularity: 85,
-      description: "Comprehensive economics exam covering both micro and macroeconomic principles.",
-      topics: ["Supply & Demand", "Market Structures", "GDP", "Inflation"],
-      attempts: 850,
-      averageScore: 70,
-      premium: false,
+      questions: 80,
       color: "from-green-500 to-emerald-500",
-      icon: "📈"
+      icon: "📈",
+      premium: false,
     },
     {
       id: 5,
-      title: "Chemistry - Organic Chemistry",
+      title: "Chemistry",
       subject: "Chemistry",
       category: "natural",
       duration: 165,
-      questions: 48,
-      difficulty: "Advanced",
-      popularity: 89,
-      description: "Focus on organic chemistry including hydrocarbons, functional groups, and reactions.",
-      topics: ["Hydrocarbons", "Functional Groups", "Reactions", "Synthesis"],
-      attempts: 920,
-      averageScore: 63,
-      premium: true,
+      questions: 80,
       color: "from-yellow-500 to-amber-500",
-      icon: "🧪"
+      icon: "🧪",
+      premium: true,
     },
     {
       id: 6,
-      title: "Geography - Physical & Human Geography",
+      title: "Geography",
       subject: "Geography",
       category: "social",
-      duration: 110,
-      questions: 35,
-      difficulty: "Beginner",
-      popularity: 82,
-      description: "Covering physical landscapes, climate patterns, and human geographical interactions.",
-      topics: ["Physical Features", "Climate", "Population", "Urbanization"],
-      attempts: 760,
-      averageScore: 75,
-      premium: false,
+      duration: 120,
+      questions: 80,
       color: "from-teal-500 to-blue-500",
-      icon: "🌍"
+      icon: "🌍",
+      premium: false,
     },
     {
       id: 7,
-      title: "Biology - Cell Biology & Genetics",
+      title: "Biology",
       subject: "Biology",
       category: "natural",
-      duration: 140,
-      questions: 42,
-      difficulty: "Intermediate",
-      popularity: 87,
-      description: "Comprehensive biology exam focusing on cellular structures and genetic principles.",
-      topics: ["Cell Structure", "DNA & RNA", "Genetics", "Evolution"],
-      attempts: 890,
-      averageScore: 69,
-      premium: false,
+      duration: 150,
+      questions: 100,
       color: "from-lime-500 to-green-500",
-      icon: "🧬"
+      icon: "🧬",
+      premium: false,
     },
     {
       id: 8,
-      title: "Business Studies - Management & Marketing",
-      subject: "Business Studies",
+      title: "Scholastic Aptitude Social",
+      subject: "Scholastic Aptitude",
       category: "social",
-      duration: 125,
-      questions: 36,
-      difficulty: "Intermediate",
-      popularity: 84,
-      description: "Test your knowledge of business management principles and marketing strategies.",
-      topics: ["Management", "Marketing", "Finance", "Entrepreneurship"],
-      attempts: 720,
-      averageScore: 71,
-      premium: false,
+      duration: 150,
+      questions: 65,
       color: "from-indigo-500 to-purple-500",
-      icon: "💼"
-    }
+      icon: "💼",
+      premium: true,
+    },
+    {
+      id: 9,
+      title: "Scholastic Aptitude Natural",
+      subject: "Scholastic Aptitude",
+      category: "natural",
+      duration: 150,
+      questions: 65,
+      color: "from-indigo-500 to-purple-500",
+      icon: "💼",
+      premium: true,
+    },
+    {
+      id: 10,
+      title: "Mathematics Social",
+      subject: "Mathematics",
+      category: "social",
+      duration: 180,
+      questions: 65,
+      color: "from-blue-500 to-cyan-500",
+      icon: "🧮",
+      premium: false,
+    },
+    {
+      id: 11,
+      title: "English Social",
+      subject: "English",
+      category: "social",
+      duration: 120,
+      questions: 120,
+      color: "from-red-500 to-pink-500",
+      icon: "📝",
+      premium: false,
+    },
+    {
+      id: 12,
+      title: "English Natural",
+      subject: "English",
+      category: "natural",
+      duration: 120,
+      questions: 120,
+      color: "from-red-500 to-pink-500",
+      icon: "📝",
+      premium: false,
+    },
   ];
 
   const stats = [
-    { number: "5000+", label: "Students Practiced", icon: <Users className="w-6 h-6" /> },
+    { number: "10K+", label: "Students Practiced", icon: <Users className="w-6 h-6" /> },
     { number: "95%", label: "Success Rate", icon: <Award className="w-6 h-6" /> },
-    { number: "50+", label: "Expert Designed", icon: <Star className="w-6 h-6" /> },
+    { number: "12", label: "Demo Exams", icon: <FileText className="w-6 h-6" /> },
     { number: "24/7", label: "Available", icon: <Clock className="w-6 h-6" /> }
   ];
 
   const filteredExams = activeCategory === "all" 
     ? demoExams 
-    : activeCategory === "popular"
-    ? demoExams.filter(exam => exam.popularity > 90)
     : demoExams.filter(exam => exam.category === activeCategory);
 
   const startDemoExam = (examId: number) => {
-    // Navigate to exam taking page or show exam instructions
     navigate(`/dashboard/demo/math`);
   };
 
@@ -353,17 +341,9 @@ export default function Demo() {
                         )}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-1 text-yellow-400">
-                        <Star className="w-4 h-4 fill-current" />
-                        <span className="text-sm font-semibold">{exam.popularity}%</span>
-                      </div>
-                      <div className="text-xs text-white/80">Popular</div>
-                    </div>
                   </div>
 
                   <h3 className="text-xl font-bold mb-2 relative z-10">{exam.title}</h3>
-                  <p className="text-white/90 text-sm relative z-10">{exam.description}</p>
                 </div>
 
                 {/* Exam Content */}
@@ -379,36 +359,6 @@ export default function Demo() {
                       <FileText className="w-5 h-5 text-gray-400 mx-auto mb-1" />
                       <div className="text-lg font-bold text-gray-900">{exam.questions}</div>
                       <div className="text-xs text-gray-600">Questions</div>
-                    </div>
-                  </div>
-
-                  {/* Difficulty & Stats */}
-                  <div className="flex items-center justify-between mb-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      exam.difficulty === 'Advanced' ? 'bg-red-100 text-red-700' :
-                      exam.difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-green-100 text-green-700'
-                    }`}>
-                      {exam.difficulty}
-                    </span>
-                    <div className="text-sm text-gray-600">
-                      <Users className="w-4 h-4 inline mr-1" />
-                      {exam.attempts.toLocaleString()} attempts
-                    </div>
-                  </div>
-
-                  {/* Topics */}
-                  <div className="mb-6">
-                    <h4 className="font-semibold text-gray-900 mb-2 text-sm">Topics Covered</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {exam.topics.map((topic, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs"
-                        >
-                          {topic}
-                        </span>
-                      ))}
                     </div>
                   </div>
 
@@ -486,12 +436,11 @@ export default function Demo() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate("/dashboard/price")}
+                    onClick={() => navigate("/sign-in")}
                     className="bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
                   >
-                    Start Now <ArrowRight className="w-5 h-5" />
+                    Start Free Trial <ArrowRight className="w-5 h-5" />
                   </motion.button>
-              
                 </div>
 
                 <motion.div

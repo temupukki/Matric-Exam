@@ -9,7 +9,8 @@ import {
   XCircle,
   ArrowLeft,
   ArrowRight,
-  AlertCircle
+  AlertCircle,
+  Beaker
 } from "lucide-react";
 
 interface Question {
@@ -32,7 +33,7 @@ interface Score {
   percentage: number;
 }
 
-export default function Mathmatics() {
+export default function Chemistry() {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(1800); // 30 minutes in seconds
@@ -40,147 +41,175 @@ export default function Mathmatics() {
   const [flagged, setFlagged] = useState<Set<number>>(new Set());
   const [showResults, setShowResults] = useState<boolean>(false);
 
-  // Real Mathematics Exam Questions
+  // Real Chemistry Exam Questions
   const examQuestions: Question[] = [
     {
       id: 1,
-      question: "Solve the quadratic equation: x² - 5x + 6 = 0",
+      question: "What is the atomic number of Carbon?",
       options: [
-        "x = 2, x = 3",
-        "x = 1, x = 6", 
-        "x = -2, x = -3",
-        "x = 2, x = -3"
+        "6",
+        "12",
+        "14", 
+        "8"
       ],
       correctAnswer: 0,
-      explanation: "Factor the equation: (x-2)(x-3)=0, so x=2 or x=3",
-      topic: "Algebra",
+      explanation: "Carbon has 6 protons in its nucleus, giving it an atomic number of 6.",
+      topic: "Atomic Structure",
       difficulty: "Easy"
     },
     {
       id: 2,
-      question: "What is the value of sin(30°) + cos(60°)?",
+      question: "Which of the following is a noble gas?",
       options: [
-        "0.5",
-        "1.0",
-        "1.5", 
-        "2.0"
+        "Helium",
+        "Chlorine",
+        "Oxygen", 
+        "Nitrogen"
       ],
-      correctAnswer: 1,
-      explanation: "sin(30°) = 0.5 and cos(60°) = 0.5, so 0.5 + 0.5 = 1.0",
-      topic: "Trigonometry",
+      correctAnswer: 0,
+      explanation: "Helium is a noble gas located in Group 18 of the periodic table.",
+      topic: "Periodic Table",
       difficulty: "Easy"
     },
     {
       id: 3,
-      question: "Find the derivative of f(x) = 3x⁴ - 2x² + 5x - 1",
+      question: "What is the pH of a neutral solution at 25°C?",
       options: [
-        "12x³ - 4x + 5",
-        "12x³ - 4x² + 5",
-        "12x³ - 2x + 5",
-        "12x³ - 4x + 5x"
+        "7",
+        "0",
+        "14",
+        "1"
       ],
       correctAnswer: 0,
-      explanation: "Using power rule: d/dx(3x⁴)=12x³, d/dx(-2x²)=-4x, d/dx(5x)=5, d/dx(-1)=0",
-      topic: "Calculus",
-      difficulty: "Medium"
+      explanation: "A neutral solution has equal concentrations of H⁺ and OH⁻ ions, giving it a pH of 7.",
+      topic: "Acids and Bases",
+      difficulty: "Easy"
     },
     {
       id: 4,
-      question: "A right triangle has sides of length 3 cm, 4 cm, and 5 cm. What is the area of the triangle?",
+      question: "Balance the chemical equation: CH₄ + O₂ → CO₂ + H₂O",
       options: [
-        "6 cm²",
-        "12 cm²",
-        "10 cm²",
-        "7.5 cm²"
+        "CH₄ + 2O₂ → CO₂ + 2H₂O",
+        "2CH₄ + O₂ → 2CO₂ + 2H₂O",
+        "CH₄ + O₂ → CO₂ + H₂O",
+        "CH₄ + 3O₂ → CO₂ + 2H₂O"
       ],
       correctAnswer: 0,
-      explanation: "Area = (1/2) × base × height = (1/2) × 3 × 4 = 6 cm²",
-      topic: "Geometry",
-      difficulty: "Easy"
+      explanation: "The balanced equation is CH₄ + 2O₂ → CO₂ + 2H₂O, with equal atoms on both sides.",
+      topic: "Chemical Equations",
+      difficulty: "Medium"
     },
     {
       id: 5,
-      question: "Solve for x: 2ˣ = 16",
+      question: "What type of bond is formed between sodium and chlorine in NaCl?",
       options: [
-        "2",
-        "3",
-        "4",
-        "5"
+        "Ionic bond",
+        "Covalent bond",
+        "Metallic bond",
+        "Hydrogen bond"
       ],
-      correctAnswer: 2,
-      explanation: "16 = 2⁴, so 2ˣ = 2⁴, therefore x = 4",
-      topic: "Exponents",
-      difficulty: "Easy"
+      correctAnswer: 0,
+      explanation: "NaCl forms an ionic bond through the transfer of electrons from sodium to chlorine.",
+      topic: "Chemical Bonding",
+      difficulty: "Medium"
     },
     {
       id: 6,
-      question: "What is the probability of rolling a prime number on a fair six-sided die?",
+      question: "How many moles are in 36 grams of water (H₂O)?",
       options: [
-        "1/2",
-        "1/3",
-        "2/3",
-        "1/6"
+        "2 moles",
+        "1 mole",
+        "3 moles",
+        "0.5 moles"
       ],
       correctAnswer: 0,
-      explanation: "Prime numbers on a die: 2, 3, 5 → 3 favorable outcomes out of 6 total = 3/6 = 1/2",
-      topic: "Probability",
+      explanation: "Molar mass of H₂O = 18 g/mol. Moles = mass/molar mass = 36/18 = 2 moles.",
+      topic: "Stoichiometry",
       difficulty: "Medium"
     },
     {
       id: 7,
-      question: "Find the limit: lim(x→2) (x² - 4)/(x - 2)",
+      question: "Which element has the electron configuration 1s² 2s² 2p⁶ 3s² 3p⁶ 4s¹?",
       options: [
-        "0",
-        "2",
-        "4",
-        "Undefined"
+        "Potassium",
+        "Calcium",
+        "Argon",
+        "Sodium"
       ],
-      correctAnswer: 2,
-      explanation: "Factor numerator: (x-2)(x+2)/(x-2) = x+2, then substitute x=2: 2+2=4",
-      topic: "Calculus",
-      difficulty: "Medium"
+      correctAnswer: 0,
+      explanation: "This electron configuration corresponds to potassium (K) with atomic number 19.",
+      topic: "Electron Configuration",
+      difficulty: "Hard"
     },
     {
       id: 8,
-      question: "If log₁₀2 ≈ 0.3010, what is log₁₀20?",
+      question: "What is the oxidation state of sulfur in H₂SO₄?",
       options: [
-        "1.3010",
-        "2.3010",
-        "0.6020",
-        "1.6990"
+        "+6",
+        "+4",
+        "-2",
+        "+2"
       ],
       correctAnswer: 0,
-      explanation: "log₁₀20 = log₁₀(2×10) = log₁₀2 + log₁₀10 = 0.3010 + 1 = 1.3010",
-      topic: "Logarithms",
-      difficulty: "Medium"
+      explanation: "In H₂SO₄, H=+1, O=-2. Let S=x. Then 2(+1) + x + 4(-2) = 0 ⇒ 2 + x - 8 = 0 ⇒ x = +6.",
+      topic: "Redox Reactions",
+      difficulty: "Hard"
     },
     {
       id: 9,
-      question: "What is the solution set for |2x - 3| < 5?",
+      question: "Which of the following is a strong acid?",
       options: [
-        "-1 < x < 4",
-        "x < -1 or x > 4",
-        "-4 < x < 1",
-        "x < 4"
+        "HCl",
+        "CH₃COOH",
+        "H₂CO₃",
+        "H₃PO₄"
       ],
       correctAnswer: 0,
-      explanation: "|2x-3|<5 ⇒ -5<2x-3<5 ⇒ -2<2x<8 ⇒ -1<x<4",
-      topic: "Algebra",
+      explanation: "HCl (hydrochloric acid) is a strong acid that completely dissociates in water.",
+      topic: "Acids and Bases",
       difficulty: "Medium"
     },
     {
       id: 10,
-      question: "A circle has equation x² + y² - 6x + 4y - 12 = 0. What is its radius?",
+      question: "What is the IUPAC name for CH₃CH₂CH₂CH₃?",
       options: [
-        "5",
-        "4",
-        "6",
-        "3"
+        "Butane",
+        "Propane",
+        "Pentane",
+        "Hexane"
       ],
       correctAnswer: 0,
-      explanation: "Complete the square: (x²-6x+9)+(y²+4y+4)=12+9+4 ⇒ (x-3)²+(y+2)²=25, so radius=√25=5",
-      topic: "Coordinate Geometry",
-      difficulty: "Hard"
+      explanation: "CH₃CH₂CH₂CH₃ has 4 carbon atoms in a continuous chain, so it's called butane.",
+      topic: "Organic Chemistry",
+      difficulty: "Medium"
+    },
+    {
+      id: 11,
+      question: "In which type of reaction do two compounds exchange ions?",
+      options: [
+        "Double displacement",
+        "Single displacement",
+        "Combination",
+        "Decomposition"
+      ],
+      correctAnswer: 0,
+      explanation: "Double displacement reactions involve the exchange of ions between two compounds.",
+      topic: "Reaction Types",
+      difficulty: "Easy"
+    },
+    {
+      id: 12,
+      question: "What is the volume of 1 mole of any gas at STP?",
+      options: [
+        "22.4 L",
+        "44.8 L",
+        "11.2 L",
+        "33.6 L"
+      ],
+      correctAnswer: 0,
+      explanation: "At Standard Temperature and Pressure (STP), 1 mole of any gas occupies 22.4 liters.",
+      topic: "Gas Laws",
+      difficulty: "Medium"
     }
   ];
 
@@ -250,7 +279,7 @@ export default function Mathmatics() {
             className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8"
           >
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">Exam Results</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">Chemistry Exam Results</h1>
               <div className="text-6xl font-bold text-blue-600 mb-4">
                 {score.percentage}%
               </div>
@@ -330,7 +359,7 @@ export default function Mathmatics() {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Mathematics Demo Exam</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Chemistry Demo Exam</h1>
               <p className="text-gray-600">Grade 10 - Final Examination</p>
             </div>
             
@@ -358,7 +387,7 @@ export default function Mathmatics() {
               className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6"
             >
               <h3 className="font-semibold text-gray-900 mb-4">Questions</h3>
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 {examQuestions.map((_, index) => (
                   <button
                     key={index}
@@ -397,7 +426,7 @@ export default function Mathmatics() {
               </div>
             </motion.div>
 
-            {/* Calculator */}
+            {/* Periodic Table Reference */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -405,12 +434,12 @@ export default function Mathmatics() {
               className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 mt-6"
             >
               <div className="flex items-center gap-2 mb-4">
-                <Calculator className="w-5 h-5 text-blue-600" />
-                <h3 className="font-semibold text-gray-900">Calculator</h3>
+                <Beaker className="w-5 h-5 text-blue-600" />
+                <h3 className="font-semibold text-gray-900">Chemistry Reference</h3>
               </div>
               <div className="bg-gray-100 rounded-lg p-4 text-center">
-                <p className="text-gray-600 text-sm">Scientific Calculator</p>
-                <p className="text-xs text-gray-500 mt-1">Available for use</p>
+                <p className="text-gray-600 text-sm">Periodic Table Available</p>
+                <p className="text-xs text-gray-500 mt-1">Common elements and atomic numbers</p>
               </div>
             </motion.div>
           </div>
@@ -532,13 +561,14 @@ export default function Mathmatics() {
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-yellow-800 mb-2">Exam Instructions</h4>
+                  <h4 className="font-semibold text-yellow-800 mb-2">Chemistry Exam Instructions</h4>
                   <ul className="text-yellow-700 text-sm space-y-1">
                     <li>• You have 30 minutes to complete this exam</li>
                     <li>• Answer all questions before time expires</li>
                     <li>• Use the flag feature to mark questions for review</li>
                     <li>• You can navigate between questions using the number grid</li>
-                  
+                    <li>• Periodic table reference is available</li>
+                    <li>• Show all chemical equations clearly</li>
                   </ul>
                 </div>
               </div>
